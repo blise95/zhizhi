@@ -1,0 +1,37 @@
+# ==================== Maven / Java ====================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
+
+# ==================== IDE ====================
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+*~
+
+# ==================== OS ====================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==================== Logs ====================
+logs/
+*.log
+
+# ==================== Environment / Secrets ====================
+application-local.properties
+application-dev.properties
+*.env
+*.env.local
+
+# ==================== Temp / Cache ====================
+*.tmp
+*.bak
+.cache/

@@ -1,0 +1,2588 @@
+[
+  {
+    "id": 1,
+    "date": "2026-06-11",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 200,
+    "suction": 1095.0,
+    "weight": 0.898,
+    "circumference": 24.46,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 2,
+    "cigaretteD": 3,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 1,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 3.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "case",
+        "bodyPart": "纸箱",
+        "code": "XXPSD",
+        "name": "纸箱破残(\u003c20cm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "date": "2026-06-11",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 180,
+    "suction": 1108.0,
+    "weight": 0.903,
+    "circumference": 24.51,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 1,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 0,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "date": "2026-06-11",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 190,
+    "suction": 1092.0,
+    "weight": 0.896,
+    "circumference": 24.44,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 1,
+    "cigaretteD": 3,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 2,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 0,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 1,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 3.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "case",
+        "bodyPart": "纸箱",
+        "code": "XXPSD",
+        "name": "纸箱破残(\u003c20cm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "date": "2026-06-12",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 210,
+    "suction": 1115.0,
+    "weight": 0.907,
+    "circumference": 24.53,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 2,
+    "cigaretteD": 4,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 4.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "date": "2026-06-12",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 185,
+    "suction": 1088.0,
+    "weight": 0.894,
+    "circumference": 24.42,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 1,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 0,
+    "cartonD": 2,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 2.0
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "date": "2026-06-12",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 195,
+    "suction": 1102.0,
+    "weight": 0.9,
+    "circumference": 24.48,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 2,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 3,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 1,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 3.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "case",
+        "bodyPart": "纸箱",
+        "code": "XXPSD",
+        "name": "纸箱破残(\u003c20cm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "date": "2026-06-13",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 205,
+    "suction": 1125.0,
+    "weight": 0.91,
+    "circumference": 24.56,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 3,
+    "cigaretteD": 3,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 2,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 2,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 3.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 3.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "date": "2026-06-13",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 175,
+    "suction": 1098.0,
+    "weight": 0.897,
+    "circumference": 24.45,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 2,
+    "cigaretteD": 3,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 2,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 3.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "date": "2026-06-13",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 200,
+    "suction": 1295.0,
+    "weight": 0.968,
+    "circumference": 24.82,
+    "cigaretteA": 1,
+    "cigaretteB": 2,
+    "cigaretteC": 1,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "高风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟搭口",
+        "code": "JDBKA",
+        "name": "爆口(≥1/4长度)",
+        "grade": "A",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "date": "2026-06-14",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 210,
+    "suction": 1100.0,
+    "weight": 0.901,
+    "circumference": 24.5,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 2,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 0,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "date": "2026-06-14",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 185,
+    "suction": 1112.0,
+    "weight": 0.905,
+    "circumference": 24.52,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 1,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "date": "2026-06-14",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 180,
+    "suction": 1085.0,
+    "weight": 0.893,
+    "circumference": 24.43,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 2,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 0,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "date": "2026-06-15",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 215,
+    "suction": 1105.0,
+    "weight": 0.904,
+    "circumference": 24.51,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 2,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 1,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 0,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "date": "2026-06-15",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 190,
+    "suction": 1118.0,
+    "weight": 0.908,
+    "circumference": 24.54,
+    "cigaretteA": 0,
+    "cigaretteB": 2,
+    "cigaretteC": 2,
+    "cigaretteD": 1,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "中度风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "date": "2026-06-15",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 195,
+    "suction": 1092.0,
+    "weight": 0.896,
+    "circumference": 24.46,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 2,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 1,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "date": "2026-06-16",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 205,
+    "suction": 1098.0,
+    "weight": 0.899,
+    "circumference": 24.47,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 3,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 2,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 2,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 3.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 2.0
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "date": "2026-06-16",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 185,
+    "suction": 1090.0,
+    "weight": 0.895,
+    "circumference": 24.44,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 2,
+    "cigaretteD": 3,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 1,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 2,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 3.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "date": "2026-06-16",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 200,
+    "suction": 1285.0,
+    "weight": 0.965,
+    "circumference": 24.8,
+    "cigaretteA": 1,
+    "cigaretteB": 1,
+    "cigaretteC": 2,
+    "cigaretteD": 1,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 1,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 0,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "高风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟搭口",
+        "code": "JDBKA",
+        "name": "爆口(≥1/4长度)",
+        "grade": "A",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "date": "2026-06-17",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 210,
+    "suction": 1102.0,
+    "weight": 0.903,
+    "circumference": 24.5,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 4,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 3,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 1,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 4.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 3.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "date": "2026-06-17",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 195,
+    "suction": 1115.0,
+    "weight": 0.907,
+    "circumference": 24.53,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 5,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 4,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 2,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 5.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 4.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "date": "2026-06-17",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 185,
+    "suction": 1088.0,
+    "weight": 0.894,
+    "circumference": 24.43,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 6,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 4,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 2,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 6.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 4.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "date": "2026-06-18",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 220,
+    "suction": 1108.0,
+    "weight": 0.905,
+    "circumference": 24.52,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 7,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 5,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 3,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 7.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 5.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 3.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "date": "2026-06-18",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 190,
+    "suction": 1100.0,
+    "weight": 0.901,
+    "circumference": 24.49,
+    "cigaretteA": 0,
+    "cigaretteB": 2,
+    "cigaretteC": 8,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 6,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 3,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 8.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 6.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 3.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "date": "2026-06-18",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 200,
+    "suction": 1105.0,
+    "weight": 0.903,
+    "circumference": 24.5,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 9,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 7,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 4,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 9.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 7.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 4.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "date": "2026-06-19",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 205,
+    "suction": 1112.0,
+    "weight": 0.906,
+    "circumference": 24.54,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 10,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 7,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 4,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 10.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 7.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 4.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "date": "2026-06-19",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 195,
+    "suction": 1120.0,
+    "weight": 0.91,
+    "circumference": 24.57,
+    "cigaretteA": 0,
+    "cigaretteB": 2,
+    "cigaretteC": 11,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 8,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 5,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "中度风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 2.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 11.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 8.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 5.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "date": "2026-06-19",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 185,
+    "suction": 1105.0,
+    "weight": 0.902,
+    "circumference": 24.51,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 12,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 9,
+    "boxSmallD": 2,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 5,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 12.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 9.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 5.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "date": "2026-06-20",
+    "shift": "早班",
+    "machineId": "1#",
+    "team": "甲班",
+    "totalInspected": 215,
+    "suction": 1115.0,
+    "weight": 0.908,
+    "circumference": 24.55,
+    "cigaretteA": 0,
+    "cigaretteB": 1,
+    "cigaretteC": 13,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 1,
+    "boxSmallC": 9,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 6,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 13.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 9.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 6.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "date": "2026-06-20",
+    "shift": "中班",
+    "machineId": "2#",
+    "team": "乙班",
+    "totalInspected": 190,
+    "suction": 1122.0,
+    "weight": 0.912,
+    "circumference": 24.58,
+    "cigaretteA": 0,
+    "cigaretteB": 3,
+    "cigaretteC": 12,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 2,
+    "boxSmallC": 9,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 1,
+    "cartonC": 6,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "中度风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JKKTB",
+        "name": "空头(深≥5mm且≥2/3截面)",
+        "grade": "B",
+        "count": 3.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 12.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDZB",
+        "name": "拉线倒置",
+        "grade": "B",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 9.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "透明纸",
+        "code": "TTWWB",
+        "name": "透明纸无",
+        "grade": "B",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 6.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "date": "2026-06-20",
+    "shift": "晚班",
+    "machineId": "3#",
+    "team": "丙班",
+    "totalInspected": 200,
+    "suction": 1108.0,
+    "weight": 0.904,
+    "circumference": 24.52,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 14,
+    "cigaretteD": 2,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 10,
+    "boxSmallD": 1,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 7,
+    "cartonD": 1,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "一般风险",
+    "defectDetails": [
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JACTC",
+        "name": "触头(挤压≥1/3圆周深≥2mm)",
+        "grade": "C",
+        "count": 14.0
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟端面",
+        "code": "JATSD",
+        "name": "吐丝(2-4mm有1条)",
+        "grade": "D",
+        "count": 2.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "拉线",
+        "code": "HLDKC",
+        "name": "拉线搭口错位(≥1mm)",
+        "grade": "C",
+        "count": 10.0
+      },
+      {
+        "module": "boxSmall",
+        "bodyPart": "小盒杂项",
+        "code": "HAWLD",
+        "name": "小盒外部粘连(可分离)",
+        "grade": "D",
+        "count": 1.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZC",
+        "name": "条盒轧皱(≥30mm)",
+        "grade": "C",
+        "count": 7.0
+      },
+      {
+        "module": "carton",
+        "bodyPart": "条盒杂项",
+        "code": "TAZZD",
+        "name": "条盒轧皱(20-30mm)",
+        "grade": "D",
+        "count": 1.0
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "date": "2026-06-30",
+    "shift": "早班",
+    "machineId": "2#",
+    "team": "甲班",
+    "totalInspected": 8,
+    "suction": 1100.0,
+    "weight": 0.9,
+    "circumference": 24.5,
+    "cigaretteA": 0,
+    "cigaretteB": 0,
+    "cigaretteC": 6,
+    "cigaretteD": 0,
+    "boxSmallA": 0,
+    "boxSmallB": 0,
+    "boxSmallC": 0,
+    "boxSmallD": 0,
+    "cartonA": 0,
+    "cartonB": 0,
+    "cartonC": 3,
+    "cartonD": 0,
+    "caseAa": 0,
+    "caseAb": 0,
+    "caseAc": 0,
+    "caseAd": 0,
+    "riskLevel": "平稳",
+    "defectDetails": [
+      {
+        "module": "carton",
+        "bodyPart": "透明纸",
+        "code": "TTRKC",
+        "name": "透明纸热封不牢(≥60mm)",
+        "grade": "C",
+        "count": 3
+      },
+      {
+        "module": "cigarette",
+        "bodyPart": "卷烟搭口",
+        "code": "JDKZC",
+        "name": "搭口宽窄不一(≥2mm)",
+        "grade": "C",
+        "count": 6
+      }
+    ]
+  }
+]

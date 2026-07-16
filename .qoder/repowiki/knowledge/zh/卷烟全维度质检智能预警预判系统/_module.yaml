@@ -1,0 +1,29 @@
+schema_version: 1
+module_path: ""
+title: 卷烟全维度质检智能预警预判系统
+scope:
+    - .mvn/
+    - src/
+    - mvnw.cmd
+    - pom.xml
+    - run.bat
+    - .mvn\wrapper\maven-wrapper.properties
+    - src\main\java\com\zjzy\quality\QualityApplication.java
+    - src\main\java\com\zjzy\quality\constant\DefectConstants.java
+    - src\main\java\com\zjzy\quality\controller\ChartController.java
+    - src\main\java\com\zjzy\quality\controller\InspectionController.java
+    - src\main\java\com\zjzy\quality\controller\WarningController.java
+    - src\main\java\com\zjzy\quality\entity\InspectionRecord.java
+    - src\main\java\com\zjzy\quality\entity\WarningLog.java
+    - src\main\java\com\zjzy\quality\service\InspectionService.java
+    - src\main\java\com\zjzy\quality\service\PredictionService.java
+    - src\main\java\com\zjzy\quality\service\SPCAnalysisService.java
+    - src\main\java\com\zjzy\quality\service\WarningService.java
+    - src\main\java\com\zjzy\quality\util\JsonDataStore.java
+    - src\main\resources\application.yml
+    - src\main\resources\static\css\style.css
+    - src\main\resources\static\index.html
+    - src\main\resources\static\js\app.js
+source_files: []
+depends_on: []
+related_to: []

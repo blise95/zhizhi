@@ -1,0 +1,48 @@
+# ============================================================
+# 卷包过程质量数智管控一体化平台 - 配置文件
+# ============================================================
+server:
+  port: 8080
+  servlet:
+    context-path: /zhiliang
+
+spring:
+  application:
+    name: quality-inspection
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+
+  sql:
+    init:
+      encoding: utf-8
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data-init.sql
+      continue-on-error: true
+
+  # 静态资源映射
+  web:
+    resources:
+      static-locations: classpath:/static/
+  mvc:
+    static-path-pattern: /**
+
+# 日志级别
+logging:
+  level:
+    com.zjzy.quality: INFO
+    org.springframework: WARN

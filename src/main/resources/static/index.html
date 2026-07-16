@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卷包过程质量数智管控一体化平台</title>
+    <link rel="stylesheet" href="css/style.css?v=1.26">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+<!-- 登录态检测：未登录跳转login.html -->
+<script>
+(function(){
+var u=sessionStorage.getItem('qa_user');
+if(!u){location.replace('/zhiliang/login.html');}
+})();
+</script>
+
+<!-- ==================== 顶部标题区 ==================== -->
+<header class="app-header">
+    <div class="header-inner">
+        <h1 class="app-title">卷包过程质量数智管控一体化平台</h1>
+        <p class="app-subtitle">浙江中烟 · 合作生产办公室</p>
+    </div>
+</header>
+
+<!-- ==================== 顶部风险提示横幅 ==================== -->
+<div id="banner" class="risk-banner">
+    <span id="bannerText">当前班次无A/B/C类风险，质检数据平稳</span>
+</div>
+
+<!-- ==================== 侧边栏 + 内容区 ==================== -->
+<div class="app-layout">
+
+    <!-- 侧边导航栏 -->
+    <nav class="app-sidebar">
+        <div class="sidebar-nav">
+            <a class="sidebar-nav-item active" data-view="view-entry">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <span>卷包过程质量数据录入</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-table">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                <span>卷包过程质量记录查询</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-defect">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                <span>综合质量汇总分析</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-case-defect">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>箱装外观质量分析</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-carton-defect">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>条装外观质量分析</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-box-defect">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>盒装外观质量分析</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-cig-defect">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>烟支外观质量分析</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-spc">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>烟支物测指标分析</span>
+            </a>
+            <a class="sidebar-nav-item" data-view="view-predict">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                <span>AI预测</span>
+            </a>
+        </div>
+
+        <!-- 侧边栏底部：用户信息 + 退出 -->
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="sidebar-user-info">
+                    <span class="sidebar-user-name" id="sidebarUserName">--</span>
+                    <span class="sidebar-user-role" id="sidebarUserRole">--</span>
+                </div>
+            </div>
+            <a class="sidebar-nav-item sidebar-logout" onclick="logout()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>退出登录</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主内容区（视图容器） -->
+    <main class="app-content">
+
+        <!-- ====== 视图1：卷包过程质量数据录入 ====== -->
+        <section class="view-panel active" id="view-entry">
+            <!-- 基础信息 -->
+            <div class="card" style="margin-bottom:16px;">
+                <h2 class="card-title">基础信息</h2>
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label>日期</label>
+                        <input type="date" id="inp_date">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>班次</label>
+                        <select id="inp_shift">
+                            <option value="早班">早班</option>
+                            <option value="中班">中班</option>
+                            <option value="晚班">晚班</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label>机台编号</label>
+                        <select id="inp_machine">
+                            <option>1#</option><option>2#</option><option>3#</option><option>4#</option><option>5#</option><option>6#</option><option>7#</option><option>8#</option><option>9#</option><option>10#</option><option>11#</option><option>12#</option><option>13#</option><option>14#</option><option>15#</option><option>16#</option><option>17#</option><option>18#</option><option>19#</option><option>20#</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>班组</label>
+                        <select id="inp_team">
+                            <option>甲班</option><option>乙班</option><option>丙班</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>合作生产点</label>
+                        <select id="inp_partner">
+                            <option value="">-- 请选择 --</option>
+                            <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                            <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>牌号</label>
+                        <select id="inp_brand">
+                            <option value="">-- 请选择 --</option>
+                            <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label>取样时间</label>
+                        <input type="text" id="inp_sample_time" placeholder="如: 10:30 或 14:00">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>取样件号</label>
+                        <input type="text" id="inp_sample_ticket" placeholder="手动输入件号">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 烟支内在物测指标表格 -->
+            <div class="card" style="margin-bottom:16px;">
+                <h2 class="card-title">烟支内在物测指标</h2>
+                <div class="measure-table-wrap">
+                    <table class="measure-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">序号</th>
+                                <th rowspan="2">时间</th>
+                                <th colspan="4">重量(g)</th>
+                                <th colspan="4">圆周(mm)</th>
+                                <th colspan="4">吸阻(Pa)</th>
+                                <th colspan="4">通风度/长度</th>
+                            </tr>
+                            <tr>
+                                <th>X</th><th>SD</th><th>MAX</th><th>MIN</th>
+                                <th>X</th><th>SD</th><th>MAX</th><th>MIN</th>
+                                <th>X</th><th>SD</th><th>MAX</th><th>MIN</th>
+                                <th>X</th><th>SD</th><th>MAX</th><th>MIN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-measure">
+                            <tr data-row="1">
+                                <td><input type="text" class="meas-seq" value="1" readonly></td>
+                                <td><input type="text" class="meas-time" placeholder="08:00"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_x" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_sd" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_max" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_min" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_x" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_sd" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_max" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_min" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_x" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_sd" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_max" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_min" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_x" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_sd" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_max" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_min" step="0.1"></td>
+                            </tr>
+                            <tr data-row="2">
+                                <td><input type="text" class="meas-seq" value="2" readonly></td>
+                                <td><input type="text" class="meas-time" placeholder="08:30"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_x" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_sd" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_max" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="weight_min" step="0.001"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_x" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_sd" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_max" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="circumference_min" step="0.01"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_x" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_sd" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_max" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="suction_min" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_x" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_sd" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_max" step="0.1"></td>
+                                <td><input type="number" class="meas-val" data-field="ventilation_min" step="0.1"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 下排：四层外观缺陷 2×2 网格 -->
+            <div class="defect-card-grid">
+                <!-- 箱装外观 -->
+                <div class="card defect-card" data-module="case">
+                    <h2 class="card-title">
+                        箱装外观缺陷
+                        <span class="defect-badge" id="badge-case">0项</span>
+                    </h2>
+                    <div class="defect-rows" id="rows-case"></div>
+                    <button type="button" class="btn-add-defect" onclick="addDefectRow('case')">+ 新增箱装缺陷</button>
+                </div>
+                <!-- 条装外观 -->
+                <div class="card defect-card" data-module="carton">
+                    <h2 class="card-title">
+                        条装外观缺陷
+                        <span class="defect-badge" id="badge-carton">0项</span>
+                    </h2>
+                    <div class="defect-rows" id="rows-carton"></div>
+                    <button type="button" class="btn-add-defect" onclick="addDefectRow('carton')">+ 新增条装缺陷</button>
+                </div>
+                <!-- 盒装外观 -->
+                <div class="card defect-card" data-module="boxSmall">
+                    <h2 class="card-title">
+                        盒装外观缺陷
+                        <span class="defect-badge" id="badge-boxSmall">0项</span>
+                    </h2>
+                    <div class="defect-rows" id="rows-boxSmall"></div>
+                    <button type="button" class="btn-add-defect" onclick="addDefectRow('boxSmall')">+ 新增盒装缺陷</button>
+                </div>
+                <!-- 烟支外观 -->
+                <div class="card defect-card" data-module="cigarette">
+                    <h2 class="card-title">
+                        烟支外观缺陷
+                        <span class="defect-badge" id="badge-cigarette">0项</span>
+                    </h2>
+                    <div class="defect-rows" id="rows-cigarette"></div>
+                    <button type="button" class="btn-add-defect" onclick="addDefectRow('cigarette')">+ 新增烟支缺陷</button>
+                </div>
+            </div>
+
+            <!-- 提交 -->
+            <button id="btn_submit" class="btn-submit">提交保存数据</button>
+        </section>
+
+        <!-- ====== 视图2：卷包过程质量记录查询 ====== -->
+        <section class="view-panel" id="view-table">
+            <div class="card">
+                <h2 class="card-title">板块1：卷包过程质量记录查询</h2>
+                <!-- 日期筛选栏 -->
+                <div class="filter-row">
+                    <label class="filter-label">日期筛选：</label>
+                    <input type="date" id="filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="filter_end" class="filter-input">
+                    <label class="filter-label" style="margin-left:16px;">牌号：</label>
+                    <select id="filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">合作生产点：</label>
+                    <select id="filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班次：</label>
+                    <select id="filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班组：</label>
+                    <select id="filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <button id="btn_filter" class="btn-filter">筛选</button>
+                    <button id="btn_filter_clear" class="btn-filter-clear">清除</button>
+                </div>
+                <div id="tableContainer" class="table-container">
+                    <table class="query-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="3">日期</th><th rowspan="3">合作生产点</th><th rowspan="3">牌号</th><th rowspan="3">班组</th><th rowspan="3">班次</th><th rowspan="3">机台号</th><th rowspan="3">取样时间</th><th rowspan="3">取样件号</th>
+                                <th colspan="6">物测</th>
+                                <th colspan="4">烟支外观</th>
+                                <th colspan="4">小盒外观</th>
+                                <th colspan="4">大条外观</th>
+                                <th colspan="4">箱装外观</th>
+                                <th rowspan="3">缺陷总数</th><th rowspan="3">风险等级</th><th rowspan="3">上传者</th><th rowspan="3">上传时间</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">重量</th><th colspan="2">圆周</th><th colspan="2">吸阻</th>
+                                <th rowspan="2">A类</th><th rowspan="2">B类</th><th rowspan="2">C类</th><th rowspan="2">D类</th>
+                                <th rowspan="2">A类</th><th rowspan="2">B类</th><th rowspan="2">C类</th><th rowspan="2">D类</th>
+                                <th rowspan="2">A类</th><th rowspan="2">B类</th><th rowspan="2">C类</th><th rowspan="2">D类</th>
+                                <th rowspan="2">A类</th><th rowspan="2">B类</th><th rowspan="2">C类</th><th rowspan="2">D类</th>
+                            </tr>
+                            <tr>
+                                <th>C类</th><th>D类</th><th>C类</th><th>D类</th><th>C类</th><th>D类</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-query">
+                            <tr><td colspan="34" class="empty-hint">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== 视图3：烟支物测指标分析 ====== -->
+        <section class="view-panel" id="view-spc">
+            <div class="card">
+                <h2 class="card-title">板块2：烟支物测SPC监控图（内置八大判异算法）</h2>
+                <!-- 筛选栏 -->
+                <div class="filter-row" style="margin-bottom:16px;">
+                    <label class="filter-label">日期筛选：</label>
+                    <input type="date" id="spc_filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="spc_filter_end" class="filter-input">
+                    <label class="filter-label" style="margin-left:16px;">牌号：</label>
+                    <select id="spc_filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">合作生产点：</label>
+                    <select id="spc_filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班次：</label>
+                    <select id="spc_filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班组：</label>
+                    <select id="spc_filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <button id="btn_spc_filter" class="btn-filter">筛选</button>
+                    <button id="btn_spc_filter_clear" class="btn-filter-clear">清除</button>
+                </div>
+                <div id="spcChart" class="chart-area"></div>
+            </div>
+        </section>
+
+        <!-- ====== 视图4：综合质量汇总分析 ====== -->
+        <section class="view-panel" id="view-defect">
+            <h2 class="card-title" style="margin-bottom:12px;">板块3：综合质量汇总分析</h2>
+            <!-- 统一筛选栏 -->
+            <div class="summary-filter-bar">
+                <div class="summary-time-presets">
+                    <button class="time-preset active" data-preset="month">本月</button>
+                    <button class="time-preset" data-preset="week">本周</button>
+                    <button class="time-preset" data-preset="today">今日</button>
+                    <button class="time-preset" data-preset="shift">当班</button>
+                    <button class="time-preset" data-preset="custom">自定义</button>
+                </div>
+                <div class="summary-filter-row" id="summary-date-range" style="display:none;">
+                    <label class="filter-label">日期：</label>
+                    <input type="date" id="defect_filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="defect_filter_end" class="filter-input">
+                </div>
+                <div class="summary-filter-row">
+                    <label class="filter-label">合作生产点：</label>
+                    <select id="defect_filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:12px;">牌号：</label>
+                    <select id="defect_filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:12px;">班次：</label>
+                    <select id="defect_filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:12px;">班组：</label>
+                    <select id="defect_filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:12px;">机台号：</label>
+                    <select id="defect_filter_machine" class="filter-input">
+                        <option value="">全部</option>
+                        <option>1#</option><option>2#</option><option>3#</option><option>4#</option><option>5#</option><option>6#</option><option>7#</option><option>8#</option><option>9#</option><option>10#</option><option>11#</option><option>12#</option><option>13#</option><option>14#</option><option>15#</option><option>16#</option><option>17#</option><option>18#</option><option>19#</option><option>20#</option>
+                    </select>
+                    <button id="btn_defect_filter" class="btn-filter">查询</button>
+                    <button id="btn_defect_filter_clear" class="btn-filter-clear">重置</button>
+                </div>
+            </div>
+
+            <!-- 质量核心指标卡 -->
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-quality">--</div>
+                    <div class="kpi-label">本月优质率</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-defect">--</div>
+                    <div class="kpi-label">本月缺陷率</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-samples">--</div>
+                    <div class="kpi-label">本月抽检样本数</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-warnings">--</div>
+                    <div class="kpi-label">本月预警数量</div>
+                </div>
+            </div>
+
+            <!-- 图表区域 -->
+            <div class="summary-charts">
+                <div class="card chart-card">
+                    <h3 class="chart-title">ABCD缺陷等级分布</h3>
+                    <div id="defectPieChart" class="chart-inline" style="height:320px;"></div>
+                </div>
+                <div class="card chart-card">
+                    <h3 class="chart-title">合作生产点质量分析</h3>
+                    <div id="summaryPartnerChart" class="chart-inline" style="height:320px;"></div>
+                </div>
+                <div class="card chart-card">
+                    <h3 class="chart-title">牌号质量分析</h3>
+                    <div id="summaryBrandChart" class="chart-inline" style="height:320px;"></div>
+                </div>
+                <div class="card chart-card">
+                    <h3 class="chart-title">机台质量分析</h3>
+                    <div id="summaryMachineChart" class="chart-inline" style="height:320px;"></div>
+                </div>
+                <div class="card chart-card chart-card-wide">
+                    <h3 class="chart-title">ABCD缺陷趋势分析</h3>
+                    <div id="summaryTrendChart" class="chart-inline" style="height:340px;"></div>
+                </div>
+                <div class="card chart-card chart-card-wide">
+                    <h3 class="chart-title">缺陷类型统计分析 (TOP10)</h3>
+                    <div id="topDefectsChart" class="chart-inline" style="height:420px;"></div>
+                </div>
+            </div>
+
+            <!-- 系统预警中心 -->
+            <div class="card warning-center">
+                <h3 class="chart-title">系统预警中心</h3>
+                <div class="warning-summary">
+                    <span class="warn-badge warn-badge-a">A类：<b id="warn-count-a">0</b></span>
+                    <span class="warn-badge warn-badge-b">B类：<b id="warn-count-b">0</b></span>
+                    <span class="warn-badge warn-badge-c">C类：<b id="warn-count-c">0</b></span>
+                    <span class="warn-badge warn-badge-d">D类：<b id="warn-count-d">0</b></span>
+                </div>
+                <div class="warning-table-wrap">
+                    <table class="warning-table">
+                        <thead>
+                            <tr>
+                                <th>预警时间</th><th>合作生产点</th><th>牌号</th><th>机台编号</th><th>缺陷类型</th><th>缺陷等级</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-warnings"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 质量分析结论 -->
+            <div class="card conclusion-card">
+                <h3 class="chart-title">质量分析结论</h3>
+                <div id="conclusionContent">
+                    <p class="empty-hint">点击查询后生成分析结论</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== 视图5：箱装外观缺陷分析 ====== -->
+        <section class="view-panel" id="view-case-defect">
+            <div class="card">
+                <h2 class="card-title">箱装外观缺陷分析（按部位×日期×缺陷折线图）</h2>
+                <!-- 日期筛选栏 -->
+                <div class="filter-row">
+                    <label class="filter-label">日期筛选（最多7天）：</label>
+                    <input type="date" id="case_filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="case_filter_end" class="filter-input">
+                    <label class="filter-label" style="margin-left:16px;">牌号：</label>
+                    <select id="case_filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">合作生产点：</label>
+                    <select id="case_filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班次：</label>
+                    <select id="case_filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班组：</label>
+                    <select id="case_filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <button id="btn_case_filter" class="btn-filter">查询</button>
+                    <button id="btn_case_filter_clear" class="btn-filter-clear">清除</button>
+                </div>
+                <div id="caseDefectContainer" class="case-defect-grid">
+                    <p class="empty-hint">请选择日期范围后点击查询</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== 视图6：条装外观缺陷分析 ====== -->
+        <section class="view-panel" id="view-carton-defect">
+            <div class="card">
+                <h2 class="card-title">条装外观缺陷分析（按部位×日期×缺陷折线图）</h2>
+                <!-- 日期筛选栏 -->
+                <div class="filter-row">
+                    <label class="filter-label">日期筛选（最多7天）：</label>
+                    <input type="date" id="carton_filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="carton_filter_end" class="filter-input">
+                    <label class="filter-label" style="margin-left:16px;">牌号：</label>
+                    <select id="carton_filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">合作生产点：</label>
+                    <select id="carton_filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班次：</label>
+                    <select id="carton_filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班组：</label>
+                    <select id="carton_filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <button id="btn_carton_filter" class="btn-filter">查询</button>
+                    <button id="btn_carton_filter_clear" class="btn-filter-clear">清除</button>
+                </div>
+                <div id="cartonDefectContainer" class="case-defect-grid">
+                    <p class="empty-hint">请选择日期范围后点击查询</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== 视图7：盒装外观缺陷分析 ====== -->
+        <section class="view-panel" id="view-box-defect">
+            <div class="card">
+                <h2 class="card-title">盒装外观缺陷分析（按部位×日期×缺陷折线图）</h2>
+                <div class="filter-row">
+                    <label class="filter-label">日期筛选（最多7天）：</label>
+                    <input type="date" id="box_filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="box_filter_end" class="filter-input">
+                    <label class="filter-label" style="margin-left:16px;">牌号：</label>
+                    <select id="box_filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">合作生产点：</label>
+                    <select id="box_filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班次：</label>
+                    <select id="box_filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班组：</label>
+                    <select id="box_filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <button id="btn_box_filter" class="btn-filter">查询</button>
+                    <button id="btn_box_filter_clear" class="btn-filter-clear">清除</button>
+                </div>
+                <div id="boxDefectContainer" class="case-defect-grid">
+                    <p class="empty-hint">请选择日期范围后点击查询</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== 视图8：烟支外观缺陷分析 ====== -->
+        <section class="view-panel" id="view-cig-defect">
+            <div class="card">
+                <h2 class="card-title">烟支外观缺陷分析（按部位×日期×缺陷折线图）</h2>
+                <div class="filter-row">
+                    <label class="filter-label">日期筛选（最多7天）：</label>
+                    <input type="date" id="cig_filter_start" class="filter-input">
+                    <span class="filter-sep">至</span>
+                    <input type="date" id="cig_filter_end" class="filter-input">
+                    <label class="filter-label" style="margin-left:16px;">牌号：</label>
+                    <select id="cig_filter_brand" class="filter-input">
+                        <option value="">全部</option>
+                        <option>利群（新版）</option><option>利群（长嘴）</option><option>利群（软红长嘴）</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">合作生产点：</label>
+                    <select id="cig_filter_partner" class="filter-input">
+                        <option value="">全部</option>
+                        <option>山西太原</option><option>广西南宁</option><option>贵州毕节</option><option>河南南阳</option>
+                        <option>江西井冈山</option><option>重庆涪陵</option><option>重庆黔江</option><option>甘肃兰州</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班次：</label>
+                    <select id="cig_filter_shift" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="早班">早班</option><option value="中班">中班</option><option value="晚班">晚班</option>
+                    </select>
+                    <label class="filter-label" style="margin-left:16px;">班组：</label>
+                    <select id="cig_filter_team" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="甲班">甲班</option><option value="乙班">乙班</option><option value="丙班">丙班</option>
+                    </select>
+                    <button id="btn_cig_filter" class="btn-filter">查询</button>
+                    <button id="btn_cig_filter_clear" class="btn-filter-clear">清除</button>
+                </div>
+                <div id="cigDefectContainer" class="case-defect-grid">
+                    <p class="empty-hint">请选择日期范围后点击查询</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== 视图9：AI预测 ====== -->
+        <section class="view-panel" id="view-predict">
+            <div class="card card-predict">
+                <h2 class="card-title">板块4：综合不良率AI预测大图</h2>
+                <div id="predictChart" class="chart-area chart-predict"></div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- ==================== 底部 ==================== -->
+<footer class="app-footer">
+    浙江中烟 · 卷包过程质量数智管控一体化平台 · 合作生产办公室
+</footer>
+
+<script src="js/app.js?v=1.26"></script>
+</body>
+</html>
