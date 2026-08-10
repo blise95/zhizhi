@@ -1,0 +1,105 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: Q0DeR-MaG1C-BrAnCh-Fo2-NoN-GiT-Or-No-C0MmIt
+nodes_managed: true
+exported_at: "2026-06-21T06:39:04Z"
+modules:
+    "":
+        dir_name: 卷烟全维度质检智能预警预判系统
+        title: 卷烟全维度质检智能预警预判系统
+        scope:
+            - .mvn/
+            - src/
+            - mvnw.cmd
+            - pom.xml
+            - run.bat
+            - .mvn\wrapper\maven-wrapper.properties
+            - src\main\java\com\zjzy\quality\QualityApplication.java
+            - src\main\java\com\zjzy\quality\constant\DefectConstants.java
+            - src\main\java\com\zjzy\quality\controller\ChartController.java
+            - src\main\java\com\zjzy\quality\controller\InspectionController.java
+            - src\main\java\com\zjzy\quality\controller\WarningController.java
+            - src\main\java\com\zjzy\quality\entity\InspectionRecord.java
+            - src\main\java\com\zjzy\quality\entity\WarningLog.java
+            - src\main\java\com\zjzy\quality\service\InspectionService.java
+            - src\main\java\com\zjzy\quality\service\PredictionService.java
+            - src\main\java\com\zjzy\quality\service\SPCAnalysisService.java
+            - src\main\java\com\zjzy\quality\service\WarningService.java
+            - src\main\java\com\zjzy\quality\util\JsonDataStore.java
+            - src\main\resources\application.yml
+            - src\main\resources\static\css\style.css
+            - src\main\resources\static\index.html
+            - src\main\resources\static\js\app.js
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    build_system:
+        dir_name: Maven构建与Windows环境启动流程
+        title: Maven构建与Windows环境启动流程
+        scope: []
+        source_files:
+            - pom.xml
+            - run.bat
+            - mvnw.cmd
+            - .mvn/wrapper/maven-wrapper.properties
+        children: []
+        depends_on: []
+        related_to: []
+    configuration_system:
+        dir_name: Spring Boot 配置与数据持久化机制
+        title: Spring Boot 配置与数据持久化机制
+        scope: []
+        source_files:
+            - src/main/resources/application.yml
+            - pom.xml
+            - src/main/java/com/zjzy/quality/util/JsonDataStore.java
+            - src/main/java/com/zjzy/quality/QualityApplication.java
+        children: []
+        depends_on: []
+        related_to: []
+    dependency_management:
+        dir_name: Maven依赖管理与构建配置
+        title: Maven依赖管理与构建配置
+        scope: []
+        source_files:
+            - pom.xml
+            - .mvn/wrapper/maven-wrapper.properties
+            - run.bat
+        children: []
+        depends_on: []
+        related_to: []
+    error_handling:
+        dir_name: 错误处理机制分析
+        title: 错误处理机制分析
+        scope: []
+        source_files:
+            - src/main/java/com/zjzy/quality/util/JsonDataStore.java
+            - src/main/java/com/zjzy/quality/service/PredictionService.java
+            - src/main/java/com/zjzy/quality/controller/InspectionController.java
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_style:
+        dir_name: 乔布斯极简风格前端视觉体系
+        title: 乔布斯极简风格前端视觉体系
+        scope: []
+        source_files:
+            - src/main/resources/static/css/style.css
+            - src/main/resources/static/index.html
+            - src/main/resources/static/js/app.js
+        children: []
+        depends_on: []
+        related_to: []
+    logging_system:
+        dir_name: 日志系统现状与约定
+        title: 日志系统现状与约定
+        scope: []
+        source_files:
+            - src/main/resources/application.yml
+            - src/main/java/com/zjzy/quality/util/JsonDataStore.java
+            - pom.xml
+        children: []
+        depends_on: []
+        related_to: []

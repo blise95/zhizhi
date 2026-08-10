@@ -1,0 +1,11 @@
+schema_version: 1
+module_path: build_system
+title: Maven构建与Windows环境启动流程
+scope: []
+source_files:
+    - pom.xml
+    - run.bat
+    - mvnw.cmd
+    - .mvn/wrapper/maven-wrapper.properties
+depends_on: []
+related_to: []

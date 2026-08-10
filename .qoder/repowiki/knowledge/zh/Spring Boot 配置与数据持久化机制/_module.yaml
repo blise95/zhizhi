@@ -1,0 +1,11 @@
+schema_version: 1
+module_path: configuration_system
+title: Spring Boot 配置与数据持久化机制
+scope: []
+source_files:
+    - src/main/resources/application.yml
+    - pom.xml
+    - src/main/java/com/zjzy/quality/util/JsonDataStore.java
+    - src/main/java/com/zjzy/quality/QualityApplication.java
+depends_on: []
+related_to: []

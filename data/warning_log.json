@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "occurTime": "2026-06-13 23:15:30",
+    "date": "2026-06-13",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "A",
+    "defectCount": 1,
+    "description": "检出A类严重缺陷1个，高风险，立即复核。涉及：烟支空头JKKTB(1个)"
+  },
+  {
+    "id": 2,
+    "occurTime": "2026-06-13 23:15:30",
+    "date": "2026-06-13",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "B",
+    "defectCount": 2,
+    "description": "B类缺陷合计2个，中度风险，及时排查。涉及：烟支触头JACTC(2个)"
+  },
+  {
+    "id": 3,
+    "occurTime": "2026-06-16 23:10:20",
+    "date": "2026-06-16",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "A",
+    "defectCount": 1,
+    "description": "检出A类严重缺陷1个，高风险，立即复核。涉及：小盒透明纸残缺HTCQA(1个)"
+  },
+  {
+    "id": 4,
+    "occurTime": "2026-06-16 23:10:20",
+    "date": "2026-06-16",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "B",
+    "defectCount": 1,
+    "description": "B类缺陷合计1个，中度风险，及时排查。涉及：小盒拉线倒置HLDZB(1个)"
+  },
+  {
+    "id": 5,
+    "occurTime": "2026-06-15 16:20:15",
+    "date": "2026-06-15",
+    "team": "乙班",
+    "machineId": "2#",
+    "defectLevel": "B",
+    "defectCount": 3,
+    "description": "B类缺陷合计3个，中度风险，及时排查。涉及：烟支触头JACTC(2个)，小盒透明纸破HTPSB(1个)"
+  },
+  {
+    "id": 6,
+    "occurTime": "2026-06-18 09:30:10",
+    "date": "2026-06-18",
+    "team": "甲班",
+    "machineId": "1#",
+    "defectLevel": "C",
+    "defectCount": 7,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：7个"
+  },
+  {
+    "id": 7,
+    "occurTime": "2026-06-18 16:25:20",
+    "date": "2026-06-18",
+    "team": "乙班",
+    "machineId": "2#",
+    "defectLevel": "C",
+    "defectCount": 8,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：8个"
+  },
+  {
+    "id": 8,
+    "occurTime": "2026-06-18 23:20:30",
+    "date": "2026-06-18",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "C",
+    "defectCount": 9,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：9个"
+  },
+  {
+    "id": 9,
+    "occurTime": "2026-06-19 09:35:10",
+    "date": "2026-06-19",
+    "team": "甲班",
+    "machineId": "1#",
+    "defectLevel": "C",
+    "defectCount": 10,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：10个"
+  },
+  {
+    "id": 10,
+    "occurTime": "2026-06-19 16:30:20",
+    "date": "2026-06-19",
+    "team": "乙班",
+    "machineId": "2#",
+    "defectLevel": "C",
+    "defectCount": 11,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：11个。B类也增多：3个"
+  },
+  {
+    "id": 11,
+    "occurTime": "2026-06-19 23:25:30",
+    "date": "2026-06-19",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "C",
+    "defectCount": 12,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：12个"
+  },
+  {
+    "id": 12,
+    "occurTime": "2026-06-20 09:40:10",
+    "date": "2026-06-20",
+    "team": "甲班",
+    "machineId": "1#",
+    "defectLevel": "C",
+    "defectCount": 13,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：13个"
+  },
+  {
+    "id": 13,
+    "occurTime": "2026-06-20 16:35:20",
+    "date": "2026-06-20",
+    "team": "乙班",
+    "machineId": "2#",
+    "defectLevel": "C",
+    "defectCount": 12,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：12个。B类：4个"
+  },
+  {
+    "id": 14,
+    "occurTime": "2026-06-20 23:30:30",
+    "date": "2026-06-20",
+    "team": "丙班",
+    "machineId": "3#",
+    "defectLevel": "C",
+    "defectCount": 14,
+    "description": "C类缺陷连续3班次上涨，一般风险，请关注。当前值：14个"
+  }
+]

@@ -1,9 +1,9 @@
-# Dependencies
+# ==================== Dependencies ====================
 node_modules/
 .pnp
 .pnp.js
 
-# Build output
+# ==================== Build Output ====================
 dist/
 dist-ssr/
 build/
@@ -13,14 +13,14 @@ dist_locked*/
 dist_new/
 output/
 
-# Environment files
+# ==================== Environment Files ====================
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Editor directories and files
+# ==================== IDE / Editor ====================
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -30,8 +30,13 @@ output/
 *.njsproj
 *.sln
 *.sw?
+*.iml
+.settings/
+.project
+.classpath
+*~
 
-# Logs
+# ==================== Logs ====================
 logs
 *.log
 npm-debug.log*
@@ -40,15 +45,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Cache
+# ==================== Cache ====================
 .cache/
 .parcel-cache/
 .vite/
 
-# Temporary files
+# ==================== Temporary Files ====================
 *.tmp
 *.temp
+*.bak
 
-# OS files
+# ==================== OS Files ====================
 Thumbs.db
 Desktop.ini
+
+# ==================== Maven / Java (Legacy) ====================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
