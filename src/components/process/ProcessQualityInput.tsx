@@ -40,6 +40,19 @@ interface DefectRecord {
   quantity: number;
 }
 
+// 单条历史记忆记录
+interface HistoryRecord {
+  formData: FormData;
+  defectData: Record<string, DefectRecord[]>;
+  savedAt: string;
+}
+
+// 按机台分组的历史记忆
+interface MachineHistory {
+  lastUsedMachine?: string;
+  [machine: string]: HistoryRecord | string | undefined;
+}
+
 // 下拉选项配置
 const OPTIONS = {
   shift: [
@@ -124,35 +137,61 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
     cigarette: [],
   });
 
-  // 页面加载时：如果有历史记录，自动带出（只清空取样时间和取样件号）
+  // 加载指定机台的历史记忆（切换机台或初始加载时调用）
+  const loadMachineHistory = (machine: string) => {
+    if (!machine) return false;
+    try {
+      const historyRaw = localStorage.getItem(HISTORY_KEY);
+      if (!historyRaw) return false;
+      const history: MachineHistory = JSON.parse(historyRaw);
+      const record = history[machine] as HistoryRecord | undefined;
+      if (!record || !record.formData) return false;
+
+      const remembered: FormData = {
+        ...record.formData,
+        date: getTodayDate(), // 日期默认当天，不记忆
+        machine,              // 确保机台与选择一致
+        samplingTime: '',     // 每次必须重新填写
+        sampleNumber: '',     // 每次必须重新填写
+      };
+      setFormData(remembered);
+      setHasHistory(true);
+
+      if (record.defectData) {
+        const nextDefectData = {
+          box: record.defectData.box || [],
+          carton: record.defectData.carton || [],
+          pack: record.defectData.pack || [],
+          cigarette: record.defectData.cigarette || [],
+        };
+        setHistoryDefectData(nextDefectData);
+        setDefectData(nextDefectData);
+      }
+      return true;
+    } catch (error) {
+      console.error('加载机台历史记忆失败：', error);
+      return false;
+    }
+  };
+
+  // 页面加载时：如果有上次使用的机台记忆，自动带出该机台数据
   useEffect(() => {
     try {
       const historyRaw = localStorage.getItem(HISTORY_KEY);
       if (historyRaw) {
-        const history = JSON.parse(historyRaw);
-        if (history && history.formData) {
-          const remembered: FormData = {
-            ...history.formData,
-            date: getTodayDate(), // 日期默认当天，不记忆
-            samplingTime: '',     // 每次必须重新填写
-            sampleNumber: '',     // 每次必须重新填写
-          };
-          setFormData(remembered);
+        const history: MachineHistory = JSON.parse(historyRaw);
+        if (history && typeof history === 'object' && Object.keys(history).length > 0) {
           setHasHistory(true);
-
-          if (history.defectData) {
-            setHistoryDefectData({
-              box: history.defectData.box || [],
-              carton: history.defectData.carton || [],
-              pack: history.defectData.pack || [],
-              cigarette: history.defectData.cigarette || [],
-            });
+          const lastMachine = history.lastUsedMachine as string | undefined;
+          if (lastMachine) {
+            loadMachineHistory(lastMachine);
           }
         }
       }
     } catch (error) {
       console.error('加载历史记忆失败：', error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 处理缺陷数据变化
@@ -186,6 +225,11 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
     // 清除该字段的错误
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+
+    // 切换机台时：自动带出该机台上一次填写的内容
+    if (field === 'machine' && value) {
+      loadMachineHistory(value);
     }
   };
 
@@ -275,13 +319,17 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
         existingRecords.push(qualityRecord);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(existingRecords));
 
-        // 保存当前数据作为下一次录入的记忆（用户修改后的最新内容）
-        const historyRecord = {
+        // 保存当前数据作为该机台下一次录入的记忆（用户修改后的最新内容）
+        const historyRaw = localStorage.getItem(HISTORY_KEY);
+        const history: MachineHistory = historyRaw ? JSON.parse(historyRaw) : {};
+        const currentMachine = formData.machine || 'unknown';
+        history[currentMachine] = {
           formData: { ...formData },
           defectData: { ...defectData },
           savedAt: new Date().toISOString(),
         };
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(historyRecord));
+        history.lastUsedMachine = currentMachine;
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
         setHasHistory(true);
 
         console.log('✅ 数据提交成功：', qualityRecord);
@@ -402,9 +450,9 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">已连续录入模式：已自动带出上一条记录</p>
+              <p className="text-sm font-medium text-foreground">已连续录入模式：已按机台自动带出历史记录</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                仅“取样时间”和“取样件号”需要重新填写，其他内容可直接复用或按需修改
+                切换机台时会自动带出该机台上一次填写的内容；仅“取样时间”和“取样件号”需要重新填写
               </p>
             </div>
           </div>
