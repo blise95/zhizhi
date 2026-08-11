@@ -82,13 +82,6 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
     }, 800);
   };
 
-  // ========== 使用演示账号 ==========
-  const useDemoAccount = () => {
-    setUsername('chenyu');
-    setPassword('chenyu312');
-    setError('');
-  };
-
   // ========== 完整Canvas动画系统 ==========
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -199,19 +192,13 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
 
       const floatingTexts: FloatingText[] = [];
 
-      // 初始百分比位置（相对于整个页面）与基础速度分组
-      // 位置经过计算，确保均在地球安全区外，并尽量分散覆盖页面
+      // 初始百分比位置（相对于左侧 65% 面板）与基础速度分组
+      // 左侧已放置功能卖点区，漂浮文字仅在右侧边缘保留，避免重叠
       const textConfigs = [
-        // 左侧组：数智·质控·智能·中枢
-        { top: 0.12, left: 0.06, speed: 0.15, group: 'left' },
-        { top: 0.38, left: 0.10, speed: 0.13, group: 'left' },
-        { top: 0.66, left: 0.05, speed: 0.14, group: 'left' },
-        { top: 0.88, left: 0.14, speed: 0.12, group: 'left' },
-        // 右侧组：决策、洞察、引擎、融合
-        { top: 0.10, left: 0.86, speed: 0.16, group: 'right' },
-        { top: 0.32, left: 0.89, speed: 0.14, group: 'right' },
-        { top: 0.60, left: 0.88, speed: 0.15, group: 'right' },
-        { top: 0.86, left: 0.87, speed: 0.13, group: 'right' },
+        { top: 0.10, left: 0.90, speed: 0.16, group: 'right' },
+        { top: 0.30, left: 0.93, speed: 0.14, group: 'right' },
+        { top: 0.56, left: 0.91, speed: 0.15, group: 'right' },
+        { top: 0.82, left: 0.92, speed: 0.13, group: 'right' },
       ];
 
       const pickNewDirection = (ft: FloatingText) => {
@@ -479,10 +466,10 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
         ctx.save();
         ctx.scale(2, 2);
 
-        // 地球参数 - 保持当前大小，整体向右轻微移动
-        globeCx = width * 0.48; // 整体向右偏移（之前0.42）
+        // 地球参数 - 为左侧功能卖点区腾出空间，整体居中偏右
+        globeCx = width * 0.58;
         globeCy = height * 0.52;
-        globeR = Math.min(width, height) * 0.46; // 保持当前大小不变
+        globeR = Math.min(width, height) * 0.42;
 
         // 更新科技漂浮文字位置（必须在地球参数计算之后）
         updateFloatingTexts(frameCount);
@@ -866,147 +853,205 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           style={{ zIndex: 1 }}
         />
 
-        {/* 左下角品牌标识 */}
-        <div className="absolute bottom-10 left-10 space-y-1.5" style={{ zIndex: 5 }}>
-          <p className="text-xs tracking-[3px] font-medium" style={{ color: 'rgba(148, 163, 184, 0.4)' }}>
-            GLOBAL DIGITAL MANUFACTURING
+        {/* 左侧功能卖点区（参考图） */}
+        <div
+          className="absolute top-0 left-0 h-full flex flex-col justify-center pl-10"
+          style={{ zIndex: 5 }}
+        >
+          <div className="relative">
+            {/* 垂直科技线 */}
+            <div
+              className="absolute left-[27px] top-[42px] bottom-[42px] w-[1px]"
+              style={{
+                background: 'linear-gradient(180deg, transparent 0%, rgba(96, 165, 250, 0.25) 20%, rgba(96, 165, 250, 0.35) 50%, rgba(96, 165, 250, 0.25) 80%, transparent 100%)',
+              }}
+            />
+
+            {[
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-5 h-5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5" />
+                    <path d="M2 12l10 5 10-5" />
+                  </svg>
+                ),
+                title: '懂数智',
+                desc: '洞察数据价值',
+              },
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-5 h-5">
+                    <path d="M3 3v18h18" />
+                    <path d="M7 16l4-4 4 4 6-6" />
+                  </svg>
+                ),
+                title: '会分析',
+                desc: '挖掘深层关联',
+              },
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-5 h-5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                ),
+                title: '能预警',
+                desc: '识别风险隐患',
+              },
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-5 h-5">
+                    <path d="M9 18h6" />
+                    <path d="M10 22h4" />
+                    <path d="M12 2v2" />
+                    <path d="M12 12l4-2" />
+                    <circle cx="12" cy="9" r="5" />
+                  </svg>
+                ),
+                title: '给建议',
+                desc: '驱动质量决策',
+              },
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center mb-11 relative">
+                {/* 发光节点 */}
+                <div
+                  className="absolute left-[27px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
+                  style={{
+                    background: 'radial-gradient(circle, #a5f3fc 0%, #60a5fa 60%, transparent 100%)',
+                    boxShadow: '0 0 10px rgba(165, 243, 252, 0.8), 0 0 24px rgba(96, 165, 250, 0.5)',
+                  }}
+                />
+
+                {/* 图标圆环 */}
+                <div
+                  className="relative w-[54px] h-[54px] rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{
+                    background: 'rgba(2, 6, 23, 0.55)',
+                    border: '1px solid rgba(96, 165, 250, 0.35)',
+                    boxShadow: '0 0 20px rgba(96, 165, 250, 0.15), inset 0 0 14px rgba(96, 165, 250, 0.08)',
+                    color: '#a5f3fc',
+                  }}
+                >
+                  {item.icon}
+                </div>
+
+                {/* 文字 */}
+                <div className="ml-5">
+                  <div
+                    className="font-bold tracking-[4px]"
+                    style={{
+                      fontSize: '26px',
+                      color: 'rgba(255, 255, 255, 0.95)',
+                      textShadow: '0 0 22px rgba(96, 165, 250, 0.35)',
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                  <div
+                    className="mt-1"
+                    style={{
+                      fontSize: '13px',
+                      letterSpacing: '2px',
+                      color: 'rgba(148, 163, 184, 0.75)',
+                    }}
+                  >
+                    {item.desc}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 左下角品牌标语 */}
+        <div className="absolute bottom-10 left-10 flex items-center" style={{ zIndex: 5 }}>
+          <div
+            className="h-[1px] w-16 rounded-full"
+            style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(96, 165, 250, 0.65) 100%)' }}
+          />
+          <p
+            className="mx-4 font-medium"
+            style={{
+              fontSize: '18px',
+              letterSpacing: '5px',
+              color: 'rgba(165, 243, 252, 0.92)',
+              textShadow: '0 0 24px rgba(96, 165, 250, 0.45), 0 0 48px rgba(96, 165, 250, 0.15)',
+            }}
+          >
+            AI驱动 · 全球协同 · 智能管控 · 质赢未来
           </p>
-          <p className="text-xs tracking-wider" style={{ color: 'rgba(71, 85, 105, 0.45)' }}>
-            全球数字化智能制造平台
-          </p>
+          <div
+            className="h-[1px] w-16 rounded-full"
+            style={{ background: 'linear-gradient(90deg, rgba(96, 165, 250, 0.65) 0%, transparent 100%)' }}
+          />
         </div>
       </div>
 
-      {/* ====== 全屏漂浮科技文字层（避开地球，低于登录框） ====== */}
+      {/* ====== 右侧边缘漂浮科技文字（避开左侧功能卖点区） ====== */}
       <div
         className="fixed inset-0 pointer-events-none"
         style={{ zIndex: 6 }}
       >
-        {/* 左侧组：数智·质控·智能·中枢 */}
         <div
           ref={setTextRef(0)}
           className="absolute tech-text-float whitespace-nowrap"
           style={{
-            top: '12%',
-            left: '6%',
-            fontSize: '32px',
-            fontWeight: 700,
-            letterSpacing: '10px',
-            color: 'rgba(165, 243, 252, 0.22)',
-            textShadow: '0 0 35px rgba(165, 243, 252, 0.38)',
-          }}
-        >
-          数智
-        </div>
-
-        <div
-          ref={setTextRef(1)}
-          className="absolute tech-text-float whitespace-nowrap"
-          style={{
-            top: '38%',
-            left: '10%',
-            fontSize: '27px',
-            fontWeight: 600,
-            letterSpacing: '8px',
-            color: 'rgba(96, 165, 250, 0.18)',
-            textShadow: '0 0 28px rgba(96, 165, 250, 0.32)',
-          }}
-        >
-          质控
-        </div>
-
-        <div
-          ref={setTextRef(2)}
-          className="absolute tech-text-float whitespace-nowrap"
-          style={{
-            top: '66%',
-            left: '5%',
-            fontSize: '30px',
-            fontWeight: 700,
-            letterSpacing: '9px',
-            color: 'rgba(34, 211, 238, 0.2)',
-            textShadow: '0 0 32px rgba(34, 211, 238, 0.35)',
-          }}
-        >
-          智能
-        </div>
-
-        <div
-          ref={setTextRef(3)}
-          className="absolute tech-text-float whitespace-nowrap"
-          style={{
-            top: '88%',
-            left: '14%',
-            fontSize: '25px',
-            fontWeight: 600,
-            letterSpacing: '7px',
-            color: 'rgba(59, 130, 246, 0.19)',
-            textShadow: '0 0 25px rgba(59, 130, 246, 0.3)',
-          }}
-        >
-          中枢
-        </div>
-
-        {/* 右侧组：决策、洞察、引擎、融合 */}
-        <div
-          ref={setTextRef(4)}
-          className="absolute tech-text-float whitespace-nowrap"
-          style={{
             top: '10%',
-            left: '86%',
-            fontSize: '28px',
+            left: '90%',
+            fontSize: '26px',
             fontWeight: 700,
-            letterSpacing: '9px',
-            color: 'rgba(165, 243, 252, 0.19)',
-            textShadow: '0 0 32px rgba(165, 243, 252, 0.3)',
+            letterSpacing: '8px',
+            color: 'rgba(165, 243, 252, 0.16)',
+            textShadow: '0 0 28px rgba(165, 243, 252, 0.28)',
           }}
         >
           决策
         </div>
 
         <div
-          ref={setTextRef(5)}
+          ref={setTextRef(1)}
           className="absolute tech-text-float whitespace-nowrap"
           style={{
-            top: '32%',
-            left: '89%',
-            fontSize: '27px',
+            top: '30%',
+            left: '93%',
+            fontSize: '24px',
             fontWeight: 700,
-            letterSpacing: '8px',
-            color: 'rgba(34, 211, 238, 0.19)',
-            textShadow: '0 0 32px rgba(34, 211, 238, 0.3)',
+            letterSpacing: '7px',
+            color: 'rgba(34, 211, 238, 0.15)',
+            textShadow: '0 0 28px rgba(34, 211, 238, 0.26)',
           }}
         >
           洞察
         </div>
 
         <div
-          ref={setTextRef(6)}
+          ref={setTextRef(2)}
           className="absolute tech-text-float whitespace-nowrap"
           style={{
-            top: '60%',
-            left: '88%',
-            fontSize: '28px',
+            top: '56%',
+            left: '91%',
+            fontSize: '25px',
             fontWeight: 700,
-            letterSpacing: '8px',
-            color: 'rgba(96, 165, 250, 0.22)',
-            textShadow: '0 0 34px rgba(96, 165, 250, 0.35)',
+            letterSpacing: '7px',
+            color: 'rgba(96, 165, 250, 0.17)',
+            textShadow: '0 0 30px rgba(96, 165, 250, 0.3)',
           }}
         >
           引擎
         </div>
 
         <div
-          ref={setTextRef(7)}
+          ref={setTextRef(3)}
           className="absolute tech-text-float whitespace-nowrap"
           style={{
-            top: '86%',
-            left: '87%',
-            fontSize: '24px',
+            top: '82%',
+            left: '92%',
+            fontSize: '22px',
             fontWeight: 600,
             letterSpacing: '6px',
-            color: 'rgba(96, 165, 250, 0.2)',
-            textShadow: '0 0 28px rgba(96, 165, 250, 0.3)',
+            color: 'rgba(96, 165, 250, 0.15)',
+            textShadow: '0 0 24px rgba(96, 165, 250, 0.24)',
           }}
         >
           融合
@@ -1105,18 +1150,18 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
               <div
                 className="flex items-center rounded-xl px-4 py-3 transition-all duration-300"
                 style={{
-                  background: 'rgba(2, 6, 18, 0.82)',
+                  background: 'rgba(15, 23, 42, 0.42)',
                   border: `1px solid ${
                     isFocused === 'username'
-                      ? 'rgba(96, 165, 250, 0.55)'
-                      : 'rgba(40, 55, 80, 0.4)'
+                      ? 'rgba(165, 243, 252, 0.65)'
+                      : 'rgba(96, 165, 250, 0.28)'
                   }`,
                   boxShadow: isFocused === 'username'
-                    ? '0 0 18px rgba(59, 130, 246, 0.15), inset 0 0 10px rgba(59, 130, 246, 0.05)'
-                    : 'inset 0 1px 2px rgba(0, 0, 0, 0.35)',
+                    ? '0 0 22px rgba(96, 165, 250, 0.22), inset 0 0 14px rgba(165, 243, 252, 0.08)'
+                    : 'inset 0 1px 2px rgba(96, 165, 250, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.25)',
                 }}
               >
-                <svg className="w-5 h-5 mr-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke={isFocused === 'username' ? '#60a5fa' : '#475569'} strokeWidth="1.5" style={{ transition: 'stroke 0.3s ease' }}>
+                <svg className="w-5 h-5 mr-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke={isFocused === 'username' ? '#60a5fa' : '#94a3b8'} strokeWidth="1.5" style={{ transition: 'stroke 0.3s ease' }}>
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
@@ -1127,7 +1172,7 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
                   onChange={(e) => setUsername(e.target.value)}
                   onFocus={() => setIsFocused('username')}
                   onBlur={() => setIsFocused(null)}
-                  className="flex-1 outline-none text-sm text-slate-300 placeholder-slate-700"
+                  className="flex-1 outline-none text-sm text-slate-200 placeholder-slate-400"
                   style={{
                     background: 'transparent',
                     WebkitAppearance: 'none',
@@ -1141,18 +1186,18 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
               <div
                 className="flex items-center rounded-xl px-4 py-3 transition-all duration-300"
                 style={{
-                  background: 'rgba(2, 6, 18, 0.82)',
+                  background: 'rgba(15, 23, 42, 0.42)',
                   border: `1px solid ${
                     isFocused === 'password'
-                      ? 'rgba(96, 165, 250, 0.55)'
-                      : 'rgba(40, 55, 80, 0.4)'
+                      ? 'rgba(165, 243, 252, 0.65)'
+                      : 'rgba(96, 165, 250, 0.28)'
                   }`,
                   boxShadow: isFocused === 'password'
-                    ? '0 0 18px rgba(59, 130, 246, 0.15), inset 0 0 10px rgba(59, 130, 246, 0.05)'
-                    : 'inset 0 1px 2px rgba(0, 0, 0, 0.35)',
+                    ? '0 0 22px rgba(96, 165, 250, 0.22), inset 0 0 14px rgba(165, 243, 252, 0.08)'
+                    : 'inset 0 1px 2px rgba(96, 165, 250, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.25)',
                 }}
               >
-                <svg className="w-5 h-5 mr-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke={isFocused === 'password' ? '#60a5fa' : '#475569'} strokeWidth="1.5" style={{ transition: 'stroke 0.3s ease' }}>
+                <svg className="w-5 h-5 mr-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke={isFocused === 'password' ? '#60a5fa' : '#94a3b8'} strokeWidth="1.5" style={{ transition: 'stroke 0.3s ease' }}>
                   <rect x="5" y="11" width="14" height="10" rx="2" />
                   <path d="M8 11V7a4 4 0 0 1 8 0v4" />
                 </svg>
@@ -1163,7 +1208,7 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setIsFocused('password')}
                   onBlur={() => setIsFocused(null)}
-                  className="flex-1 outline-none text-sm text-slate-300 placeholder-slate-700"
+                  className="flex-1 outline-none text-sm text-slate-200 placeholder-slate-400"
                   style={{
                     background: 'transparent',
                     WebkitAppearance: 'none',
@@ -1263,26 +1308,6 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
               </div>
             </form>
 
-            {/* 分隔线 */}
-            <div className="my-5 flex items-center">
-              <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(51, 65, 85, 0.25) 100%)' }} />
-              <span className="px-3 text-xs tracking-wider" style={{ color: 'rgba(71, 85, 105, 0.5)' }}>或</span>
-              <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, rgba(51, 65, 85, 0.25) 0%, transparent 100%)' }} />
-            </div>
-
-            {/* 演示账号按钮 */}
-            <button
-              onClick={useDemoAccount}
-              className="w-full py-2.5 rounded-xl font-medium text-sm transition-all duration-300 hover:bg-slate-800/40 active:scale-[0.98]"
-              style={{
-                background: 'rgba(30, 41, 59, 0.3)',
-                border: '1px dashed rgba(96, 165, 250, 0.18)',
-                color: 'rgba(148, 163, 184, 0.6)',
-                letterSpacing: '1px',
-              }}
-            >
-              使用演示账号快速体验
-            </button>
           </div>
 
           {/* 底部版权信息 */}

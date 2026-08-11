@@ -20,6 +20,7 @@ function App() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<{ username: string; displayName: string; role: string } | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // 检查登录状态
   useEffect(() => {
@@ -214,10 +215,15 @@ function App() {
   return (
     <div className="min-h-screen bg-background">
       {/* 左侧导航 */}
-      <Sidebar activeMenu={activeMenu} onMenuChange={setActiveMenu} />
+      <Sidebar
+        activeMenu={activeMenu}
+        onMenuChange={setActiveMenu}
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
 
       {/* 主内容区域 */}
-      <div className="ml-64 min-h-screen">
+      <div className={`min-h-screen transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-[68px]' : 'ml-64'}`}>
         {/* 顶部栏 */}
         <Header
           currentPage={pageInfo.title}
