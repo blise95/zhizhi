@@ -431,21 +431,43 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
         // 只绘制在地球前方的部分
         if (pp1.z < -globeR * 0.45 || pp3.z < -globeR * 0.45) return;
 
-        // 光晕
+        // 高端科技蓝连接线 - 多层发光
+        const gradient = ctx.createLinearGradient(pp1.x, pp1.y, pp3.x, pp3.y);
+        gradient.addColorStop(0, 'rgba(165, 243, 252, 0.85)');
+        gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.75)');
+        gradient.addColorStop(1, 'rgba(37, 99, 235, 0.65)');
+
+        // 外层光晕
+        ctx.save();
+        ctx.shadowColor = 'rgba(96, 165, 250, 0.6)';
+        ctx.shadowBlur = 16;
         ctx.beginPath();
         ctx.moveTo(pp1.x, pp1.y);
         ctx.quadraticCurveTo(pp2.x, pp2.y, pp3.x, pp3.y);
-        ctx.strokeStyle = `rgba(${hexToRgb(color)}, ${alpha * 0.12})`;
-        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.18)';
+        ctx.lineWidth = 6;
         ctx.stroke();
+        ctx.restore();
+
+        // 中层光晕
+        ctx.save();
+        ctx.shadowColor = 'rgba(165, 243, 252, 0.5)';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.moveTo(pp1.x, pp1.y);
+        ctx.quadraticCurveTo(pp2.x, pp2.y, pp3.x, pp3.y);
+        ctx.strokeStyle = 'rgba(96, 165, 250, 0.35)';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+        ctx.restore();
 
         // 主线
         ctx.beginPath();
         ctx.moveTo(pp1.x, pp1.y);
         ctx.quadraticCurveTo(pp2.x, pp2.y, pp3.x, pp3.y);
-        ctx.strokeStyle = `rgba(${hexToRgb(color)}, ${alpha * 0.35})`;
-        ctx.lineWidth = 1;
-        ctx.setLineDash([3, 5]);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 6]);
         ctx.stroke();
         ctx.setLineDash([]);
 
@@ -586,6 +608,58 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
         ctx.fillStyle = edgeSoftener;
         ctx.fill();
 
+        // 地图仪科技支架 - 赤道环 + 子午环 + 底部基座
+        ctx.save();
+
+        // 赤道环
+        ctx.beginPath();
+        ctx.ellipse(globeCx, globeCy, globeR * 1.18, globeR * 0.32, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.22)';
+        ctx.lineWidth = 1.4;
+        ctx.shadowColor = 'rgba(96, 165, 250, 0.45)';
+        ctx.shadowBlur = 22;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // 子午环
+        ctx.beginPath();
+        ctx.ellipse(globeCx, globeCy, globeR * 0.35, globeR * 1.18, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.18)';
+        ctx.lineWidth = 1.4;
+        ctx.shadowColor = 'rgba(96, 165, 250, 0.4)';
+        ctx.shadowBlur = 20;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // 底部基座弧线
+        ctx.beginPath();
+        ctx.ellipse(globeCx, globeCy + globeR * 1.12, globeR * 0.55, globeR * 0.12, 0, Math.PI, 0);
+        ctx.strokeStyle = 'rgba(96, 165, 250, 0.32)';
+        ctx.lineWidth = 2.2;
+        ctx.shadowColor = 'rgba(96, 165, 250, 0.5)';
+        ctx.shadowBlur = 16;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // 支架节点高光
+        const standNodes = [
+          { x: globeCx - globeR * 1.18, y: globeCy },
+          { x: globeCx + globeR * 1.18, y: globeCy },
+          { x: globeCx, y: globeCy - globeR * 1.18 },
+        ];
+        standNodes.forEach(node => {
+          const nodeGlow = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, 8);
+          nodeGlow.addColorStop(0, 'rgba(165, 243, 252, 0.6)');
+          nodeGlow.addColorStop(0.5, 'rgba(59, 130, 246, 0.2)');
+          nodeGlow.addColorStop(1, 'transparent');
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = nodeGlow;
+          ctx.fill();
+        });
+
+        ctx.restore();
+
         // 经纬网格 - 多层精细网格
         ctx.lineWidth = 0.5;
 
@@ -638,48 +712,82 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           ctx.fill();
         }
 
-        // 主要大陆轮廓科技线（简化版，增强科技感）
-        const continentLines = [
-          // 亚洲东部轮廓
-          { lat: 50, lng: 120 }, { lat: 40, lng: 130 }, { lat: 30, lng: 120 },
-          { lat: 20, lng: 110 }, { lat: 10, lng: 105 }, { lat: 0, lng: 100 },
-          // 中东
-          { lat: 30, lng: 60 }, { lat: 25, lng: 55 }, { lat: 20, lng: 50 },
-          // 东南亚/印尼
-          { lat: 0, lng: 110 }, { lat: -5, lng: 120 }, { lat: -8, lng: 115 },
-          { lat: -5, lng: 140 }, { lat: 0, lng: 130 },
-        ];
+        // 世界地图点云 - 用密集发光点构建大陆轮廓
+        const continentPoints: Array<{ lat: number; lng: number }> = [];
 
-        ctx.beginPath();
-        let firstPoint = true;
-        continentLines.forEach((point, idx) => {
-          const pos = latLngTo3D(point.lat, point.lng, globeR * 0.97);
-          if (pos.z < -globeR * 0.2) {
-            firstPoint = true;
-            return;
-          }
-          const projected = project3D(pos.x, pos.y, pos.z);
-          if (firstPoint) {
-            ctx.moveTo(projected.x, projected.y);
-            firstPoint = false;
-          } else {
-            const prev = continentLines[idx - 1];
-            const prevPos = latLngTo3D(prev.lat, prev.lng, globeR * 0.97);
-            const dist = Math.sqrt(
-              Math.pow(pos.x - prevPos.x, 2) +
-              Math.pow(pos.y - prevPos.y, 2) +
-              Math.pow(pos.z - prevPos.z, 2)
-            );
-            if (dist < globeR * 0.5) {
-              ctx.lineTo(projected.x, projected.y);
-            } else {
-              ctx.moveTo(projected.x, projected.y);
+        // 亚洲
+        for (let lat = 10; lat <= 55; lat += 4) {
+          for (let lng = 75; lng <= 145; lng += 5) {
+            if ((lat > 20 && lng > 130) || (lat < 25 && lng > 120) || (lat > 35 && lng < 90)) {
+              continentPoints.push({ lat, lng });
             }
           }
+        }
+        // 东南亚群岛
+        for (let lat = -8; lat <= 10; lat += 3) {
+          for (let lng = 95; lng <= 140; lng += 4) {
+            if (Math.random() > 0.35) continentPoints.push({ lat, lng });
+          }
+        }
+        // 欧洲
+        for (let lat = 36; lat <= 70; lat += 3) {
+          for (let lng = -10; lng <= 45; lng += 4) {
+            if (Math.random() > 0.45) continentPoints.push({ lat, lng });
+          }
+        }
+        // 非洲
+        for (let lat = -35; lat <= 35; lat += 4) {
+          for (let lng = -17; lng <= 51; lng += 5) {
+            if (Math.random() > 0.4) continentPoints.push({ lat, lng });
+          }
+        }
+        // 北美
+        for (let lat = 25; lat <= 70; lat += 4) {
+          for (let lng = -130; lng <= -60; lng += 5) {
+            if (Math.random() > 0.45) continentPoints.push({ lat, lng });
+          }
+        }
+        // 南美
+        for (let lat = -55; lat <= 12; lat += 4) {
+          for (let lng = -85; lng <= -35; lng += 5) {
+            if (Math.random() > 0.45) continentPoints.push({ lat, lng });
+          }
+        }
+        // 澳洲
+        for (let lat = -39; lat <= -11; lat += 3) {
+          for (let lng = 113; lng <= 153; lng += 4) {
+            if (Math.random() > 0.5) continentPoints.push({ lat, lng });
+          }
+        }
+
+        continentPoints.forEach((point, i) => {
+          const pos = latLngTo3D(point.lat, point.lng + rotation * 57.3, globeR * 0.97);
+          if (pos.z < -globeR * 0.15) return;
+
+          const projected = project3D(pos.x, pos.y, pos.z);
+          const depthAlpha = 0.25 + 0.55 * ((pos.z + globeR) / (2 * globeR));
+          const pulse = (Math.sin(Date.now() * 0.003 + i * 0.5) + 1) / 2;
+
+          // 点外发光
+          const dotGlow = ctx.createRadialGradient(
+            projected.x, projected.y, 0,
+            projected.x, projected.y, 4
+          );
+          dotGlow.addColorStop(0, `rgba(96, 165, 250, ${0.6 * depthAlpha})`);
+          dotGlow.addColorStop(0.4, `rgba(59, 130, 246, ${0.28 * depthAlpha})`);
+          dotGlow.addColorStop(1, 'transparent');
+
+          ctx.beginPath();
+          ctx.arc(projected.x, projected.y, 1.9 + pulse * 0.7, 0, Math.PI * 2);
+          ctx.fillStyle = dotGlow;
+          ctx.fill();
+
+          // 核心亮点
+          ctx.beginPath();
+          ctx.arc(projected.x, projected.y, 0.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(165, 243, 252, ${0.5 * depthAlpha + pulse * 0.2})`;
+          ctx.fill();
         });
-        ctx.strokeStyle = 'rgba(59, 130, 246, 0.12)';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
 
         // ========================================
         // 第三层：三个全球重要地点
@@ -807,8 +915,8 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           ctx.textBaseline = 'alphabetic';
         });
 
-        // 缓慢自转（约42秒一圈，持续稳定转动）
-        rotation += 0.0024;
+        // 缓慢自转（约26秒一圈，持续稳定转动）
+        rotation += 0.004;
 
         ctx.restore();
         frameCount++;
