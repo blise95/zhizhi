@@ -383,7 +383,7 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           name: '印尼·科伦印象',
           subName: 'Indonesia Partner',
           lat: -2.5,
-          lng: 140.0,
+          lng: 106.0,
           color: '#34d399',
           type: 'partner',
         },
@@ -473,6 +473,205 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
 
         return { pp1, pp2, pp3 };
       };
+
+      // ====== 真实地理大陆/国界线数据（来源：bland basemaps，经度,纬度） ======
+      const coastlinePolygons = [
+        {
+          name: 'Africa',
+          points: [
+            [35.9, -5.5], [35.5, -1.5], [36.7, 3.0], [37.2, 9.0], [36.8, 11.0],
+            [33.0, 15.0], [31.0, 19.5], [32.5, 23.5], [31.2, 29.0], [31.3, 32.5],
+            [27.5, 33.5], [22.0, 36.5], [17.5, 38.5], [15.0, 39.5], [13.0, 42.5],
+            [11.5, 43.5], [11.8, 51.4], [10.4, 51.0],
+            [3.0, 50.0], [-1.0, 45.5], [-6.0, 40.5], [-11.5, 40.0],
+            [-16.0, 40.5], [-21.0, 36.0], [-26.5, 34.5], [-29.0, 32.5],
+            [-31.5, 30.5], [-33.5, 27.0], [-34.5, 22.5], [-34.4, 18.5],
+            [-28.5, 15.0], [-15.5, 12.5], [-8.0, 13.5], [-5.0, 12.0],
+            [-1.0, 9.5], [2.0, 9.5], [4.5, 7.0], [6.5, 3.5], [5.5, -1.0],
+            [4.5, -6.5], [6.5, -11.0], [9.5, -13.5], [13.5, -16.5],
+            [16.0, -17.0], [21.0, -17.0], [27.5, -13.5], [30.5, -10.0],
+            [32.5, -9.0], [35.9, -5.5],
+          ],
+        },
+        {
+          name: 'Eurasia',
+          points: [
+            [36.0, -5.5], [38.5, -9.5], [43.0, -9.0], [43.5, -2.0],
+            [48.5, -4.5], [51.0, 2.0], [52.0, 4.0], [53.5, 7.5],
+            [54.5, 9.5], [55.5, 13.0], [57.5, 18.0],
+            [62.0, 18.0], [65.5, 22.0], [71.0, 25.0], [67.0, 40.0], [66.5, 42.0],
+            [71.0, 55.0], [72.0, 75.0], [73.5, 100.0], [72.5, 130.0],
+            [69.5, 160.0], [68.5, 180.0],
+            [65.0, 175.0], [59.0, 163.0], [51.0, 157.0], [46.0, 142.0],
+            [41.5, 138.0], [43.0, 131.0], [35.0, 130.0], [40.0, 124.0],
+            [38.0, 121.5], [35.0, 119.5], [31.5, 121.0],
+            [28.0, 121.5], [23.5, 118.0], [21.5, 112.0], [18.0, 108.0],
+            [10.5, 106.5], [1.5, 103.5],
+            [8.5, 98.5], [22.5, 91.0], [15.0, 80.0], [8.0, 77.5],
+            [17.5, 72.5], [23.5, 68.0], [25.0, 61.0], [24.0, 57.5],
+            [25.0, 51.5], [30.0, 48.0],
+            [26.5, 56.0], [23.5, 58.0], [17.5, 55.5], [14.5, 52.5],
+            [13.0, 45.0], [13.5, 43.0], [21.0, 38.5], [28.0, 34.5],
+            [31.0, 34.5], [35.0, 35.5], [36.0, 33.0], [37.0, 29.0],
+            [38.5, 26.5], [38.5, 23.5], [40.0, 20.0], [40.0, 18.0],
+            [45.5, 13.5], [44.5, 12.0], [44.0, 8.5], [43.5, 4.0],
+            [42.5, 3.0], [36.0, -5.5],
+          ],
+        },
+        {
+          name: 'North America',
+          points: [
+            [50.0, -55.0], [56.0, -60.0], [60.0, -62.0], [63.0, -70.0],
+            [73.0, -79.0], [73.0, -90.0], [71.0, -110.0], [70.0, -125.0],
+            [70.0, -141.0],
+            [71.0, -155.0], [66.0, -165.0], [60.0, -168.0], [54.5, -162.0],
+            [60.5, -150.0], [58.0, -135.0], [54.5, -131.0],
+            [49.0, -124.5], [40.0, -124.0], [34.0, -118.0], [32.5, -117.5],
+            [31.5, -112.5], [22.5, -109.0], [29.0, -115.0],
+            [22.5, -107.5], [21.5, -106.0], [16.5, -98.5], [14.5, -92.5],
+            [13.0, -87.5], [8.0, -83.5], [8.5, -80.0],
+            [9.5, -82.5], [14.0, -84.0], [15.5, -88.0], [18.5, -90.5],
+            [18.5, -95.5], [25.5, -97.5], [29.5, -94.0], [30.0, -89.5],
+            [29.5, -83.0], [24.5, -82.5], [25.0, -80.5], [31.0, -81.5],
+            [35.0, -76.0], [40.5, -74.5], [41.5, -70.0], [45.0, -66.5],
+            [46.5, -60.5], [47.0, -53.5], [50.0, -55.0],
+          ],
+        },
+        {
+          name: 'South America',
+          points: [
+            [10.5, -61.5], [5.0, -52.0], [-1.0, -48.0], [-5.5, -35.0],
+            [-13.5, -38.5], [-22.5, -41.0], [-23.0, -43.5],
+            [-26.5, -48.5], [-33.5, -53.0], [-38.5, -57.5], [-40.5, -63.5],
+            [-45.0, -65.5], [-52.5, -68.5], [-54.5, -70.5],
+            [-52.0, -75.0], [-48.5, -75.0], [-42.0, -72.0], [-36.0, -72.5],
+            [-30.0, -71.5], [-23.0, -70.5], [-18.0, -70.5], [-13.5, -76.5],
+            [-8.5, -79.5], [-6.0, -81.0], [-2.0, -80.5], [1.0, -79.5],
+            [5.5, -78.0], [8.5, -77.0], [10.5, -75.5], [12.5, -71.0],
+            [10.5, -61.5],
+          ],
+        },
+        {
+          name: 'Australia',
+          points: [
+            [-22.0, 114.0], [-27.0, 114.5], [-32.0, 115.5], [-35.0, 117.5],
+            [-33.5, 121.0], [-32.0, 127.0], [-31.5, 131.5], [-35.0, 137.0],
+            [-37.5, 140.0], [-38.5, 144.0], [-37.5, 148.0], [-37.5, 150.0],
+            [-33.0, 151.5], [-28.5, 153.5], [-25.0, 153.0], [-22.0, 149.5],
+            [-15.0, 145.5], [-10.5, 142.5], [-15.5, 138.0], [-15.0, 135.5],
+            [-12.0, 130.0], [-14.5, 125.0], [-17.0, 122.0], [-20.0, 119.0],
+            [-22.0, 114.0],
+          ],
+        },
+        {
+          name: 'Greenland',
+          points: [
+            [83.0, -54.0], [82.0, -22.0], [75.0, -18.0], [70.5, -20.0],
+            [68.5, -25.0], [65.0, -37.0], [60.0, -44.0], [63.0, -50.0],
+            [66.5, -53.0], [70.0, -54.5], [73.5, -56.0], [76.5, -63.0],
+            [79.0, -72.0], [82.0, -65.0], [83.0, -54.0],
+          ],
+        },
+      ];
+
+      const borderPolygons = [
+        {
+          name: 'USA',
+          points: [
+            [49.0, -125.0], [42.5, -125.0], [40.0, -124.0], [34.5, -120.5],
+            [32.7, -117.5], [31.5, -111.0], [31.5, -108.0], [32.0, -106.5],
+            [29.0, -103.0], [27.5, -99.5], [26.0, -97.5], [29.5, -94.0],
+            [30.0, -89.0], [29.0, -85.5], [24.5, -82.0], [25.0, -80.0],
+            [32.0, -80.5], [36.5, -76.0], [40.5, -74.0], [42.5, -70.0],
+            [45.0, -67.0], [47.5, -69.0], [45.0, -75.0], [45.5, -82.5],
+            [48.0, -88.5], [49.0, -95.0], [49.0, -125.0],
+          ],
+        },
+        {
+          name: 'Canada',
+          points: [
+            [60.0, -140.5], [70.0, -140.5], [70.0, -130.0], [71.0, -110.0],
+            [73.5, -95.0], [73.5, -78.0], [63.0, -70.0], [60.0, -63.0],
+            [52.5, -57.0], [47.5, -53.0], [46.5, -60.0], [45.0, -67.0],
+            [47.5, -69.0], [45.0, -75.0], [45.5, -82.5], [48.0, -88.5],
+            [49.0, -95.0], [49.0, -123.0], [54.5, -132.0], [60.0, -140.5],
+          ],
+        },
+        {
+          name: 'China',
+          points: [
+            [48.5, 135.0], [45.0, 128.0], [40.0, 124.0], [38.5, 121.0],
+            [34.0, 121.5], [28.0, 121.5], [23.5, 118.0], [22.0, 113.5],
+            [21.5, 110.0], [21.0, 108.0], [21.5, 105.0], [22.0, 101.5],
+            [22.0, 97.5], [28.5, 95.0], [29.0, 92.0], [28.0, 88.5],
+            [30.5, 80.5], [38.0, 74.0], [42.5, 80.0], [47.5, 85.0],
+            [46.5, 91.0], [44.5, 95.0], [42.5, 100.0], [42.5, 110.0],
+            [43.5, 116.5], [50.0, 120.0], [50.0, 127.5], [48.5, 135.0],
+          ],
+        },
+        {
+          name: 'India',
+          points: [
+            [8.0, 77.5], [9.0, 79.0], [13.0, 80.5], [17.0, 81.5],
+            [19.5, 84.5], [21.5, 87.0], [22.0, 89.0], [26.5, 89.5],
+            [27.0, 88.0], [28.5, 80.0], [31.0, 78.5], [32.5, 75.0],
+            [35.5, 77.0], [34.5, 74.0], [28.0, 69.5], [24.0, 68.0],
+            [22.5, 70.0], [21.0, 71.5], [17.5, 72.5], [14.5, 74.0],
+            [10.0, 76.0], [8.0, 77.5],
+          ],
+        },
+        {
+          name: 'Brazil',
+          points: [
+            [-5.5, -35.0], [-22.5, -40.0], [-25.5, -48.5], [-33.5, -53.5],
+            [-30.5, -57.5], [-20.0, -58.0], [-16.5, -58.5], [-11.0, -62.5],
+            [-11.0, -68.5], [-9.5, -70.5], [-7.5, -72.5], [-4.5, -73.5],
+            [-4.0, -70.0], [-1.0, -69.5], [1.5, -67.0], [4.5, -61.5],
+            [4.5, -59.5], [5.0, -52.0], [-1.0, -48.0], [-5.5, -35.0],
+          ],
+        },
+      ];
+
+      // 射线法判断点是否在多边形内（lat, lng 空间）
+      const pointInPolygon = (lat: number, lng: number, polygon: number[][]) => {
+        let inside = false;
+        for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+          const [yi, xi] = polygon[i];
+          const [yj, xj] = polygon[j];
+          const intersect = ((yi > lat) !== (yj > lat)) &&
+            (lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi);
+          if (intersect) inside = !inside;
+        }
+        return inside;
+      };
+
+      // 预计算大陆填充点（在组件初始化时生成，避免每帧计算）
+      let landFillPoints: Array<{ lat: number; lng: number }> = [];
+      const generateLandFillPoints = () => {
+        const points: Array<{ lat: number; lng: number }> = [];
+        const step = 2.5; // 度数间隔，更密集的大陆填充
+
+        coastlinePolygons.forEach(poly => {
+          const lats = poly.points.map(p => p[0]);
+          const lngs = poly.points.map(p => p[1]);
+          const minLat = Math.min(...lats) - 2;
+          const maxLat = Math.max(...lats) + 2;
+          const minLng = Math.min(...lngs) - 2;
+          const maxLng = Math.max(...lngs) + 2;
+
+          for (let lat = minLat; lat <= maxLat; lat += step) {
+            for (let lng = minLng; lng <= maxLng; lng += step) {
+              if (pointInPolygon(lat, lng, poly.points)) {
+                points.push({ lat, lng });
+              }
+            }
+          }
+        });
+
+        return points;
+      };
+
+      landFillPoints = generateLandFillPoints();
 
       // ====== 主绘制循环 ======
       let globeCx = 0;
@@ -581,13 +780,13 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           globeCx - globeR * 0.42, globeCy - globeR * 0.42, 0,
           globeCx, globeCy, globeR
         );
-        earthGradient.addColorStop(0, '#1e4878');
-        earthGradient.addColorStop(0.15, '#14355a');
-        earthGradient.addColorStop(0.35, '#0c2440');
-        earthGradient.addColorStop(0.6, '#07182c');
-        earthGradient.addColorStop(0.82, '#061626');
-        earthGradient.addColorStop(0.95, '#0a1e36');
-        earthGradient.addColorStop(1, 'rgba(13, 36, 65, 0.85)');
+        earthGradient.addColorStop(0, '#1a3a5c');
+        earthGradient.addColorStop(0.15, '#0f2944');
+        earthGradient.addColorStop(0.35, '#081c30');
+        earthGradient.addColorStop(0.6, '#051320');
+        earthGradient.addColorStop(0.82, '#030f1a');
+        earthGradient.addColorStop(0.95, '#051627');
+        earthGradient.addColorStop(1, 'rgba(10, 28, 50, 0.85)');
 
         ctx.beginPath();
         ctx.arc(globeCx, globeCy, globeR, 0, Math.PI * 2);
@@ -671,7 +870,7 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
 
           ctx.beginPath();
           ctx.ellipse(globeCx, y, radiusAtLat, radiusAtLat * 0.1, 0, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(59, 130, 246, 0.09)';
+          ctx.strokeStyle = 'rgba(59, 130, 246, 0.06)';
           ctx.stroke();
         }
 
@@ -694,100 +893,84 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           }
         }
 
-        // 科技数据节点 - 模拟城市/区域光点
-        const nodeCount = 50;
-        for (let i = 0; i < nodeCount; i++) {
-          const nodeLat = (Math.random() * 160 - 80) * 0.75;
-          const nodeLng = (i / nodeCount) * 360 + rotation * 57.3 + Math.random() * 25;
-          const nodePos = latLngTo3D(nodeLat, nodeLng, globeR * 0.96);
-
-          if (nodePos.z < -globeR * 0.2) continue;
-
-          const projected = project3D(nodePos.x, nodePos.y, nodePos.z);
-          const pulse = (Math.sin(Date.now() * 0.0025 + i * 1.3) + 1) / 2;
-
-          ctx.beginPath();
-          ctx.arc(projected.x, projected.y, 0.7 + pulse * 1.1, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(165, 243, 252, ${0.12 + pulse * 0.18})`;
-          ctx.fill();
-        }
-
-        // 世界地图点云 - 用密集发光点构建大陆轮廓
-        const continentPoints: Array<{ lat: number; lng: number }> = [];
-
-        // 亚洲
-        for (let lat = 10; lat <= 55; lat += 4) {
-          for (let lng = 75; lng <= 145; lng += 5) {
-            if ((lat > 20 && lng > 130) || (lat < 25 && lng > 120) || (lat > 35 && lng < 90)) {
-              continentPoints.push({ lat, lng });
-            }
-          }
-        }
-        // 东南亚群岛
-        for (let lat = -8; lat <= 10; lat += 3) {
-          for (let lng = 95; lng <= 140; lng += 4) {
-            if (Math.random() > 0.35) continentPoints.push({ lat, lng });
-          }
-        }
-        // 欧洲
-        for (let lat = 36; lat <= 70; lat += 3) {
-          for (let lng = -10; lng <= 45; lng += 4) {
-            if (Math.random() > 0.45) continentPoints.push({ lat, lng });
-          }
-        }
-        // 非洲
-        for (let lat = -35; lat <= 35; lat += 4) {
-          for (let lng = -17; lng <= 51; lng += 5) {
-            if (Math.random() > 0.4) continentPoints.push({ lat, lng });
-          }
-        }
-        // 北美
-        for (let lat = 25; lat <= 70; lat += 4) {
-          for (let lng = -130; lng <= -60; lng += 5) {
-            if (Math.random() > 0.45) continentPoints.push({ lat, lng });
-          }
-        }
-        // 南美
-        for (let lat = -55; lat <= 12; lat += 4) {
-          for (let lng = -85; lng <= -35; lng += 5) {
-            if (Math.random() > 0.45) continentPoints.push({ lat, lng });
-          }
-        }
-        // 澳洲
-        for (let lat = -39; lat <= -11; lat += 3) {
-          for (let lng = 113; lng <= 153; lng += 4) {
-            if (Math.random() > 0.5) continentPoints.push({ lat, lng });
-          }
-        }
-
-        continentPoints.forEach((point, i) => {
-          const pos = latLngTo3D(point.lat, point.lng + rotation * 57.3, globeR * 0.97);
-          if (pos.z < -globeR * 0.15) return;
+        // 真实地理大陆填充（预计算点云）
+        landFillPoints.forEach((point, i) => {
+          const pos = latLngTo3D(point.lat, point.lng, globeR * 0.97);
+          if (pos.z < -globeR * 0.12) return;
 
           const projected = project3D(pos.x, pos.y, pos.z);
-          const depthAlpha = 0.25 + 0.55 * ((pos.z + globeR) / (2 * globeR));
-          const pulse = (Math.sin(Date.now() * 0.003 + i * 0.5) + 1) / 2;
+          const depthAlpha = 0.3 + 0.55 * ((pos.z + globeR) / (2 * globeR));
 
-          // 点外发光
-          const dotGlow = ctx.createRadialGradient(
-            projected.x, projected.y, 0,
-            projected.x, projected.y, 4
-          );
-          dotGlow.addColorStop(0, `rgba(96, 165, 250, ${0.6 * depthAlpha})`);
-          dotGlow.addColorStop(0.4, `rgba(59, 130, 246, ${0.28 * depthAlpha})`);
-          dotGlow.addColorStop(1, 'transparent');
+          ctx.save();
+          ctx.shadowColor = 'rgba(96, 165, 250, 0.35)';
+          ctx.shadowBlur = 6;
 
           ctx.beginPath();
-          ctx.arc(projected.x, projected.y, 1.9 + pulse * 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = dotGlow;
+          ctx.arc(projected.x, projected.y, 3.0, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(96, 165, 250, ${0.65 * depthAlpha})`;
           ctx.fill();
 
-          // 核心亮点
+          ctx.shadowBlur = 0;
+          ctx.restore();
+
           ctx.beginPath();
-          ctx.arc(projected.x, projected.y, 0.8, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(165, 243, 252, ${0.5 * depthAlpha + pulse * 0.2})`;
+          ctx.arc(projected.x, projected.y, 1.1, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(165, 243, 252, ${0.6 * depthAlpha})`;
           ctx.fill();
         });
+
+        // 大陆海岸线（明亮边界）- 按线段绘制，避免穿到背面
+        ctx.lineWidth = 1.2;
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = 'rgba(96, 165, 250, 0.65)';
+        ctx.shadowBlur = 12;
+        ctx.strokeStyle = 'rgba(165, 243, 252, 0.75)';
+
+        coastlinePolygons.forEach(poly => {
+          for (let i = 0; i < poly.points.length; i++) {
+            const nextIdx = (i + 1) % poly.points.length;
+            const [lat1, lng1] = poly.points[i];
+            const [lat2, lng2] = poly.points[nextIdx];
+            const pos1 = latLngTo3D(lat1, lng1, globeR * 0.98);
+            const pos2 = latLngTo3D(lat2, lng2, globeR * 0.98);
+
+            if (pos1.z < -globeR * 0.05 || pos2.z < -globeR * 0.05) continue;
+
+            const p1 = project3D(pos1.x, pos1.y, pos1.z);
+            const p2 = project3D(pos2.x, pos2.y, pos2.z);
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+        ctx.shadowBlur = 0;
+
+        // 国界线（略暗）
+        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.35)';
+        ctx.setLineDash([2, 3]);
+        borderPolygons.forEach(poly => {
+          for (let i = 0; i < poly.points.length; i++) {
+            const nextIdx = (i + 1) % poly.points.length;
+            const [lat1, lng1] = poly.points[i];
+            const [lat2, lng2] = poly.points[nextIdx];
+            const pos1 = latLngTo3D(lat1, lng1, globeR * 0.985);
+            const pos2 = latLngTo3D(lat2, lng2, globeR * 0.985);
+
+            if (pos1.z < -globeR * 0.05 || pos2.z < -globeR * 0.05) continue;
+
+            const p1 = project3D(pos1.x, pos1.y, pos1.z);
+            const p2 = project3D(pos2.x, pos2.y, pos2.z);
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+        ctx.setLineDash([]);
 
         // 大陆 / 海洋 / 首都名称标签
         const globeLabels = [
