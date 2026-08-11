@@ -573,31 +573,12 @@ const QualityDashboard: React.FC = () => {
   // ==================== 数据计算：物测筛选选项 ====================
 
   const physicalTestFilterOptions = useMemo(() => {
-    const thisMonthData = physicalTestData.filter(r =>
-      r.date >= monthRange.from && r.date <= monthRange.to
-    );
-
-    const machineSet = new Set<string>();
-    thisMonthData.forEach(r => {
-      if (r.machine) machineSet.add(r.machine);
-    });
-
-    // 机台改变时，牌号选项联动：先按当前机台过滤，再提取牌号
-    let brandSource = thisMonthData;
-    if (selectedMachine) {
-      brandSource = brandSource.filter(r => r.machine === selectedMachine);
-    }
-
-    const brandSet = new Set<string>();
-    brandSource.forEach(r => {
-      if (r.brand) brandSet.add(r.brand);
-    });
-
+    // 下拉选项使用固定完整列表，确保无论当前月份是否有数据都显示所有机台/牌号
     return {
-      machines: Array.from(machineSet).sort(),
-      brands: Array.from(brandSet).sort(),
+      machines: [...MACHINES],
+      brands: BRAND_OPTIONS.map(b => b.value),
     };
-  }, [physicalTestData, monthRange, selectedMachine]);
+  }, []);
 
   // ==================== 数据计算：物测状态 ====================
 
