@@ -78,9 +78,10 @@ const DEFECT_MODULES: DefectModuleConfig[] = [
 
 interface AppearanceDefectInputProps {
   onDataChange?: (data: Record<string, DefectRecord[]>) => void;
+  initialData?: Record<string, DefectRecord[]>;
 }
 
-export function AppearanceDefectInput({ onDataChange }: AppearanceDefectInputProps) {
+export function AppearanceDefectInput({ onDataChange, initialData }: AppearanceDefectInputProps) {
   // 各模块的缺陷记录
   const [defectRecords, setDefectRecords] = useState<Record<string, DefectRecord[]>>({
     box: [],
@@ -98,6 +99,18 @@ export function AppearanceDefectInput({ onDataChange }: AppearanceDefectInputPro
       onDataChange(defectRecords);
     }
   }, [defectRecords, onDataChange]);
+
+  // 当传入历史缺陷数据时，设置为初始值（支持连续录入记忆）
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setDefectRecords({
+        box: initialData.box || [],
+        carton: initialData.carton || [],
+        pack: initialData.pack || [],
+        cigarette: initialData.cigarette || [],
+      });
+    }
+  }, [initialData]);
 
   // 切换模块展开/折叠
   const toggleModule = (moduleKey: string) => {

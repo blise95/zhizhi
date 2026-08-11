@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Save,
   RotateCcw,
@@ -109,6 +109,9 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
   // 重置确认对话框
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
+  // 重置时是否同时清除历史记忆
+  const [clearHistoryOnReset, setClearHistoryOnReset] = useState(false);
+
   // 提交成功提示
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
@@ -121,6 +124,37 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
     cigarette: [],
   });
 
+  // 页面加载时：如果有历史记录，自动带出（只清空取样时间和取样件号）
+  useEffect(() => {
+    try {
+      const historyRaw = localStorage.getItem(HISTORY_KEY);
+      if (historyRaw) {
+        const history = JSON.parse(historyRaw);
+        if (history && history.formData) {
+          const remembered: FormData = {
+            ...history.formData,
+            date: getTodayDate(), // 日期默认当天，不记忆
+            samplingTime: '',     // 每次必须重新填写
+            sampleNumber: '',     // 每次必须重新填写
+          };
+          setFormData(remembered);
+          setHasHistory(true);
+
+          if (history.defectData) {
+            setHistoryDefectData({
+              box: history.defectData.box || [],
+              carton: history.defectData.carton || [],
+              pack: history.defectData.pack || [],
+              cigarette: history.defectData.cigarette || [],
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('加载历史记忆失败：', error);
+    }
+  }, []);
+
   // 处理缺陷数据变化
   const handleDefectDataChange = (data: Record<string, DefectRecord[]>) => {
     setDefectData(data);
@@ -128,6 +162,23 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
 
   // 统一的数据存储key（与查询页面保持一致）
   const STORAGE_KEY = 'processQualityData';
+
+  // 上一条记录记忆key（用于连续录入自动带出）
+  const HISTORY_KEY = 'processQualityLastRecord';
+
+  // 是否有历史记忆（用于显示连续录入提示）
+  const [hasHistory, setHasHistory] = useState(false);
+
+  // 从历史记录带出的缺陷数据初始值
+  const [historyDefectData, setHistoryDefectData] = useState<Record<string, DefectRecord[]>>({
+    box: [],
+    carton: [],
+    pack: [],
+    cigarette: [],
+  });
+
+  // 取样时间输入框引用（提交成功后自动聚焦）
+  const samplingTimeRef = useRef<HTMLInputElement>(null);
 
   // 输入变更处理
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -224,9 +275,18 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
         existingRecords.push(qualityRecord);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(existingRecords));
 
+        // 保存当前数据作为下一次录入的记忆（用户修改后的最新内容）
+        const historyRecord = {
+          formData: { ...formData },
+          defectData: { ...defectData },
+          savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(historyRecord));
+        setHasHistory(true);
+
         console.log('✅ 数据提交成功：', qualityRecord);
         console.log(`📊 当前共 ${existingRecords.length} 条记录`);
-        setSubmitMessage(`数据提交成功！已保存第 ${existingRecords.length} 条记录`);
+        setSubmitMessage(`第 ${existingRecords.length} 条记录保存成功！请继续录入下一条`);
         setShowSuccess(true);
 
         // 3秒后自动隐藏提示
@@ -235,8 +295,18 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
           setSubmitMessage('');
         }, 3000);
 
-        // 重置表单
-        handleReset();
+        // 连续录入：不清空全部表单，只清空必须重新填写的字段
+        setFormData(prev => ({
+          ...prev,
+          samplingTime: '',
+          sampleNumber: '',
+        }));
+        setErrors({});
+
+        // 自动聚焦到取样时间，方便用户继续录入
+        setTimeout(() => {
+          samplingTimeRef.current?.focus();
+        }, 100);
 
         // 触发浏览器事件通知其他组件数据已更新
         window.dispatchEvent(new Event('storage'));
@@ -268,8 +338,15 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
     }
   };
 
-  // 重置处理
-  const handleReset = () => {
+  // 清除历史记忆
+  const clearHistoryMemory = () => {
+    localStorage.removeItem(HISTORY_KEY);
+    setHasHistory(false);
+    setHistoryDefectData({ box: [], carton: [], pack: [], cigarette: [] });
+  };
+
+  // 重置处理（默认保留历史记忆，方便后续继续连续录入）
+  const handleReset = (clearHistory = false) => {
     setFormData({
       date: getTodayDate(),
       shift: '',
@@ -283,8 +360,13 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
       steelStamp: '',
       tobaccoBatch: '',
     });
+    setDefectData({ box: [], carton: [], pack: [], cigarette: [] });
     setErrors({});
     setShowResetConfirm(false);
+
+    if (clearHistory) {
+      clearHistoryMemory();
+    }
   };
 
   // 取消处理
@@ -309,6 +391,31 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
           返回驾驶舱
         </button>
       </div>
+
+      {/* 连续录入提示 */}
+      {hasHistory && (
+        <div className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-brand-blue/30 bg-brand-blue/5 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="p-1.5 rounded-md bg-brand-blue/15">
+              <svg className="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground">已连续录入模式：已自动带出上一条记录</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                仅“取样时间”和“取样件号”需要重新填写，其他内容可直接复用或按需修改
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={clearHistoryMemory}
+            className="px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-danger border border-border/50 hover:border-danger/50 rounded-lg hover:bg-danger/5 transition-colors whitespace-nowrap"
+          >
+            清除记忆
+          </button>
+        </div>
+      )}
 
       {/* 基础信息模块 */}
       <section className="data-card">
@@ -464,6 +571,7 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
               icon={<Clock className="w-4 h-4" />}
             >
               <input
+                ref={samplingTimeRef}
                 type="time"
                 value={formData.samplingTime}
                 onChange={(e) => handleInputChange('samplingTime', e.target.value)}
@@ -521,7 +629,10 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
       </section>
 
       {/* 外观缺陷录入模块 */}
-      <AppearanceDefectInput onDataChange={handleDefectDataChange} />
+      <AppearanceDefectInput
+        onDataChange={handleDefectDataChange}
+        initialData={historyDefectData}
+      />
 
       {/* 操作按钮区域 */}
       <section className="data-card">
@@ -620,6 +731,19 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
               </div>
             </div>
 
+            {/* 是否同时清除历史记忆 */}
+            <label className="flex items-center gap-3 px-1 py-2 mb-2 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={clearHistoryOnReset}
+                onChange={(e) => setClearHistoryOnReset(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-brand-blue focus:ring-brand-blue/30 bg-background cursor-pointer"
+              />
+              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                同时清除历史记忆（下次进入不再自动带出）
+              </span>
+            </label>
+
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowResetConfirm(false)}
@@ -628,7 +752,7 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
                 取消
               </button>
               <button
-                onClick={handleReset}
+                onClick={() => handleReset(clearHistoryOnReset)}
                 className="px-5 py-2 text-sm font-medium text-white bg-warning hover:bg-warning/90 rounded-lg transition-colors"
               >
                 确认重置
