@@ -789,6 +789,79 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
           ctx.fill();
         });
 
+        // 大陆 / 海洋 / 首都名称标签
+        const globeLabels = [
+          // 大陆
+          { lat: 38, lng: 95, text: '亚洲', type: 'continent' },
+          { lat: 52, lng: 18, text: '欧洲', type: 'continent' },
+          { lat: 8, lng: 20, text: '非洲', type: 'continent' },
+          { lat: 45, lng: -100, text: '北美洲', type: 'continent' },
+          { lat: -15, lng: -60, text: '南美洲', type: 'continent' },
+          { lat: -25, lng: 135, text: '大洋洲', type: 'continent' },
+          // 海洋
+          { lat: 15, lng: 165, text: '太平洋', type: 'ocean' },
+          { lat: -20, lng: -25, text: '大西洋', type: 'ocean' },
+          { lat: -15, lng: 75, text: '印度洋', type: 'ocean' },
+          { lat: 75, lng: 0, text: '北冰洋', type: 'ocean' },
+          // 首都
+          { lat: 39.9, lng: 116.4, text: '北京', type: 'capital' },
+          { lat: 35.7, lng: 139.7, text: '东京', type: 'capital' },
+          { lat: 28.6, lng: 77.2, text: '新德里', type: 'capital' },
+          { lat: 55.8, lng: 37.6, text: '莫斯科', type: 'capital' },
+          { lat: 51.5, lng: -0.1, text: '伦敦', type: 'capital' },
+          { lat: 48.9, lng: 2.3, text: '巴黎', type: 'capital' },
+          { lat: 52.5, lng: 13.4, text: '柏林', type: 'capital' },
+          { lat: 41.9, lng: 12.5, text: '罗马', type: 'capital' },
+          { lat: 30.0, lng: 31.2, text: '开罗', type: 'capital' },
+          { lat: 38.9, lng: -77.0, text: '华盛顿', type: 'capital' },
+          { lat: 45.4, lng: -75.7, text: '渥太华', type: 'capital' },
+          { lat: 19.4, lng: -99.1, text: '墨西哥城', type: 'capital' },
+          { lat: -15.8, lng: -47.9, text: '巴西利亚', type: 'capital' },
+          { lat: -34.6, lng: -58.4, text: '布宜诺斯艾利斯', type: 'capital' },
+          { lat: -35.3, lng: 149.1, text: '堪培拉', type: 'capital' },
+        ];
+
+        globeLabels.forEach(label => {
+          const pos = latLngTo3D(label.lat, label.lng + rotation * 57.3, globeR * 1.05);
+          if (pos.z < -globeR * 0.1) return;
+
+          const projected = project3D(pos.x, pos.y, pos.z);
+          const depthAlpha = 0.35 + 0.5 * ((pos.z + globeR) / (2 * globeR));
+
+          const style =
+            label.type === 'continent'
+              ? { font: '600 13px "SF Pro Display", -apple-system, "PingFang SC", sans-serif', textColor: 'rgba(165, 243, 252, 0.88)', borderAlpha: 0.45, bgAlpha: 0.72 }
+              : label.type === 'ocean'
+              ? { font: '500 11px "SF Pro Display", -apple-system, "PingFang SC", sans-serif', textColor: 'rgba(96, 165, 250, 0.6)', borderAlpha: 0.25, bgAlpha: 0.45 }
+              : { font: '500 10px "SF Pro Display", -apple-system, "PingFang SC", sans-serif', textColor: 'rgba(203, 213, 225, 0.78)', borderAlpha: 0.32, bgAlpha: 0.6 };
+
+          ctx.font = style.font;
+          const textWidth = ctx.measureText(label.text).width + 14;
+          const labelH = label.type === 'continent' ? 24 : label.type === 'ocean' ? 20 : 18;
+          const labelX = projected.x - textWidth / 2;
+          const labelY = projected.y - labelH / 2;
+
+          // 标签背景
+          ctx.fillStyle = `rgba(2, 6, 18, ${style.bgAlpha * depthAlpha})`;
+          ctx.beginPath();
+          ctx.roundRect(labelX, labelY, textWidth, labelH, 5);
+          ctx.fill();
+
+          // 标签边框
+          ctx.strokeStyle = `rgba(96, 165, 250, ${style.borderAlpha * depthAlpha})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+
+          // 文字
+          ctx.fillStyle = style.textColor;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(label.text, projected.x, projected.y + 0.5);
+
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'alphabetic';
+        });
+
         // ========================================
         // 第三层：三个全球重要地点
         // ========================================
