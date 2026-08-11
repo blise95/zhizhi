@@ -42,6 +42,7 @@ export interface PhysicalTestRecord {
   // 元数据
   createdAt: string;
   updatedAt: string;
+  uploader?: string; // 上传者（当前登录用户）
 }
 
 // 单个指标的检测数据

@@ -14,6 +14,11 @@ import {
   AlertTriangle,
   Droplets,
   Weight,
+  Pencil,
+  Trash2,
+  Save,
+  User,
+  Clock,
 } from 'lucide-react';
 
 // 类型定义
@@ -29,6 +34,8 @@ interface TobaccoInspectionRecord {
   fillingResult: string;
   overallResult: string;
   createdAt: string;
+  updatedAt?: string;
+  uploader?: string;
 }
 
 interface FilterConditions {
@@ -57,6 +64,12 @@ export function TobaccoInspectionQuery() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRecord, setSelectedRecord] = useState<TobaccoInspectionRecord | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+
+  // 编辑与删除状态
+  const [editingRecord, setEditingRecord] = useState<TobaccoInspectionRecord | null>(null);
+  const [editForm, setEditForm] = useState<Partial<TobaccoInspectionRecord>>({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState<TobaccoInspectionRecord | null>(null);
 
   const pageSize = 10;
 
@@ -190,12 +203,55 @@ export function TobaccoInspectionQuery() {
     setShowDetailModal(true);
   };
 
+  // 删除确认
+  const handleDeleteClick = (record: TobaccoInspectionRecord) => {
+    setRecordToDelete(record);
+    setShowDeleteConfirm(true);
+  };
+
+  // 执行删除
+  const confirmDelete = () => {
+    if (!recordToDelete) return;
+    const updated = allData.filter(r => r.id !== recordToDelete.id);
+    localStorage.setItem('tobaccoInspectionRecords', JSON.stringify(updated));
+    setAllData(updated);
+    setShowDeleteConfirm(false);
+    setRecordToDelete(null);
+  };
+
+  // 打开编辑弹窗
+  const handleEditClick = (record: TobaccoInspectionRecord) => {
+    setEditingRecord(record);
+    setEditForm({ ...record });
+  };
+
+  // 保存编辑
+  const saveEdit = () => {
+    if (!editingRecord || !editForm) return;
+    const updated = allData.map(r => {
+      if (r.id === editingRecord.id) {
+        return { ...r, ...editForm, updatedAt: new Date().toISOString() } as TobaccoInspectionRecord;
+      }
+      return r;
+    });
+    localStorage.setItem('tobaccoInspectionRecords', JSON.stringify(updated));
+    setAllData(updated);
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
+  // 取消编辑
+  const cancelEdit = () => {
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
   // 导出Excel
   const handleExport = () => {
     const headers = [
       '序号', '检验日期', '合作生产点', '烟丝牌号', '烟丝批次号',
       '烟丝水份(%)', '水份判定', '烟丝填充值(cm³/g)', '填充值判定',
-      '本次检验结果'
+      '本次检验结果', '上传者', '上传时间', '更新时间'
     ];
 
     const rows = filteredData.map((item, index) => [
@@ -209,6 +265,9 @@ export function TobaccoInspectionQuery() {
       item.fillingValue,
       item.fillingResult,
       item.overallResult,
+      item.uploader || '-',
+      item.createdAt ? new Date(item.createdAt).toLocaleString() : '-',
+      item.updatedAt ? new Date(item.updatedAt).toLocaleString() : '-',
     ]);
 
     const csvContent = [
@@ -410,6 +469,14 @@ export function TobaccoInspectionQuery() {
                 <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">烟丝水份</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">填充值</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">检验结果</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <User className="w-3.5 h-3.5 inline mr-1" />
+                  上传者
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <Clock className="w-3.5 h-3.5 inline mr-1" />
+                  上传时间
+                </th>
                 <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">操作</th>
               </tr>
             </thead>
@@ -456,20 +523,40 @@ export function TobaccoInspectionQuery() {
                         {record.overallResult}
                       </span>
                     </td>
+                    <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">{record.uploader || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">
+                      {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                    </td>
                     <td className="px-4 py-3 text-center">
-                      <button
-                        onClick={() => handleViewDetail(record)}
-                        className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-brand-blue hover:text-brand-blue/80 bg-brand-blue/10 hover:bg-brand-blue/20 rounded-lg transition-colors"
-                      >
-                        <Eye className="w-3.5 h-3.5 mr-1" />
-                        查看详情
-                      </button>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleViewDetail(record)}
+                          className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-brand-blue hover:text-brand-blue/80 bg-brand-blue/10 hover:bg-brand-blue/20 rounded-lg transition-colors"
+                        >
+                          <Eye className="w-3.5 h-3.5 mr-1" />
+                          查看详情
+                        </button>
+                        <button
+                          onClick={() => handleEditClick(record)}
+                          className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 rounded-lg transition-colors"
+                        >
+                          <Pencil className="w-3.5 h-3.5 mr-1" />
+                          修改
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(record)}
+                          className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 mr-1" />
+                          删除
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={9} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={11} className="px-4 py-12 text-center text-muted-foreground">
                     <div className="flex flex-col items-center">
                       <FileText className="w-12 h-12 mb-3 opacity-50" />
                       <p>暂无符合条件的检验数据</p>
@@ -653,6 +740,177 @@ export function TobaccoInspectionQuery() {
                   </table>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 编辑弹窗 */}
+      {editingRecord && editForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={cancelEdit} />
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-background border border-border/50 rounded-2xl shadow-2xl m-4">
+            <div className="sticky top-0 bg-background/95 backdrop-blur-md border-b border-border/50 px-6 py-4 flex items-center justify-between z-10 bg-gradient-to-r from-brand-blue to-blue-600">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Pencil className="w-5 h-5" />
+                修改烟丝检验记录
+              </h3>
+              <button onClick={cancelEdit} className="text-white/80 hover:text-white">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-brand-blue" />
+                  基础信息
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">检验日期</label>
+                    <input
+                      type="date"
+                      value={(editForm.inspectionDate as string) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, inspectionDate: e.target.value }))}
+                      className="input-field text-sm w-full"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">合作生产点</label>
+                    <select
+                      value={(editForm.productionPoint as string) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, productionPoint: e.target.value }))}
+                      className="input-field text-sm w-full"
+                    >
+                      <option value="">请选择</option>
+                      {PRODUCTION_POINTS.map(p => <option key={p} value={p}>{p}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">烟丝牌号</label>
+                    <select
+                      value={(editForm.tobaccoBrand as string) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, tobaccoBrand: e.target.value }))}
+                      className="input-field text-sm w-full"
+                    >
+                      <option value="">请选择</option>
+                      {TOBACCO_BRANDS.map(b => <option key={b} value={b}>{b}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">批次号</label>
+                    <input
+                      type="text"
+                      value={(editForm.batchNumber as string) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, batchNumber: e.target.value }))}
+                      className="input-field text-sm w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Droplets className="w-4 h-4 text-brand-blue" />
+                  检验指标
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">烟丝水份 (%)</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={(editForm.moistureValue as number) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, moistureValue: parseFloat(e.target.value) || 0 }))}
+                      className="input-field text-sm w-full"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">水份判定</label>
+                    <select
+                      value={(editForm.moistureResult as string) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, moistureResult: e.target.value }))}
+                      className="input-field text-sm w-full"
+                    >
+                      <option value="">请选择</option>
+                      <option value="合格">合格</option>
+                      <option value="不合格">不合格</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">烟丝填充值 (cm³/g)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={(editForm.fillingValue as number) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, fillingValue: parseFloat(e.target.value) || 0 }))}
+                      className="input-field text-sm w-full"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">填充值判定</label>
+                    <select
+                      value={(editForm.fillingResult as string) || ''}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, fillingResult: e.target.value }))}
+                      className="input-field text-sm w-full"
+                    >
+                      <option value="">请选择</option>
+                      <option value="合格">合格</option>
+                      <option value="不合格">不合格</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground border-t border-border/50 pt-4">
+                <div><span className="font-medium">上传者：</span>{editForm.uploader || '-'}</div>
+                <div><span className="font-medium">上传时间：</span>{editForm.createdAt ? new Date(editForm.createdAt).toLocaleString() : '-'}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-border/50 bg-background/30">
+              <button onClick={cancelEdit} className="px-6 py-2 rounded-lg border border-border hover:bg-accent/10 transition-colors text-sm font-medium">
+                取消
+              </button>
+              <button onClick={saveEdit} className="px-6 py-2 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors text-sm font-medium flex items-center gap-2">
+                <Save className="w-4 h-4" />
+                保存修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 删除确认弹窗 */}
+      {showDeleteConfirm && recordToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+                <Trash2 className="w-6 h-6 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">确认删除记录？</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  检验日期：{recordToDelete.inspectionDate}，烟丝牌号：{recordToDelete.tobaccoBrand}，批次：{recordToDelete.batchNumber}<br />
+                  删除后无法恢复，请谨慎操作。
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => { setShowDeleteConfirm(false); setRecordToDelete(null); }}
+                className="px-5 py-2 text-sm font-medium text-muted-foreground bg-background border border-border rounded-lg hover:bg-accent/10"
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+              >
+                确认删除
+              </button>
             </div>
           </div>
         </div>

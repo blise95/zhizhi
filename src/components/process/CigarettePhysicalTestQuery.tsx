@@ -20,6 +20,11 @@ import {
   CheckCircle2,
   Activity,
   BarChart3,
+  Pencil,
+  Trash2,
+  Save,
+  User,
+  Clock,
 } from 'lucide-react';
 import {
   LineChart,
@@ -138,6 +143,12 @@ export function CigarettePhysicalTestQuery() {
   const [showFilters, setShowFilters] = useState(true);
   const [selectedIndicator, setSelectedIndicator] = useState<string>('weight');
   const printRef = useRef<HTMLDivElement>(null);
+
+  // 编辑与删除状态
+  const [editingRecord, setEditingRecord] = useState<PhysicalTestRecord | null>(null);
+  const [editForm, setEditForm] = useState<Partial<PhysicalTestRecord>>({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState<PhysicalTestRecord | null>(null);
 
   // 加载数据
   useEffect(() => {
@@ -346,6 +357,69 @@ export function CigarettePhysicalTestQuery() {
     setShowDetailModal(true);
   };
 
+  // 删除确认
+  const handleDeleteClick = (record: PhysicalTestRecord) => {
+    setRecordToDelete(record);
+    setShowDeleteConfirm(true);
+  };
+
+  // 执行删除
+  const confirmDelete = () => {
+    if (!recordToDelete) return;
+    const updated = allData.filter(r => r.id !== recordToDelete.id);
+    localStorage.setItem('physicalTestRecords', JSON.stringify(updated));
+    setAllData(updated);
+    setShowDeleteConfirm(false);
+    setRecordToDelete(null);
+  };
+
+  // 打开编辑弹窗
+  const handleEditClick = (record: PhysicalTestRecord) => {
+    setEditingRecord(record);
+    setEditForm({ ...record });
+  };
+
+  // 保存编辑
+  const saveEdit = () => {
+    if (!editingRecord || !editForm) return;
+    const updated = allData.map(r => {
+      if (r.id === editingRecord.id) {
+        return {
+          ...r,
+          ...editForm,
+          updatedAt: new Date().toISOString(),
+        } as PhysicalTestRecord;
+      }
+      return r;
+    });
+    localStorage.setItem('physicalTestRecords', JSON.stringify(updated));
+    setAllData(updated);
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
+  // 取消编辑/删除
+  const cancelEdit = () => {
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
+  // 更新编辑表单基础字段
+  const updateEditField = (field: keyof PhysicalTestRecord, value: string) => {
+    setEditForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  // 更新编辑表单指标字段
+  const updateEditIndicator = (indicatorId: string, subKey: keyof IndicatorData, value: string) => {
+    setEditForm(prev => {
+      const current = (prev[indicatorId as keyof PhysicalTestRecord] as IndicatorData) || { x: '', sd: '', max: '', min: '' };
+      return {
+        ...prev,
+        [indicatorId]: { ...current, [subKey]: value },
+      };
+    });
+  };
+
   // 导出Excel
   const handleExportExcel = () => {
     try {
@@ -360,6 +434,9 @@ export function CigarettePhysicalTestQuery() {
           '牌号': BRANDS.find(b => b.value === record.brand)?.label?.replace('摩登（', '').replace('）', '') || record.brand,
           '记录人': record.recorder,
           '检测时间': record.testTime,
+          '上传者': record.uploader || '-',
+          '上传时间': record.createdAt ? new Date(record.createdAt).toLocaleString() : '-',
+          '更新时间': record.updatedAt ? new Date(record.updatedAt).toLocaleString() : '-',
         };
 
         // 添加物测指标
@@ -521,7 +598,7 @@ export function CigarettePhysicalTestQuery() {
                   <td>${record.machine}</td>
                   <td>${BRANDS.find(b => b.value === record.brand)?.label?.replace('摩登（', '').replace('）', '') || record.brand}</td>
                   ${PHYSICAL_TEST_INDICATORS.map(ind => {
-                    const data = record[indicator.id as keyof PhysicalTestRecord] as IndicatorData;
+                    const data = record[ind.id as keyof PhysicalTestRecord] as IndicatorData;
                     return data ? `
                       <td>${data.x !== '' && data.x != null ? parseFloat(String(data.x)).toFixed(2) : '-'}</td>
                       <td>${data.sd !== '' && data.sd != null ? parseFloat(String(data.sd)).toFixed(3) : '-'}</td>
@@ -529,6 +606,8 @@ export function CigarettePhysicalTestQuery() {
                       <td>${data.min !== '' && data.min != null ? parseFloat(String(data.min)).toFixed(2) : '-'}</td>
                     ` : '<td>-</td><td>-</td><td>-</td><td>-</td>';
                   }).join('')}
+                  <td>${record.uploader || '-'}</td>
+                  <td>${record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -778,6 +857,14 @@ export function CigarettePhysicalTestQuery() {
                 <th className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">
                   牌号
                 </th>
+                <th className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">
+                  <User className="w-3.5 h-3.5 inline mr-1" />
+                  上传者
+                </th>
+                <th className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">
+                  <Clock className="w-3.5 h-3.5 inline mr-1" />
+                  上传时间
+                </th>
                 {PHYSICAL_TEST_INDICATORS.map(indicator => (
                   <React.Fragment key={indicator.id}>
                     <th colSpan={4} className="px-3 py-2 text-center text-xs font-semibold text-foreground uppercase tracking-wider bg-brand-blue/10">
@@ -791,6 +878,8 @@ export function CigarettePhysicalTestQuery() {
               </tr>
               {/* 子表头 */}
               <tr className="bg-secondary/30">
+                <th className="px-3 py-2"></th>
+                <th className="px-3 py-2"></th>
                 <th className="px-3 py-2"></th>
                 <th className="px-3 py-2"></th>
                 <th className="px-3 py-2"></th>
@@ -830,6 +919,12 @@ export function CigarettePhysicalTestQuery() {
                     <td className="px-3 py-3 text-sm text-foreground whitespace-nowrap">
                       {getBrandLabel(record.brand)}
                     </td>
+                    <td className="px-3 py-3 text-sm text-foreground whitespace-nowrap">
+                      {record.uploader || '-'}
+                    </td>
+                    <td className="px-3 py-3 text-sm text-muted-foreground whitespace-nowrap">
+                      {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                    </td>
                     {PHYSICAL_TEST_INDICATORS.map(indicator => {
                       const data = record[indicator.id as keyof PhysicalTestRecord] as IndicatorData;
                       return (
@@ -850,20 +945,36 @@ export function CigarettePhysicalTestQuery() {
                       );
                     })}
                     <td className="px-3 py-3 text-sm whitespace-nowrap">
-                      <button
-                        onClick={() => handleViewDetail(record)}
-                        className="text-brand-blue hover:text-brand-blue/80 hover:underline flex items-center gap-1"
-                      >
-                        <Eye className="w-4 h-4" />
-                        详情
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleViewDetail(record)}
+                          className="text-brand-blue hover:text-brand-blue/80 hover:underline flex items-center gap-1"
+                        >
+                          <Eye className="w-4 h-4" />
+                          详情
+                        </button>
+                        <button
+                          onClick={() => handleEditClick(record)}
+                          className="text-amber-400 hover:text-amber-300 hover:underline flex items-center gap-1"
+                        >
+                          <Pencil className="w-4 h-4" />
+                          修改
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(record)}
+                          className="text-red-400 hover:text-red-300 hover:underline flex items-center gap-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          删除
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan={6 + PHYSICAL_TEST_INDICATORS.length * 4 + 1}
+                    colSpan={8 + PHYSICAL_TEST_INDICATORS.length * 4 + 1}
                     className="px-6 py-12 text-center"
                   >
                     <div className="flex flex-col items-center">
@@ -1263,6 +1374,187 @@ export function CigarettePhysicalTestQuery() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 编辑弹窗 */}
+      {editingRecord && editForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-background rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden animate-scale-in border border-border/50">
+            <div className="bg-gradient-to-r from-brand-blue to-blue-600 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <Pencil className="w-5 h-5" />
+                修改烟支物测记录
+              </h2>
+              <button onClick={cancelEdit} className="text-white/80 hover:text-white">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="overflow-y-auto max-h-[calc(90vh-140px)] p-6 space-y-6">
+              {/* 基础信息编辑 */}
+              <div>
+                <h3 className="text-base font-semibold text-foreground mb-3 pb-2 border-b border-border/30">基础信息</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">日期</label>
+                    <input
+                      type="date"
+                      value={(editForm.date as string) || ''}
+                      onChange={(e) => updateEditField('date', e.target.value)}
+                      className="form-input text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">班别</label>
+                    <select
+                      value={(editForm.shiftType as string) || ''}
+                      onChange={(e) => updateEditField('shiftType', e.target.value)}
+                      className="form-select text-sm"
+                    >
+                      <option value="">请选择</option>
+                      {SHIFT_TYPES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">班次</label>
+                    <select
+                      value={(editForm.shift as string) || ''}
+                      onChange={(e) => updateEditField('shift', e.target.value)}
+                      className="form-select text-sm"
+                    >
+                      <option value="">请选择</option>
+                      {SHIFTS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">机台</label>
+                    <select
+                      value={(editForm.machine as string) || ''}
+                      onChange={(e) => updateEditField('machine', e.target.value)}
+                      className="form-select text-sm"
+                    >
+                      <option value="">请选择</option>
+                      {MACHINES.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">合作生产点</label>
+                    <select
+                      value={(editForm.productionPoint as string) || ''}
+                      onChange={(e) => updateEditField('productionPoint', e.target.value)}
+                      className="form-select text-sm"
+                    >
+                      <option value="">请选择</option>
+                      {PRODUCTION_POINTS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">牌号</label>
+                    <select
+                      value={(editForm.brand as string) || ''}
+                      onChange={(e) => updateEditField('brand', e.target.value)}
+                      className="form-select text-sm"
+                    >
+                      <option value="">请选择</option>
+                      {BRANDS.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">记录人</label>
+                    <input
+                      type="text"
+                      value={(editForm.recorder as string) || ''}
+                      onChange={(e) => updateEditField('recorder', e.target.value)}
+                      className="form-input text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-muted-foreground">检测时间</label>
+                    <input
+                      type="time"
+                      value={(editForm.testTime as string) || ''}
+                      onChange={(e) => updateEditField('testTime', e.target.value)}
+                      className="form-input text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 物测指标编辑 */}
+              <div>
+                <h3 className="text-base font-semibold text-foreground mb-3 pb-2 border-b border-border/30">物测指标数据</h3>
+                <div className="space-y-4">
+                  {PHYSICAL_TEST_INDICATORS.map(indicator => {
+                    const data = (editForm[indicator.id as keyof PhysicalTestRecord] as IndicatorData) || { x: '', sd: '', max: '', min: '' };
+                    return (
+                      <div key={indicator.id} className="bg-secondary/30 rounded-lg p-4 border border-border/20">
+                        <h4 className="text-sm font-semibold text-foreground mb-3">{indicator.name} ({indicator.unit})</h4>
+                        <div className="grid grid-cols-4 gap-4">
+                          {(['x', 'sd', 'max', 'min'] as const).map(key => (
+                            <div key={key} className="space-y-1.5">
+                              <label className="text-xs text-muted-foreground uppercase">{key}</label>
+                              <input
+                                type="text"
+                                inputMode="decimal"
+                                value={data[key] || ''}
+                                onChange={(e) => updateEditIndicator(indicator.id, key, e.target.value)}
+                                className="form-input text-sm"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 px-6 py-4 border-t border-border/30 bg-secondary/20">
+              <button onClick={cancelEdit} className="px-5 py-2 rounded-lg border border-border hover:bg-accent/10 text-sm font-medium">
+                取消
+              </button>
+              <button onClick={saveEdit} className="px-5 py-2 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 text-sm font-medium flex items-center gap-2">
+                <Save className="w-4 h-4" />
+                保存修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 删除确认弹窗 */}
+      {showDeleteConfirm && recordToDelete && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-background rounded-xl shadow-2xl w-full max-w-md border border-border/50 p-6 animate-scale-in">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+                <Trash2 className="w-6 h-6 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">确认删除记录？</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  记录日期：{recordToDelete.date}，机台：{recordToDelete.machine}<br />
+                  删除后无法恢复，请谨慎操作。
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => { setShowDeleteConfirm(false); setRecordToDelete(null); }}
+                className="px-5 py-2 text-sm font-medium text-muted-foreground bg-background border border-border rounded-lg hover:bg-accent/10"
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+              >
+                确认删除
+              </button>
             </div>
           </div>
         </div>

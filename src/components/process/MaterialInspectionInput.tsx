@@ -20,6 +20,7 @@ import {
   Send,
   ArrowRight,
 } from 'lucide-react';
+import { getCurrentUser } from '../auth/Login';
 
 // 类型定义
 interface MaterialInspectionData {
@@ -188,10 +189,14 @@ export function MaterialInspectionInput() {
 
     // 保存到localStorage
     const records = JSON.parse(localStorage.getItem('materialInspectionRecords') || '[]');
+    const currentUser = getCurrentUser();
+    const now = new Date().toISOString();
     const record = {
       ...formData,
       id: Date.now(),
-      createdAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
+      uploader: currentUser?.displayName || currentUser?.username || '未知用户',
     };
     records.push(record);
     localStorage.setItem('materialInspectionRecords', JSON.stringify(records));

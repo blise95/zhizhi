@@ -16,6 +16,7 @@ import {
   Send,
   ArrowRight,
 } from 'lucide-react';
+import { getCurrentUser } from '../auth/Login';
 
 // 类型定义
 interface TobaccoInspectionData {
@@ -166,10 +167,14 @@ export function TobaccoInspectionInput() {
       const existingRecords = JSON.parse(localStorage.getItem('tobaccoInspectionRecords') || '[]');
 
       // 添加新记录
+      const currentUser = getCurrentUser();
+      const now = new Date().toISOString();
       const newRecord = {
         ...formData,
         id: Date.now(),
-        createdAt: new Date().toISOString(),
+        createdAt: now,
+        updatedAt: now,
+        uploader: currentUser?.displayName || currentUser?.username || '未知用户',
       };
 
       existingRecords.push(newRecord);

@@ -18,6 +18,11 @@ import {
   TrendingUp,
   ArrowLeft,
   X,
+  Pencil,
+  Trash2,
+  Save,
+  User,
+  Clock,
 } from 'lucide-react';
 
 // 导入缺陷库（用于详情展示）
@@ -46,6 +51,7 @@ interface ProcessQualityData {
   // 时间戳
   createdAt: string;
   updatedAt: string;
+  uploader?: string;
 }
 
 // 筛选条件接口
@@ -103,6 +109,12 @@ export function ProcessQualityQuery() {
   const [selectedRecord, setSelectedRecord] = useState<ProcessQualityData | null>(null);
   const [showFilters, setShowFilters] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
+  // 编辑与删除状态
+  const [editingRecord, setEditingRecord] = useState<ProcessQualityData | null>(null);
+  const [editForm, setEditForm] = useState<Partial<ProcessQualityData>>({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState<ProcessQualityData | null>(null);
 
   // 初始化：加载数据（从localStorage或使用模拟数据）
   useEffect(() => {
@@ -292,6 +304,69 @@ export function ProcessQualityQuery() {
     setShowDetailModal(true);
   };
 
+  // 删除确认
+  const handleDeleteClick = (record: ProcessQualityData) => {
+    setRecordToDelete(record);
+    setShowDeleteConfirm(true);
+  };
+
+  // 执行删除
+  const confirmDelete = () => {
+    if (!recordToDelete) return;
+    const updated = allData.filter(r => r.id !== recordToDelete.id);
+    localStorage.setItem('processQualityData', JSON.stringify(updated));
+    setAllData(updated);
+    setFilteredData(updated.filter(item => {
+      if (filters.dateFrom && item.date < filters.dateFrom) return false;
+      if (filters.dateTo && item.date > filters.dateTo) return false;
+      if (filters.productionPoint && item.productionPoint !== filters.productionPoint) return false;
+      if (filters.brand && item.brand !== filters.brand) return false;
+      if (filters.shiftType && item.shiftType !== filters.shiftType) return false;
+      if (filters.shift && item.shift !== filters.shift) return false;
+      if (filters.machine && item.machine !== filters.machine) return false;
+      return true;
+    }));
+    setShowDeleteConfirm(false);
+    setRecordToDelete(null);
+  };
+
+  // 打开编辑弹窗
+  const handleEditClick = (record: ProcessQualityData) => {
+    setEditingRecord(record);
+    setEditForm({ ...record });
+  };
+
+  // 保存编辑
+  const saveEdit = () => {
+    if (!editingRecord || !editForm) return;
+    const updated = allData.map(r => {
+      if (r.id === editingRecord.id) {
+        return { ...r, ...editForm, updatedAt: new Date().toISOString() } as ProcessQualityData;
+      }
+      return r;
+    });
+    localStorage.setItem('processQualityData', JSON.stringify(updated));
+    setAllData(updated);
+    // 刷新筛选后的数据
+    let result = [...updated];
+    if (filters.dateFrom) result = result.filter(item => item.date >= filters.dateFrom);
+    if (filters.dateTo) result = result.filter(item => item.date <= filters.dateTo);
+    if (filters.productionPoint) result = result.filter(item => item.productionPoint === filters.productionPoint);
+    if (filters.brand) result = result.filter(item => item.brand === filters.brand);
+    if (filters.shiftType) result = result.filter(item => item.shiftType === filters.shiftType);
+    if (filters.shift) result = result.filter(item => item.shift === filters.shift);
+    if (filters.machine) result = result.filter(item => item.machine === filters.machine);
+    setFilteredData(result);
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
+  // 取消编辑
+  const cancelEdit = () => {
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
   // 导出Excel
   const exportToExcel = () => {
     // 准备导出数据
@@ -312,7 +387,9 @@ export function ProcessQualityQuery() {
       '条装缺陷数': item.cartonDefects?.length || 0,
       '盒装缺陷数': item.packDefects?.length || 0,
       '烟支缺陷数': item.cigaretteDefects?.length || 0,
-      '录入时间': item.createdAt,
+      '上传者': item.uploader || '-',
+      '上传时间': item.createdAt ? new Date(item.createdAt).toLocaleString() : '-',
+      '更新时间': item.updatedAt ? new Date(item.updatedAt).toLocaleString() : '-',
     }));
 
     // 创建CSV内容（简单实现，实际项目可使用xlsx库）
@@ -564,6 +641,14 @@ export function ProcessQualityQuery() {
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">牌号</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">记录人</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">取样时间</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      <User className="w-3.5 h-3.5 inline mr-1" />
+                      上传者
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      <Clock className="w-3.5 h-3.5 inline mr-1" />
+                      上传时间
+                    </th>
                     <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">缺陷数</th>
                     <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">操作</th>
                   </tr>
@@ -585,6 +670,10 @@ export function ProcessQualityQuery() {
                         <td className="px-4 py-3 text-sm text-foreground max-w-[200px] truncate" title={record.brand}>{record.brand}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{record.recorder}</td>
                         <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">{record.samplingTime}</td>
+                        <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">{record.uploader || '-'}</td>
+                        <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">
+                          {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                        </td>
                         <td className="px-4 py-3 text-sm text-center">
                           {totalDefects > 0 ? (
                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-danger/10 text-danger">
@@ -597,13 +686,29 @@ export function ProcessQualityQuery() {
                           )}
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <button
-                            onClick={() => viewDetail(record)}
-                            className="px-3 py-1.5 rounded-md bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20 transition-colors inline-flex items-center gap-1.5 text-xs font-medium"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                            查看详情
-                          </button>
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => viewDetail(record)}
+                              className="px-3 py-1.5 rounded-md bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20 transition-colors inline-flex items-center gap-1.5 text-xs font-medium"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                              查看详情
+                            </button>
+                            <button
+                              onClick={() => handleEditClick(record)}
+                              className="px-3 py-1.5 rounded-md bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors inline-flex items-center gap-1.5 text-xs font-medium"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                              修改
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(record)}
+                              className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors inline-flex items-center gap-1.5 text-xs font-medium"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              删除
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -880,6 +985,119 @@ export function ProcessQualityQuery() {
                 className="px-6 py-2 rounded-lg border border-border hover:bg-accent/10 transition-colors text-sm font-medium"
               >
                 关闭
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 编辑弹窗 */}
+      {editingRecord && editForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-border/50 bg-gradient-to-r from-brand-blue to-blue-600">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Pencil className="w-5 h-5" />
+                修改质量记录
+              </h2>
+              <button onClick={cancelEdit} className="text-white/80 hover:text-white">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-160px)] space-y-6">
+              <div>
+                <h3 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-brand-blue" />
+                  基础信息
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: '日期', field: 'date', type: 'date' },
+                    { label: '班别', field: 'shiftType', type: 'select', options: SHIFT_TYPES },
+                    { label: '班次', field: 'shift', type: 'select', options: SHIFTS },
+                    { label: '机台', field: 'machine', type: 'select', options: MACHINES },
+                    { label: '合作生产点', field: 'productionPoint', type: 'select', options: PRODUCTION_POINTS },
+                    { label: '牌号', field: 'brand', type: 'select', options: BRANDS },
+                    { label: '记录人', field: 'recorder', type: 'text' },
+                    { label: '取样时间', field: 'samplingTime', type: 'time' },
+                    { label: '取样件号', field: 'samplingNo', type: 'text' },
+                    { label: '条盒钢印', field: 'steelStamp', type: 'text' },
+                    { label: '烟丝批次', field: 'tobaccoBatch', type: 'text' },
+                  ].map(item => (
+                    <div key={item.field} className="space-y-1.5">
+                      <label className="text-xs font-medium text-muted-foreground">{item.label}</label>
+                      {item.type === 'select' ? (
+                        <select
+                          value={(editForm[item.field as keyof ProcessQualityData] as string) || ''}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, [item.field]: e.target.value }))}
+                          className="form-select text-sm w-full"
+                        >
+                          <option value="">请选择</option>
+                          {(item.options as string[]).map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type={item.type}
+                          value={(editForm[item.field as keyof ProcessQualityData] as string) || ''}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, [item.field]: e.target.value }))}
+                          className="form-input text-sm w-full"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground border-t border-border/30 pt-4">
+                <div><span className="font-medium">上传者：</span>{editForm.uploader || '-'}</div>
+                <div><span className="font-medium">上传时间：</span>{editForm.createdAt ? new Date(editForm.createdAt).toLocaleString() : '-'}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-border/50 bg-background/30">
+              <button onClick={cancelEdit} className="px-6 py-2 rounded-lg border border-border hover:bg-accent/10 transition-colors text-sm font-medium">
+                取消
+              </button>
+              <button onClick={saveEdit} className="px-6 py-2 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors text-sm font-medium flex items-center gap-2">
+                <Save className="w-4 h-4" />
+                保存修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 删除确认弹窗 */}
+      {showDeleteConfirm && recordToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+                <Trash2 className="w-6 h-6 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">确认删除记录？</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  记录日期：{recordToDelete.date}，机台：{recordToDelete.machine}，牌号：{recordToDelete.brand}<br />
+                  删除后无法恢复，请谨慎操作。
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => { setShowDeleteConfirm(false); setRecordToDelete(null); }}
+                className="px-5 py-2 text-sm font-medium text-muted-foreground bg-background border border-border rounded-lg hover:bg-accent/10"
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+              >
+                确认删除
               </button>
             </div>
           </div>

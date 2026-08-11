@@ -26,6 +26,7 @@ import {
   PHYSICAL_TEST_INDICATORS,
   createEmptyIndicatorData,
 } from '@/data/physicalTestTypes';
+import { getCurrentUser } from '../auth/Login';
 
 // 下拉选项配置（与录入页面保持一致）
 const OPTIONS = {
@@ -147,6 +148,9 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
   const handleSubmit = () => {
     if (!validateForm()) return;
 
+    const currentUser = getCurrentUser();
+    const now = new Date().toISOString();
+
     const record: PhysicalTestRecord = {
       id: Date.now().toString(),
       ...basicInfo,
@@ -154,8 +158,9 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
       circumference: indicatorData['circumference'] || createEmptyIndicatorData(),
       drawResistance: indicatorData['drawResistance'] || createEmptyIndicatorData(),
       ventilationLength: indicatorData['ventilationLength'] || createEmptyIndicatorData(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
+      uploader: currentUser?.displayName || currentUser?.username || '未知用户',
     };
 
     // 保存到localStorage

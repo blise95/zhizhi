@@ -17,6 +17,11 @@ import {
   Image as ImageIcon,
   ZoomIn,
   X,
+  Pencil,
+  Trash2,
+  Save,
+  User,
+  Clock,
 } from 'lucide-react';
 
 // 类型定义
@@ -41,6 +46,8 @@ interface MaterialInspectionRecord {
   images: string[];
   // 元数据
   createdAt: string;
+  updatedAt?: string;
+  uploader?: string;
 }
 
 interface FilterConditions {
@@ -91,6 +98,12 @@ export function MaterialInspectionQuery() {
   const [selectedRecord, setSelectedRecord] = useState<MaterialInspectionRecord | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const pageSize = 10;
+
+  // 编辑与删除状态
+  const [editingRecord, setEditingRecord] = useState<MaterialInspectionRecord | null>(null);
+  const [editForm, setEditForm] = useState<Partial<MaterialInspectionRecord>>({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState<MaterialInspectionRecord | null>(null);
 
   // 初始化：加载数据
   useEffect(() => {
@@ -201,7 +214,7 @@ export function MaterialInspectionQuery() {
     csvContent += `导出时间,${new Date().toLocaleString()}\n`;
     csvContent += `数据总量,${filteredData.length}条\n\n`;
 
-    csvContent += '检验日期,合作生产点,材料类型,材料代码,批次号,供应商,检验员,材料色差,材料印刷,材料切割,字体完整,本次检验结果,图片数量\n';
+    csvContent += '检验日期,合作生产点,材料类型,材料代码,批次号,供应商,检验员,材料色差,材料印刷,材料切割,字体完整,本次检验结果,图片数量,上传者,上传时间,更新时间\n';
 
     filteredData.forEach(record => {
       csvContent += `${record.inspectionDate},`;
@@ -216,7 +229,10 @@ export function MaterialInspectionQuery() {
       csvContent += `${record.cutting},`;
       csvContent += `${record.fontComplete},`;
       csvContent += `${record.overallResult},`;
-      csvContent += `${record.images.length}张\n`;
+      csvContent += `${record.images.length}张,`;
+      csvContent += `${record.uploader || '-'},`;
+      csvContent += `${record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'},`;
+      csvContent += `${record.updatedAt ? new Date(record.updatedAt).toLocaleString() : '-'}\n`;
     });
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -225,6 +241,49 @@ export function MaterialInspectionQuery() {
     link.download = `材料到厂检验查询_${getTodayDate()}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
+  };
+
+  // 删除确认
+  const handleDeleteClick = (record: MaterialInspectionRecord) => {
+    setRecordToDelete(record);
+    setShowDeleteConfirm(true);
+  };
+
+  // 执行删除
+  const confirmDelete = () => {
+    if (!recordToDelete) return;
+    const updated = allData.filter(r => r.id !== recordToDelete.id);
+    localStorage.setItem('materialInspectionRecords', JSON.stringify(updated));
+    setAllData(updated);
+    setShowDeleteConfirm(false);
+    setRecordToDelete(null);
+  };
+
+  // 打开编辑弹窗
+  const handleEditClick = (record: MaterialInspectionRecord) => {
+    setEditingRecord(record);
+    setEditForm({ ...record });
+  };
+
+  // 保存编辑
+  const saveEdit = () => {
+    if (!editingRecord || !editForm) return;
+    const updated = allData.map(r => {
+      if (r.id === editingRecord.id) {
+        return { ...r, ...editForm, updatedAt: new Date().toISOString() } as MaterialInspectionRecord;
+      }
+      return r;
+    });
+    localStorage.setItem('materialInspectionRecords', JSON.stringify(updated));
+    setAllData(updated);
+    setEditingRecord(null);
+    setEditForm({});
+  };
+
+  // 取消编辑
+  const cancelEdit = () => {
+    setEditingRecord(null);
+    setEditForm({});
   };
 
   // 打印
@@ -454,6 +513,14 @@ export function MaterialInspectionQuery() {
                 <th className="text-left py-3 px-4 font-semibold text-foreground">批次号</th>
                 <th className="text-left py-3 px-4 font-semibold text-foreground">供应商</th>
                 <th className="text-left py-3 px-4 font-semibold text-foreground">检验员</th>
+                <th className="text-left py-3 px-4 font-semibold text-foreground">
+                  <User className="w-3.5 h-3.5 inline mr-1" />
+                  上传者
+                </th>
+                <th className="text-left py-3 px-4 font-semibold text-foreground">
+                  <Clock className="w-3.5 h-3.5 inline mr-1" />
+                  上传时间
+                </th>
                 <th className="text-center py-3 px-4 font-semibold text-foreground">检验结果</th>
                 <th className="text-center py-3 px-4 font-semibold text-foreground">图片</th>
                 <th className="text-center py-3 px-4 font-semibold text-foreground">操作</th>
@@ -473,6 +540,10 @@ export function MaterialInspectionQuery() {
                     <td className="py-3 px-4 text-foreground font-mono text-xs">{record.batchNumber}</td>
                     <td className="py-3 px-4 text-foreground">{record.supplier}</td>
                     <td className="py-3 px-4 text-foreground">{record.inspector}</td>
+                    <td className="py-3 px-4 text-foreground">{record.uploader || '-'}</td>
+                    <td className="py-3 px-4 text-muted-foreground whitespace-nowrap">
+                      {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                    </td>
                     <td className="py-3 px-4 text-center">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                         record.overallResult === '合格'
@@ -498,19 +569,35 @@ export function MaterialInspectionQuery() {
                       )}
                     </td>
                     <td className="py-3 px-4 text-center">
-                      <button
-                        onClick={() => setSelectedRecord(record)}
-                        className="inline-flex items-center px-3 py-1.5 rounded-md bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20 transition-colors text-xs"
-                      >
-                        <Eye className="w-3.5 h-3.5 mr-1" />
-                        查看详情
-                      </button>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => setSelectedRecord(record)}
+                          className="inline-flex items-center px-3 py-1.5 rounded-md bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20 transition-colors text-xs"
+                        >
+                          <Eye className="w-3.5 h-3.5 mr-1" />
+                          查看详情
+                        </button>
+                        <button
+                          onClick={() => handleEditClick(record)}
+                          className="inline-flex items-center px-3 py-1.5 rounded-md bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors text-xs"
+                        >
+                          <Pencil className="w-3.5 h-3.5 mr-1" />
+                          修改
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(record)}
+                          className="inline-flex items-center px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 mr-1" />
+                          删除
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center text-muted-foreground">
+                  <td colSpan={12} className="py-12 text-center text-muted-foreground">
                     <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
                     <p>暂无数据</p>
                     <p className="text-xs mt-1">请调整筛选条件或录入新的检验数据</p>
@@ -745,6 +832,135 @@ export function MaterialInspectionQuery() {
             >
               <X className="w-8 h-8" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* 编辑弹窗 */}
+      {editingRecord && editForm && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-border/50 bg-gradient-to-r from-brand-blue to-blue-600">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Pencil className="w-5 h-5" />
+                修改材料检验记录
+              </h2>
+              <button onClick={cancelEdit} className="text-white/80 hover:text-white">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-160px)] space-y-6">
+              <div>
+                <h3 className="text-base font-bold text-foreground mb-4">基础信息</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {[
+                    { label: '检验日期', field: 'inspectionDate', type: 'date' },
+                    { label: '合作生产点', field: 'productionPoint', type: 'select', options: PRODUCTION_POINTS },
+                    { label: '材料类型', field: 'materialType', type: 'select', options: MATERIAL_TYPES },
+                    { label: '材料代码', field: 'materialCode', type: 'text' },
+                    { label: '批次号', field: 'batchNumber', type: 'text' },
+                    { label: '供应商', field: 'supplier', type: 'text' },
+                    { label: '检验员', field: 'inspector', type: 'text' },
+                  ].map(item => (
+                    <div key={item.field} className="space-y-1.5">
+                      <label className="text-xs font-medium text-muted-foreground">{item.label}</label>
+                      {item.type === 'select' ? (
+                        <select
+                          value={(editForm[item.field as keyof MaterialInspectionRecord] as string) || ''}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, [item.field]: e.target.value }))}
+                          className="form-select text-sm w-full"
+                        >
+                          <option value="">请选择</option>
+                          {(item.options as string[]).map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                      ) : (
+                        <input
+                          type={item.type}
+                          value={(editForm[item.field as keyof MaterialInspectionRecord] as string) || ''}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, [item.field]: e.target.value }))}
+                          className="form-input text-sm w-full"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-foreground mb-4">检验指标</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: '材料色差', field: 'colorDifference' },
+                    { label: '材料印刷', field: 'printing' },
+                    { label: '材料切割', field: 'cutting' },
+                    { label: '字体完整', field: 'fontComplete' },
+                  ].map(item => (
+                    <div key={item.field} className="space-y-1.5">
+                      <label className="text-xs font-medium text-muted-foreground">{item.label}</label>
+                      <select
+                        value={(editForm[item.field as keyof MaterialInspectionRecord] as string) || ''}
+                        onChange={(e) => setEditForm(prev => ({ ...prev, [item.field]: e.target.value }))}
+                        className="form-select text-sm w-full"
+                      >
+                        <option value="">请选择</option>
+                        <option value="合格">合格</option>
+                        <option value="不合格">不合格</option>
+                      </select>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground border-t border-border/30 pt-4">
+                <div><span className="font-medium">上传者：</span>{editForm.uploader || '-'}</div>
+                <div><span className="font-medium">上传时间：</span>{editForm.createdAt ? new Date(editForm.createdAt).toLocaleString() : '-'}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-border/50 bg-background/30">
+              <button onClick={cancelEdit} className="px-6 py-2 rounded-lg border border-border hover:bg-accent/10 transition-colors text-sm font-medium">
+                取消
+              </button>
+              <button onClick={saveEdit} className="px-6 py-2 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors text-sm font-medium flex items-center gap-2">
+                <Save className="w-4 h-4" />
+                保存修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 删除确认弹窗 */}
+      {showDeleteConfirm && recordToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+                <Trash2 className="w-6 h-6 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">确认删除记录？</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  检验日期：{recordToDelete.inspectionDate}，材料：{recordToDelete.materialType}，批次：{recordToDelete.batchNumber}<br />
+                  删除后无法恢复，请谨慎操作。
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => { setShowDeleteConfirm(false); setRecordToDelete(null); }}
+                className="px-5 py-2 text-sm font-medium text-muted-foreground bg-background border border-border rounded-lg hover:bg-accent/10"
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+              >
+                确认删除
+              </button>
+            </div>
           </div>
         </div>
       )}

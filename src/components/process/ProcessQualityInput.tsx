@@ -14,6 +14,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { AppearanceDefectInput } from './AppearanceDefectInput';
+import { getCurrentUser } from '../auth/Login';
 
 // 表单数据类型定义
 interface FormData {
@@ -253,6 +254,9 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
   const handleSubmit = () => {
     if (validateForm()) {
       try {
+        const currentUser = getCurrentUser();
+        const now = new Date().toISOString();
+
         // 构建基础质量记录
         const qualityRecord: any = {
           id: `REC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -267,6 +271,9 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
           samplingNo: formData.sampleNumber || '',
           steelStamp: formData.steelStamp || '',
           tobaccoBatch: formData.tobaccoBatch || '',
+          createdAt: now,
+          updatedAt: now,
+          uploader: currentUser?.displayName || currentUser?.username || '未知用户',
         };
 
         // 添加缺陷数据（如果有）
