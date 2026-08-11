@@ -6,14 +6,17 @@ import {
   Wifi,
   Server,
   ChevronRight,
+  LogOut,
 } from 'lucide-react';
 
 interface HeaderProps {
   currentPage: string;
   breadcrumbs: { label: string; path?: string }[];
+  currentUser?: { username: string; displayName: string; role: string } | null;
+  onLogout?: () => void;
 }
 
-export function Header({ currentPage, breadcrumbs }: HeaderProps) {
+export function Header({ currentPage, breadcrumbs, currentUser, onLogout }: HeaderProps) {
   // 获取当前时间
   const now = new Date();
   const dateStr = now.toLocaleDateString('zh-CN', {
@@ -91,9 +94,23 @@ export function Header({ currentPage, breadcrumbs }: HeaderProps) {
               <User className="w-4 h-4 text-brand-blue" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-foreground leading-tight">质量工程师</span>
-              <span className="text-xs text-muted-foreground leading-tight">质量管理部</span>
+              <span className="text-sm font-medium text-foreground leading-tight">
+                {currentUser?.displayName || currentUser?.username || '用户'}
+              </span>
+              <span className="text-xs text-muted-foreground leading-tight">
+                {currentUser?.role || '质量管理部'}
+              </span>
             </div>
+            {/* 登出按钮 */}
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                className="ml-2 p-2 rounded-lg hover:bg-danger/10 text-muted-foreground hover:text-danger transition-colors group"
+                title="退出登录"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>

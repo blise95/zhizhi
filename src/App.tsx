@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
 import { QualityDashboard } from './components/dashboard/QualityDashboard';
@@ -14,9 +14,48 @@ import { BoxQualityAnalysis } from './components/analysis/BoxQualityAnalysis';
 import { CartonQualityAnalysis } from './components/analysis/CartonQualityAnalysis';
 import { PackQualityAnalysis } from './components/analysis/PackQualityAnalysis';
 import { CigaretteQualityAnalysis } from './components/analysis/CigaretteQualityAnalysis';
+import Login, { getCurrentUser, logout } from './components/auth/Login';
 
 function App() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ username: string; displayName: string; role: string } | null>(null);
+
+  // 检查登录状态
+  useEffect(() => {
+    // 仅当 URL 带有 ?login 参数时强制回到登录页（便于开发预览登录特效）
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('login')) {
+      localStorage.removeItem('zhiquality_auth');
+    }
+
+    const user = getCurrentUser();
+    if (user) {
+      setIsAuthenticated(true);
+      setCurrentUser(user);
+    }
+  }, []);
+
+  // 登录成功回调
+  const handleLoginSuccess = () => {
+    const user = getCurrentUser();
+    if (user) {
+      setIsAuthenticated(true);
+      setCurrentUser(user);
+    }
+  };
+
+  // 登出
+  const handleLogout = () => {
+    logout();
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
+
+  // 未登录时显示登录页面
+  if (!isAuthenticated) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
 
   // 根据当前菜单获取页面信息
   const getPageInfo = () => {
@@ -180,7 +219,12 @@ function App() {
       {/* 主内容区域 */}
       <div className="ml-64 min-h-screen">
         {/* 顶部栏 */}
-        <Header currentPage={pageInfo.title} breadcrumbs={pageInfo.breadcrumbs} />
+        <Header
+          currentPage={pageInfo.title}
+          breadcrumbs={pageInfo.breadcrumbs}
+          currentUser={currentUser}
+          onLogout={handleLogout}
+        />
 
         {/* 内容区 */}
         <main className="pt-16">

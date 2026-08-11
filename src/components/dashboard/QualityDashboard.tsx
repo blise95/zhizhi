@@ -35,6 +35,9 @@ import {
   Sparkles,
   Radio,
   Gauge,
+  Filter,
+  ChevronDown,
+  Cigarette,
 } from 'lucide-react';
 
 // 导入类型和工具函数
@@ -74,6 +77,25 @@ const SPEC_LIMITS: Record<string, { USL: number; LSL: number; target: number }> 
 };
 
 const INSPECTION_POINTS_PER_SAMPLE = 215;
+
+const BRAND_OPTIONS = [
+  { value: 'modern-eu', label: '摩登（中东-EU）' },
+  { value: 'normal-red-djibouti', label: '摩登（普通红吉布提）' },
+  { value: 'normal-red-intl', label: '摩登（普通红国际）' },
+  { value: 'normal-silver-intl', label: '摩登（普通银国际）' },
+  { value: 'slim', label: '摩登（细支）' },
+  { value: 'slim-gold', label: '摩登（细支金）' },
+  { value: 'ultra-slim', label: '摩登（超细支）' },
+  { value: 'ultra-gold', label: '摩登（超细金）' },
+  { value: 'ultra-silver', label: '摩登（超细银）' },
+  { value: 'ultra-black', label: '摩登（超细黑）' },
+  { value: 'ultra-white-97', label: '摩登（97超细白）' },
+];
+
+const BRAND_MAP: Record<string, string> = BRAND_OPTIONS.reduce((map, b) => {
+  map[b.value] = b.label;
+  return map;
+}, {} as Record<string, string>);
 
 // ==================== 接口定义 ====================
 
@@ -209,6 +231,8 @@ const QualityDashboard: React.FC = () => {
   const [trendMetric, setTrendMetric] = useState<'qualityRate' | 'defectRate' | 'defectCount'>('qualityRate');
   const [machineMetric, setMachineMetric] = useState<'defectCount' | 'qualityRate' | 'defectRate'>('defectCount');
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [selectedMachine, setSelectedMachine] = useState<string>('');
+  const [selectedBrand, setSelectedBrand] = useState<string>('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // 实时更新时间
@@ -546,12 +570,51 @@ const QualityDashboard: React.FC = () => {
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [processData, monthRange, trendMetric]);
 
-  // ==================== 数据计算：物测状态 ====================
+  // ==================== 数据计算：物测筛选选项 ====================
 
-  const physicalTestStatus = useMemo((): PhysicalTestStatus[] => {
+  const physicalTestFilterOptions = useMemo(() => {
     const thisMonthData = physicalTestData.filter(r =>
       r.date >= monthRange.from && r.date <= monthRange.to
     );
+
+    const machineSet = new Set<string>();
+    thisMonthData.forEach(r => {
+      if (r.machine) machineSet.add(r.machine);
+    });
+
+    // 机台改变时，牌号选项联动：先按当前机台过滤，再提取牌号
+    let brandSource = thisMonthData;
+    if (selectedMachine) {
+      brandSource = brandSource.filter(r => r.machine === selectedMachine);
+    }
+
+    const brandSet = new Set<string>();
+    brandSource.forEach(r => {
+      if (r.brand) brandSet.add(r.brand);
+    });
+
+    return {
+      machines: Array.from(machineSet).sort(),
+      brands: Array.from(brandSet).sort(),
+    };
+  }, [physicalTestData, monthRange, selectedMachine]);
+
+  // ==================== 数据计算：物测状态 ====================
+
+  const physicalTestStatus = useMemo((): PhysicalTestStatus[] => {
+    let thisMonthData = physicalTestData.filter(r =>
+      r.date >= monthRange.from && r.date <= monthRange.to
+    );
+
+    // 按机台筛选
+    if (selectedMachine) {
+      thisMonthData = thisMonthData.filter(r => r.machine === selectedMachine);
+    }
+
+    // 按牌号筛选
+    if (selectedBrand) {
+      thisMonthData = thisMonthData.filter(r => r.brand === selectedBrand);
+    }
 
     return PHYSICAL_TEST_INDICATORS.map(indicator => {
       const values: number[] = [];
@@ -606,7 +669,7 @@ const QualityDashboard: React.FC = () => {
         sampleSize: values.length,
       };
     });
-  }, [physicalTestData, monthRange]);
+  }, [physicalTestData, monthRange, selectedMachine, selectedBrand]);
 
   // ==================== 数据计算：预警信息 ====================
 
@@ -1361,18 +1424,105 @@ const QualityDashboard: React.FC = () => {
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
 
               <div className="p-7">
-                <div className="flex items-center gap-4 mb-7">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-green-500/30 rounded-xl blur-lg"></div>
-                    <div className="relative p-2.5 rounded-xl bg-green-500/20 border border-green-500/30">
-                      <Gauge className="w-6 h-6 text-green-400" />
+                <div className="flex items-center justify-between mb-7">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-green-500/30 rounded-xl blur-lg"></div>
+                      <div className="relative p-2.5 rounded-xl bg-green-500/20 border border-green-500/30">
+                        <Gauge className="w-6 h-6 text-green-400" />
+                      </div>
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">烟支物测质量状态</h2>
+                      <p className="text-xs text-slate-500 mt-0.5">六西格玛过程能力 · 多机台 · 多牌号</p>
                     </div>
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">烟支物测质量状态</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">六西格玛过程能力</p>
+
+                  {/* 机台 / 牌号筛选器 */}
+                  <div className="flex items-center gap-3">
+                    {/* 机台选择 */}
+                    <div className="relative group/select">
+                      <div className="absolute inset-0 rounded-xl bg-emerald-500/10 blur-md opacity-0 group-hover/select:opacity-100 transition-opacity"></div>
+                      <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-700/50 hover:border-emerald-500/40 transition-all duration-300">
+                        <Factory className="w-4 h-4 text-emerald-400" />
+                        <select
+                          value={selectedMachine}
+                          onChange={(e) => {
+                            setSelectedMachine(e.target.value);
+                            setSelectedBrand('');
+                          }}
+                          className="bg-transparent text-sm font-medium text-slate-200 outline-none cursor-pointer min-w-[110px] appearance-none pr-6 focus:text-emerald-300 transition-colors"
+                        >
+                          <option value="" className="bg-slate-900 text-slate-300">全部机台</option>
+                          {physicalTestFilterOptions.machines.map(machine => (
+                            <option key={machine} value={machine} className="bg-slate-900 text-slate-300">{machine}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* 牌号选择 */}
+                    <div className="relative group/select">
+                      <div className="absolute inset-0 rounded-xl bg-cyan-500/10 blur-md opacity-0 group-hover/select:opacity-100 transition-opacity"></div>
+                      <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-700/50 hover:border-cyan-500/40 transition-all duration-300">
+                        <Cigarette className="w-4 h-4 text-cyan-400" />
+                        <select
+                          value={selectedBrand}
+                          onChange={(e) => setSelectedBrand(e.target.value)}
+                          disabled={!selectedMachine && physicalTestFilterOptions.brands.length === 0}
+                          className="bg-transparent text-sm font-medium text-slate-200 outline-none cursor-pointer min-w-[140px] appearance-none pr-6 focus:text-cyan-300 transition-colors disabled:cursor-not-allowed disabled:text-slate-600"
+                        >
+                          <option value="" className="bg-slate-900 text-slate-300">
+                            {selectedMachine ? '该机台全部牌号' : '全部牌号'}
+                          </option>
+                          {physicalTestFilterOptions.brands.map(brand => (
+                            <option key={brand} value={brand} className="bg-slate-900 text-slate-300">
+                              {BRAND_MAP[brand] || brand}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* 重置筛选 */}
+                    {(selectedMachine || selectedBrand) && (
+                      <button
+                        onClick={() => {
+                          setSelectedMachine('');
+                          setSelectedBrand('');
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-900/40 border border-slate-700/40 hover:border-slate-500/40 transition-all duration-300"
+                      >
+                        <Filter className="w-3.5 h-3.5" />
+                        重置
+                      </button>
+                    )}
                   </div>
                 </div>
+
+                {/* 当前筛选状态标签 */}
+                {(selectedMachine || selectedBrand) && (
+                  <div className="flex items-center gap-2 mb-5">
+                    <span className="text-xs text-slate-500 font-medium">当前筛选：</span>
+                    {selectedMachine && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        <Factory className="w-3 h-3" />
+                        {selectedMachine}
+                      </span>
+                    )}
+                    {selectedBrand && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                        <Cigarette className="w-3 h-3" />
+                        {BRAND_MAP[selectedBrand] || selectedBrand}
+                      </span>
+                    )}
+                    <span className="text-xs text-slate-600 ml-1">
+                      样本 N={physicalTestStatus[0]?.sampleSize ?? 0}
+                    </span>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-4 gap-5">
                   {physicalTestStatus.map(item => (
@@ -1403,7 +1553,7 @@ const QualityDashboard: React.FC = () => {
                             item.status === 'poor' ? 'bg-red-500/20 text-red-400 border-red-500/30 shadow-lg shadow-red-500/20' :
                             'bg-slate-700/50 text-slate-500 border-slate-600/30'
                           }`}>
-                            {item.statusText}
+                            {item.statusLabel}
                           </div>
                         </div>
 
