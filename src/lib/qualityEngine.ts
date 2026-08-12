@@ -99,6 +99,7 @@ export interface BatchRating {
   issueStatus: IssueStatus;
   defectCount: number;
   defectsByCategory: Record<string, number>;
+  scoreByCategory: Record<string, number>;
   defects: DefectRecord[];
 }
 
@@ -346,6 +347,7 @@ export function calculateBatchRating(record: ProcessQualityRecord): BatchRating 
   let totalScore = 0;
   let defectCount = 0;
   const defectsByCategory: Record<string, number> = { A: 0, B: 0, C: 0, D: 0 };
+  const scoreByCategory: Record<string, number> = { A: 0, B: 0, C: 0, D: 0 };
   const allDefects: DefectRecord[] = [];
 
   defectGroups.forEach(({ field, scoreCategory }) => {
@@ -359,6 +361,7 @@ export function calculateBatchRating(record: ProcessQualityRecord): BatchRating 
       defectCount += qty;
       const cat = (d.category || 'D').toUpperCase();
       defectsByCategory[cat] = (defectsByCategory[cat] || 0) + qty;
+      scoreByCategory[cat] = (scoreByCategory[cat] || 0) + score;
       allDefects.push(d);
     });
   });
@@ -387,6 +390,7 @@ export function calculateBatchRating(record: ProcessQualityRecord): BatchRating 
     issueStatus,
     defectCount,
     defectsByCategory,
+    scoreByCategory,
     defects: allDefects,
   };
 }
@@ -565,7 +569,8 @@ export function computeDefectGradeDistribution(records: ProcessQualityRecord[]):
         result[category] = { category, count: 0, score: 0 };
       }
       result[category].count += count;
-      result[category].score += count * getDefectScore(category);
+      // 使用与批次评级完全一致的累计扣分，确保和实际扣分值一致
+      result[category].score += r.scoreByCategory[category] || 0;
     });
   });
 

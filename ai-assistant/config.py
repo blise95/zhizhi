@@ -1,0 +1,94 @@
+"""
+智质通 AI 问答模块配置
+"""
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# 加载 .env 文件（如果存在）
+load_dotenv()
+
+# 项目根目录
+BASE_DIR = Path(__file__).resolve().parent
+
+# 标准文档路径
+DOC_RATING = Path(os.getenv("DOC_RATING", r"C:\Users\lenovo\Desktop\本次素材网页系统\卷烟外在质量分级及评级规定20231228.pdf"))
+DOC_DEFECT = Path(os.getenv("DOC_DEFECT", r"C:\Users\lenovo\Desktop\本次素材网页系统\卷烟外在质量缺陷判定20231030.pdf"))
+
+# 向量库存储目录
+VECTOR_STORE_PATH = Path(os.getenv("VECTOR_STORE_PATH", str(BASE_DIR / "data" / "vector_store")))
+
+# 检索配置
+TOP_K_RETRIEVE = int(os.getenv("TOP_K_RETRIEVE", "8"))
+TOP_K_RERANK = int(os.getenv("TOP_K_RERANK", "5"))
+
+# 业务数据 API（可选，留空则使用本地 JSON 或空数据）
+BUSINESS_API_URL = os.getenv("BUSINESS_API_URL", "")
+
+# Embedding 模型配置
+# 可选：fastembed / ollama / openai
+EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "fastembed").lower()
+FASTEMBED_MODEL = os.getenv("FASTEMBED_MODEL", "BAAI/bge-small-zh-v1.5")
+
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_EMBEDDING_MODEL = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+OPENAI_EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
+
+# LLM 配置
+# 可选：openai / ollama
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama").lower()
+
+OLLAMA_CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
+
+OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
+
+ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY", "")
+ZHIPU_BASE_URL = os.getenv("ZHIPU_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
+ZHIPU_CHAT_MODEL = os.getenv("ZHIPU_CHAT_MODEL", "glm-4-flash")
+
+
+def get_embedding_config():
+    """返回当前启用的 embedding 配置"""
+    if EMBEDDING_PROVIDER == "fastembed":
+        return {
+            "provider": "fastembed",
+            "model": FASTEMBED_MODEL,
+        }
+    if EMBEDDING_PROVIDER == "ollama":
+        return {
+            "provider": "ollama",
+            "base_url": OLLAMA_BASE_URL,
+            "model": OLLAMA_EMBEDDING_MODEL,
+        }
+    return {
+        "provider": "openai",
+        "api_key": OPENAI_API_KEY,
+        "base_url": OPENAI_BASE_URL,
+        "model": OPENAI_EMBEDDING_MODEL,
+    }
+
+
+def get_llm_config():
+    """返回当前启用的 LLM 配置"""
+    if LLM_PROVIDER == "ollama":
+        return {
+            "provider": "ollama",
+            "base_url": OLLAMA_BASE_URL,
+            "model": OLLAMA_CHAT_MODEL,
+        }
+    if LLM_PROVIDER == "zhipu":
+        return {
+            "provider": "openai_compatible",
+            "api_key": ZHIPU_API_KEY,
+            "base_url": ZHIPU_BASE_URL,
+            "model": ZHIPU_CHAT_MODEL,
+        }
+    return {
+        "provider": "openai",
+        "api_key": OPENAI_API_KEY,
+        "base_url": OPENAI_BASE_URL,
+        "model": OPENAI_CHAT_MODEL,
+    }

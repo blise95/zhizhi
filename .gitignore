@@ -65,3 +65,23 @@ target/
 *.class
 *.jar
 *.war
+
+# ==================== AI Assistant ====================
+ai-assistant/venv/
+ai-assistant/venv2/
+ai-assistant/data/vector_store/
+ai-assistant/**/__pycache__/
+ai-assistant/**/*.pyc
+
+# ==================== Debug / Temporary Output ====================
+stderr.txt
+stdout.txt
+analysis-*.png
+analysis-*.cjs
+dashboard-*.png
+debug-*.png
+login-*.png
+process-*.png
+query-*.png
+screenshot*.png
+screenshot*.cjs
