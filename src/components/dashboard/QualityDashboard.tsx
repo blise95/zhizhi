@@ -1,239 +1,345 @@
 /**
- * 智·质 - 质量驾驶舱（超级炫酷版）
- * 卷烟数智化质量管理与智能分析平台 - 核心总览入口
+ * 智·质 - 质量驾驶舱（重构版）
  *
- * 设计理念：
- * - 🚀 未来科技互联网风格
- * - ✨ 高端、炫酷、专业、精致
- * - 💫 丰富的动态视觉效果
- * - 🎯 数据驱动，稳定可靠（纯CSS实现）
+ * 依据《卷烟外在质量分级及评级规定》（QJ/ZY-GY.02-027-2023）
+ * 按照“质量结果 → 质量趋势 → 质量原因 → 质量定位 → 质量预警”五层架构重构。
  */
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Activity,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  Line,
+  Cell,
+  PieChart,
+  Pie,
+} from 'recharts';
+import {
+  Calendar,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
   TrendingUp,
   TrendingDown,
   Minus,
-  AlertTriangle,
-  AlertCircle,
-  CheckCircle2,
-  ArrowUpRight,
-  ArrowDownRight,
   Factory,
   BarChart3,
-  Target,
   Shield,
-  Zap,
-  Eye,
-  Brain,
+  Activity,
   Clock,
-  Calendar,
-  Package,
-  Box,
-  Layers,
-  Sparkles,
-  Radio,
-  Gauge,
+  ChevronRight,
   Filter,
-  ChevronDown,
-  Cigarette,
+  Sparkles,
 } from 'lucide-react';
 
-// 导入类型和工具函数
-import type {
-  ProcessQualityRecord,
-  DefectRecord,
-} from '@/utils/analysisUtils';
+import { loadProcessQualityData } from '@/utils/analysisUtils';
+import type { ProcessQualityRecord } from '@/utils/analysisUtils';
 import {
-  loadProcessQualityData,
-  getCurrentMonthRange,
-} from '@/utils/analysisUtils';
+  getTimeRange,
+  getPreviousRange,
+  computeStats,
+  computeGradeDistribution,
+  computeQualityTrend,
+  computeDefectGradeDistribution,
+  computeDefectTop10,
+  computeMachineStats,
+  computeAlerts,
+  computeHealthStatus,
+  RATING_META,
+  type TimeRange,
+  type QualityStatsWithComparison,
+  type GradeDistributionItem,
+  type TrendPoint,
+  type DefectGradeItem,
+  type DefectTopItem,
+  type MachineStats,
+  type AlertItem,
+  type HealthStatus,
+  type ProductRating,
+} from '@/lib/qualityEngine';
 
-import type {
-  PhysicalTestRecord,
-  IndicatorData,
-} from '@/data/physicalTestTypes';
-import {
-  PHYSICAL_TEST_INDICATORS,
-} from '@/data/physicalTestTypes';
+// ==================== 样式常量 ====================
 
-// ==================== 常量定义 ====================
-
-const MACHINES = ['2#', '4#', '9#', '10#', 'ALW 9#', 'ALW 1#'];
-
-const APPEARANCE_TYPES = [
-  { key: 'box', label: '箱装', icon: Box, color: '#3b82f6', gradient: 'from-blue-500 to-cyan-400' },
-  { key: 'carton', label: '条装', icon: Package, color: '#8b5cf6', gradient: 'from-purple-500 to-pink-400' },
-  { key: 'pack', label: '盒装', icon: Layers, color: '#06b6d4', gradient: 'from-cyan-500 to-teal-400' },
-  { key: 'cigarette', label: '烟支', icon: Zap, color: '#f59e0b', gradient: 'from-amber-500 to-orange-400' },
-] as const;
-
-const SPEC_LIMITS: Record<string, { USL: number; LSL: number; target: number }> = {
-  weight: { USL: 920, LSL: 880, target: 900 },
-  circumference: { USL: 24.35, LSL: 24.05, target: 24.20 },
-  drawResistance: { USL: 1150, LSL: 850, target: 1000 },
-  ventilationLength: { USL: 30, LSL: 20, target: 25 },
-};
-
-const INSPECTION_POINTS_PER_SAMPLE = 215;
-
-const BRAND_OPTIONS = [
-  { value: 'modern-eu', label: '摩登（中东-EU）' },
-  { value: 'normal-red-djibouti', label: '摩登（普通红吉布提）' },
-  { value: 'normal-red-intl', label: '摩登（普通红国际）' },
-  { value: 'normal-silver-intl', label: '摩登（普通银国际）' },
-  { value: 'slim', label: '摩登（细支）' },
-  { value: 'slim-gold', label: '摩登（细支金）' },
-  { value: 'ultra-slim', label: '摩登（超细支）' },
-  { value: 'ultra-gold', label: '摩登（超细金）' },
-  { value: 'ultra-silver', label: '摩登（超细银）' },
-  { value: 'ultra-black', label: '摩登（超细黑）' },
-  { value: 'ultra-white-97', label: '摩登（97超细白）' },
+const TIME_OPTIONS: { key: TimeRange['type']; label: string }[] = [
+  { key: 'today', label: '今日' },
+  { key: 'week', label: '本周' },
+  { key: 'month', label: '本月' },
+  { key: 'custom', label: '自定义' },
 ];
 
-const BRAND_MAP: Record<string, string> = BRAND_OPTIONS.reduce((map, b) => {
-  map[b.value] = b.label;
-  return map;
-}, {} as Record<string, string>);
-
-// ==================== 接口定义 ====================
-
-interface CoreKPI {
-  label: string;
-  value: string | number;
-  unit?: string;
-  trend?: 'up' | 'down' | 'stable';
-  change?: string;
-  icon: React.ReactNode;
-  highlight?: boolean;
-  glowColor?: string;
-}
-
-interface AppearanceQualityItem {
-  key: string;
-  label: string;
-  icon: React.ReactNode;
-  color: string;
-  gradient: string;
-  qualityRate: number;
-  defectCount: number;
-  sampleCount: number;
-}
-
-interface MachineQualityItem {
-  machine: string;
-  defectCount: number;
-  qualityRate: number;
-  defectRate: number;
-  sampleCount: number;
-}
-
-interface PhysicalTestStatus {
-  indicatorId: string;
-  name: string;
-  unit: string;
-  cpk: number | null;
-  status: 'excellent' | 'good' | 'attention' | 'poor' | 'insufficient';
-  statusLabel: string;
-  mean: number;
-  stdDev: number;
-  sampleSize: number;
-}
-
-interface AlertItem {
-  id: string;
-  level: 'high' | 'warning' | 'normal';
-  message: string;
-  source: string;
-}
-
-interface TrendDataPoint {
-  date: string;
-  value: number;
-  label: string;
-}
-
-// ==================== 工具函数 ====================
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
-}
-
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('zh-CN', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
-}
-
-function getWeekDay(date: Date): string {
-  const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  return days[date.getDay()];
-}
-
-function calculateHealthIndex(
-  qualityRate: number,
-  defectRate: number,
-  hasPoorCpk: boolean,
-  hasHighAlerts: boolean
-): number {
-  let score = qualityRate;
-  score -= Math.min(defectRate * 10, 10);
-  if (hasPoorCpk) score -= 5;
-  if (hasHighAlerts) score -= 3;
-  return Math.max(0, Math.min(100, score));
-}
+const GRADE_ORDER: ProductRating[] = ['excellent', 'first', 'second', 'unqualified'];
 
 // ==================== 动画数字组件 ====================
 
-const AnimatedNumber: React.FC<{ value: number | string; decimals?: number }> = ({ value, decimals = 1 }) => {
+const AnimatedNumber: React.FC<{ value: number; decimals?: number; suffix?: string }> = ({
+  value,
+  decimals = 1,
+  suffix = '',
+}) => {
   const [displayValue, setDisplayValue] = useState(0);
-  const numericValue = typeof value === 'number' ? value : parseFloat(String(value)) || 0;
 
   useEffect(() => {
-    let start = 0;
-    const end = numericValue;
-    const duration = 1500;
+    let current = displayValue;
+    const end = value;
+    const duration = 1000;
     const startTime = Date.now();
 
     const animate = () => {
       const now = Date.now();
       const progress = Math.min((now - startTime) / duration, 1);
-      // Ease out cubic
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      current = start + (end - start) * easeProgress;
+      const ease = 1 - Math.pow(1 - progress, 3);
+      current = start + (end - start) * ease;
       setDisplayValue(current);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
+      if (progress < 1) requestAnimationFrame(animate);
     };
 
-    let current = 0;
-    animate();
-  }, [numericValue]);
+    const start = current;
+    requestAnimationFrame(animate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
-  return <span>{decimals > 0 ? displayValue.toFixed(decimals) : Math.round(displayValue).toLocaleString()}</span>;
+  return (
+    <span>
+      {decimals > 0 ? displayValue.toFixed(decimals) : Math.round(displayValue).toLocaleString()}
+      {suffix}
+    </span>
+  );
+};
+
+// ==================== 子组件：指标卡 ====================
+
+interface KPICardProps {
+  label: string;
+  value: number;
+  unit?: string;
+  changePoints?: number;
+  changePct?: number;
+  icon: React.ReactNode;
+  color: string;
+  decimals?: number;
+  comparisonLabel?: string;
+}
+
+const KPICard: React.FC<KPICardProps> = ({
+  label,
+  value,
+  unit = '',
+  changePoints,
+  changePct,
+  icon,
+  color,
+  decimals = 1,
+  comparisonLabel,
+}) => {
+  const effectiveChange = changePoints !== undefined ? changePoints : changePct;
+  const trend =
+    effectiveChange !== undefined
+      ? effectiveChange > 0
+        ? 'up'
+        : effectiveChange < 0
+        ? 'down'
+        : 'stable'
+      : undefined;
+  const isPct = changePct !== undefined;
+
+  return (
+    <div
+      className="relative overflow-hidden rounded-xl border p-5 transition-all duration-300 hover:-translate-y-1"
+      style={{
+        background: 'rgba(15, 23, 42, 0.6)',
+        borderColor: `${color}30`,
+        boxShadow: `0 0 20px ${color}10`,
+      }}
+    >
+      <div className="absolute right-0 top-0 h-24 w-24 rounded-bl-full opacity-10" style={{ background: color }} />
+      <div className="relative z-10 flex items-start justify-between">
+        <div>
+          <p className="mb-1 text-sm font-medium text-slate-400">{label}</p>
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-white">
+              <AnimatedNumber value={value} decimals={decimals} />
+            </span>
+            {unit && <span className="text-sm text-slate-400">{unit}</span>}
+          </div>
+          {trend !== undefined && effectiveChange !== undefined && (
+            <div className="mt-2 flex items-center gap-1 text-xs">
+              {trend === 'up' ? (
+                <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+              ) : trend === 'down' ? (
+                <TrendingDown className="h-3.5 w-3.5 text-rose-400" />
+              ) : (
+                <Minus className="h-3.5 w-3.5 text-slate-400" />
+              )}
+              <span
+                className={
+                  trend === 'up' ? 'text-emerald-400' : trend === 'down' ? 'text-rose-400' : 'text-slate-400'
+                }
+              >
+                {isPct
+                  ? `${Math.abs(effectiveChange).toFixed(1)}%`
+                  : `${Math.abs(effectiveChange).toFixed(1)}个百分点`}
+                {comparisonLabel && ` · ${comparisonLabel}`}
+              </span>
+            </div>
+          )}
+        </div>
+        <div
+          className="flex h-11 w-11 items-center justify-center rounded-lg"
+          style={{ background: `${color}20`, color }}
+        >
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== 子组件：横向条形图（等级分布） ====================
+
+const GradeDistributionChart: React.FC<{ data: GradeDistributionItem[] }> = ({ data }) => {
+  return (
+    <div className="space-y-3">
+      {data.map(item => (
+        <div key={item.rating} className="group cursor-pointer">
+          <div className="mb-1 flex items-center justify-between text-sm">
+            <span className="font-medium text-slate-200">{item.label}</span>
+            <span className="text-slate-400">
+              {item.count}批 / {item.rate}%
+            </span>
+          </div>
+          <div className="h-3 w-full overflow-hidden rounded-full bg-slate-800/60">
+            <div
+              className="h-full rounded-full transition-all duration-700 ease-out group-hover:opacity-90"
+              style={{ width: `${item.rate}%`, background: item.color, boxShadow: `0 0 10px ${item.color}60` }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ==================== 子组件：表格（机台质量） ====================
+
+const MachineTable: React.FC<{ data: MachineStats[] }> = ({ data }) => {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-slate-700/60 text-left text-slate-400">
+            <th className="pb-3 pl-2 font-medium">机台</th>
+            <th className="pb-3 font-medium">检验批次</th>
+            <th className="pb-3 font-medium">优质率</th>
+            <th className="pb-3 font-medium">合格率</th>
+            <th className="pb-3 font-medium">平均扣分</th>
+            <th className="pb-3 font-medium">缺陷数</th>
+            <th className="pb-3 font-medium">不合格批</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, idx) => (
+            <tr
+              key={item.machine}
+              className="border-b border-slate-800/40 transition-colors hover:bg-slate-800/30"
+            >
+              <td className="py-3 pl-2 font-medium text-slate-200">{item.machine}</td>
+              <td className="py-3 text-slate-300">{item.batchCount}</td>
+              <td className="py-3">
+                <span
+                  className="rounded px-2 py-0.5 text-xs font-medium"
+                  style={{
+                    color: item.excellentRate >= 90 ? '#10b981' : item.excellentRate >= 80 ? '#3b82f6' : '#f59e0b',
+                    background: `${item.excellentRate >= 90 ? '#10b981' : item.excellentRate >= 80 ? '#3b82f6' : '#f59e0b'}20`,
+                  }}
+                >
+                  {item.excellentRate}%
+                </span>
+              </td>
+              <td className="py-3 text-slate-300">{item.passRate}%</td>
+              <td className="py-3 text-slate-300">{item.avgScore}</td>
+              <td className="py-3 text-slate-300">{item.defectCount}</td>
+              <td className="py-3">
+                {item.unqualifiedCount > 0 ? (
+                  <span className="rounded bg-rose-500/20 px-2 py-0.5 text-xs font-medium text-rose-400">
+                    {item.unqualifiedCount}批
+                  </span>
+                ) : (
+                  <span className="text-slate-500">-</span>
+                )}
+              </td>
+            </tr>
+          ))}
+          {data.length === 0 && (
+            <tr>
+              <td colSpan={7} className="py-8 text-center text-slate-500">
+                当前时间范围内无机台数据
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+// ==================== 子组件：预警列表 ====================
+
+const AlertList: React.FC<{ alerts: AlertItem[] }> = ({ alerts }) => {
+  const levelConfig = {
+    high: { icon: AlertCircle, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)', label: '严重' },
+    warning: { icon: AlertTriangle, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', label: '警告' },
+    normal: { icon: Activity, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)', label: '提示' },
+  };
+
+  return (
+    <div className="space-y-2">
+      {alerts.map(alert => {
+        const cfg = levelConfig[alert.level];
+        const Icon = cfg.icon;
+        return (
+          <div
+            key={alert.id}
+            className="flex items-start gap-3 rounded-lg border border-slate-700/50 p-3 transition-colors hover:bg-slate-800/40"
+            style={{ background: 'rgba(15, 23, 42, 0.4)' }}
+          >
+            <div
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
+              style={{ background: cfg.bg, color: cfg.color }}
+            >
+              <Icon className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-slate-200">{alert.message}</p>
+              <p className="mt-0.5 text-xs text-slate-500">来源：{alert.source}</p>
+            </div>
+          </div>
+        );
+      })}
+      {alerts.length === 0 && (
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-400">
+          <CheckCircle2 className="h-4 w-4" />
+          当前时间范围内未发现质量异常，质量状态良好。
+        </div>
+      )}
+    </div>
+  );
 };
 
 // ==================== 主组件 ====================
 
 const QualityDashboard: React.FC = () => {
-  // ==================== 状态管理 ====================
-
+  const [timeType, setTimeType] = useState<TimeRange['type']>('week');
+  const [customFrom, setCustomFrom] = useState<string>('');
+  const [customTo, setCustomTo] = useState<string>('');
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  const [trendMetric, setTrendMetric] = useState<'qualityRate' | 'defectRate' | 'defectCount'>('qualityRate');
-  const [machineMetric, setMachineMetric] = useState<'defectCount' | 'qualityRate' | 'defectRate'>('defectCount');
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [selectedMachine, setSelectedMachine] = useState<string>('');
-  const [selectedBrand, setSelectedBrand] = useState<string>('');
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [allRecords, setAllRecords] = useState<ProcessQualityRecord[]>([]);
 
   // 实时更新时间
   useEffect(() => {
@@ -241,1469 +347,458 @@ const QualityDashboard: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 监听localStorage变化
+  // 加载数据并监听变化
   useEffect(() => {
-    const handleStorage = () => setCurrentTime(new Date());
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    const load = () => {
+      setAllRecords(loadProcessQualityData());
+    };
+    load();
+    window.addEventListener('storage', load);
+    return () => window.removeEventListener('storage', load);
   }, []);
 
-  // 粒子背景动画
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      opacity: number;
-      color: string;
-    }> = [];
-
-    // 创建粒子
-    for (let i = 0; i < 50; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.1,
-        color: ['#3b82f6', '#06b6d4', '#8b5cf6', '#10b981'][Math.floor(Math.random() * 4)],
-      });
-    }
-
-    let animationId: number;
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach(particle => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        // 边界检测
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-
-        // 绘制粒子
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
-        ctx.fill();
-
-        // 绘制光晕
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color + '08';
-        ctx.fill();
-      });
-
-      // 绘制连线
-      particles.forEach((p1, i) => {
-        particles.slice(i + 1).forEach(p2 => {
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 150) {
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `#3b82f6${Math.floor((1 - distance / 150) * 0.15 * 255).toString(16).padStart(2, '0')}`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        });
-      });
-
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  // ==================== 数据加载 ====================
-
-  const processData = useMemo((): ProcessQualityRecord[] => {
-    try {
-      return loadProcessQualityData();
-    } catch (e) {
-      console.error('加载过程质量数据失败:', e);
-      return [];
-    }
-  }, [currentTime]);
-
-  const physicalTestData = useMemo((): PhysicalTestRecord[] => {
-    try {
-      const data = localStorage.getItem('physicalTestRecords');
-      if (!data) return [];
-      return JSON.parse(data) as PhysicalTestRecord[];
-    } catch (e) {
-      console.error('加载物测数据失败:', e);
-      return [];
-    }
-  }, [currentTime]);
-
-  const monthRange = useMemo(() => getCurrentMonthRange(), []);
-
-  // ==================== 数据计算：核心KPI ====================
-
-  const coreKPIs = useMemo((): CoreKPI[] => {
-    const thisMonthData = processData.filter(r =>
-      r.inspectionDate >= monthRange.from && r.inspectionDate <= monthRange.to
-    );
-
-    const totalSamples = thisMonthData.length;
-    let totalDefects = 0;
-    let defectSampleCount = 0;
-
-    thisMonthData.forEach(record => {
-      ['boxDefects', 'cartonDefects', 'packDefects', 'cigaretteDefects'].forEach(key => {
-        const defects = record[key as keyof ProcessQualityRecord] as DefectRecord[] | undefined;
-        if (defects && defects.length > 0) {
-          totalDefects += defects.reduce((sum, d) => sum + (d.quantity || 0), 0);
-          defectSampleCount++;
-        }
-      });
-    });
-
-    const qualityRate = totalSamples > 0
-      ? parseFloat(((totalSamples - defectSampleCount) / totalSamples * 100).toFixed(1))
-      : 0;
-
-    const defectRate = totalSamples > 0
-      ? parseFloat((totalDefects / (totalSamples * INSPECTION_POINTS_PER_SAMPLE) * 100).toFixed(3))
-      : 0;
-
-    const poorCpkCount = physicalTestData.filter(r =>
-      r.date >= monthRange.from && r.date <= monthRange.to
-    ).length > 0 ? 0 : 0;
-
-    const healthIndex = calculateHealthIndex(qualityRate, defectRate, poorCpkCount > 0, false);
-
-    return [
-      {
-        label: '质量健康指数',
-        value: healthIndex.toFixed(1),
-        unit: '',
-        icon: <Shield className="w-7 h-7" />,
-        highlight: true,
-        trend: healthIndex >= 90 ? 'stable' : 'down',
-        change: healthIndex >= 90 ? '优秀' : '需关注',
-        glowColor: '#3b82f6',
-      },
-      {
-        label: '本月抽检样本数',
-        value: totalSamples,
-        unit: '个',
-        icon: <Target className="w-7 h-7" />,
-        glowColor: '#10b981',
-      },
-      {
-        label: '本月缺陷数量',
-        value: totalDefects,
-        unit: '项',
-        icon: <AlertTriangle className="w-7 h-7" />,
-        trend: totalDefects > 0 ? 'up' : undefined,
-        change: totalDefects > 0 ? '需关注' : '',
-        glowColor: '#ef4444',
-      },
-      {
-        label: '综合优质率',
-        value: `${qualityRate}`,
-        unit: '%',
-        icon: <CheckCircle2 className="w-7 h-7" />,
-        trend: qualityRate >= 95 ? 'up' : qualityRate >= 90 ? 'stable' : 'down',
-        change: qualityRate >= 95 ? '优秀' : qualityRate >= 90 ? '达标' : '待提升',
-        glowColor: '#8b5cf6',
-      },
-      {
-        label: '本月缺陷率',
-        value: defectRate,
-        unit: '%',
-        icon: <Eye className="w-7 h-7" />,
-        trend: defectRate < 0.1 ? 'stable' : defectRate < 0.2 ? 'down' : 'down',
-        change: defectRate < 0.1 ? '正常' : '偏高',
-        glowColor: '#f59e0b',
-      },
-    ];
-  }, [processData, physicalTestData, monthRange]);
-
-  // ==================== 数据计算：外观质量状态 ====================
-
-  const appearanceQuality = useMemo((): AppearanceQualityItem[] => {
-    const thisMonthData = processData.filter(r =>
-      r.inspectionDate >= monthRange.from && r.inspectionDate <= monthRange.to
-    );
-
-    return APPEARANCE_TYPES.map(type => {
-      let defectCount = 0;
-      let sampleCount = 0;
-      let defectSampleCount = 0;
-
-      thisMonthData.forEach(record => {
-        const defects = record[`${type.key}Defects` as keyof ProcessQualityRecord] as DefectRecord[] | undefined;
-        if (defects && defects.length > 0) {
-          sampleCount++;
-          defectCount += defects.reduce((sum, d) => sum + (d.quantity || 0), 0);
-          defectSampleCount++;
-        } else if (record[`${type.key}Defects` as keyof ProcessQualityRecord]) {
-          sampleCount++;
-        }
-      });
-
-      const qualityRate = sampleCount > 0
-        ? parseFloat(((sampleCount - defectSampleCount) / sampleCount * 100).toFixed(1))
-        : 0;
-
-      return {
-        key: type.key,
-        label: type.label,
-        icon: <type.icon className="w-6 h-6" />,
-        color: type.color,
-        gradient: type.gradient,
-        qualityRate,
-        defectCount,
-        sampleCount,
-      };
-    });
-  }, [processData, monthRange]);
-
-  // ==================== 数据计算：机台质量对比 ====================
-
-  const machineQuality = useMemo((): MachineQualityItem[] => {
-    const thisMonthData = processData.filter(r =>
-      r.inspectionDate >= monthRange.from && r.inspectionDate <= monthRange.to
-    );
-
-    return MACHINES.map(machine => {
-      const machineData = thisMonthData.filter(r => r.machine === machine);
-
-      let defectCount = 0;
-      let defectSampleCount = 0;
-
-      machineData.forEach(record => {
-        ['boxDefects', 'cartonDefects', 'packDefects', 'cigaretteDefects'].forEach(key => {
-          const defects = record[key as keyof ProcessQualityRecord] as DefectRecord[] | undefined;
-          if (defects && defects.length > 0) {
-            defectCount += defects.reduce((sum, d) => sum + (d.quantity || 0), 0);
-            defectSampleCount++;
-          }
-        });
-      });
-
-      const qualityRate = machineData.length > 0
-        ? parseFloat(((machineData.length - defectSampleCount) / machineData.length * 100).toFixed(1))
-        : 0;
-
-      const defectRate = machineData.length > 0
-        ? parseFloat((defectCount / (machineData.length * INSPECTION_POINTS_PER_SAMPLE) * 100).toFixed(3))
-        : 0;
-
-      return {
-        machine,
-        defectCount,
-        qualityRate,
-        defectRate,
-        sampleCount: machineData.length,
-      };
-    }).sort((a, b) => b.defectCount - a.defectCount);
-  }, [processData, monthRange]);
-
-  // ==================== 数据计算：趋势数据 ====================
-
-  const trendData = useMemo((): TrendDataPoint[] => {
-    const thisMonthData = processData.filter(r =>
-      r.inspectionDate >= monthRange.from && r.inspectionDate <= monthRange.to
-    );
-
-    const dateMap = new Map<string, { samples: number; defects: number; defectSamples: number }>();
-
-    thisMonthData.forEach(record => {
-      const date = record.inspectionDate;
-      if (!dateMap.has(date)) {
-        dateMap.set(date, { samples: 0, defects: 0, defectSamples: 0 });
-      }
-      const stat = dateMap.get(date)!;
-      stat.samples++;
-
-      ['boxDefects', 'cartonDefects', 'packDefects', 'cigaretteDefects'].forEach(key => {
-        const defects = record[key as keyof ProcessQualityRecord] as DefectRecord[] | undefined;
-        if (defects && defects.length > 0) {
-          stat.defects += defects.reduce((sum, d) => sum + (d.quantity || 0), 0);
-          stat.defectSamples++;
-        }
-      });
-    });
-
-    return Array.from(dateMap.entries())
-      .map(([date, stat]) => ({
-        date,
-        value: trendMetric === 'qualityRate'
-          ? parseFloat(((stat.samples - stat.defectSamples) / stat.samples * 100).toFixed(1))
-          : trendMetric === 'defectRate'
-          ? parseFloat((stat.defects / (stat.samples * INSPECTION_POINTS_PER_SAMPLE) * 100).toFixed(3))
-          : stat.defects,
-        label: date.slice(5),
-      }))
-      .sort((a, b) => a.date.localeCompare(b.date));
-  }, [processData, monthRange, trendMetric]);
-
-  // ==================== 数据计算：物测筛选选项 ====================
-
-  const physicalTestFilterOptions = useMemo(() => {
-    // 下拉选项使用固定完整列表，确保无论当前月份是否有数据都显示所有机台/牌号
-    return {
-      machines: [...MACHINES],
-      brands: BRAND_OPTIONS.map(b => b.value),
-    };
-  }, []);
-
-  // ==================== 数据计算：物测状态 ====================
-
-  const physicalTestStatus = useMemo((): PhysicalTestStatus[] => {
-    let thisMonthData = physicalTestData.filter(r =>
-      r.date >= monthRange.from && r.date <= monthRange.to
-    );
-
-    // 按机台筛选
-    if (selectedMachine) {
-      thisMonthData = thisMonthData.filter(r => r.machine === selectedMachine);
-    }
-
-    // 按牌号筛选
-    if (selectedBrand) {
-      thisMonthData = thisMonthData.filter(r => r.brand === selectedBrand);
-    }
-
-    return PHYSICAL_TEST_INDICATORS.map(indicator => {
-      const values: number[] = [];
-
-      thisMonthData.forEach(record => {
-        const data = record[indicator.id as keyof PhysicalTestRecord] as IndicatorData;
-        if (data && data.x !== '' && data.x != null) {
-          const x = parseFloat(String(data.x));
-          if (!isNaN(x)) values.push(x);
-        }
-      });
-
-      if (values.length < 2) {
-        return {
-          indicatorId: indicator.id,
-          name: indicator.name,
-          unit: indicator.unit,
-          cpk: null,
-          status: 'insufficient' as const,
-          statusLabel: '样本不足',
-          mean: 0,
-          stdDev: 0,
-          sampleSize: values.length,
-        };
-      }
-
-      const mean = values.reduce((a, b) => a + b, 0) / values.length;
-      const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
-      const stdDev = Math.sqrt(variance);
-
-      const spec = SPEC_LIMITS[indicator.id];
-      const cpu = spec ? (spec.USL - mean) / (3 * stdDev) : 0;
-      const cpl = spec ? (mean - spec.LSL) / (3 * stdDev) : 0;
-      const cpk = Math.min(cpu, cpl);
-
-      let status: PhysicalTestStatus['status'];
-      let statusLabel: string;
-      if (cpk >= 1.67) { status = 'excellent'; statusLabel = '优秀'; }
-      else if (cpk >= 1.33) { status = 'good'; statusLabel = '良好'; }
-      else if (cpk >= 1.00) { status = 'attention'; statusLabel = '关注'; }
-      else { status = 'poor'; statusLabel = '不足'; }
-
-      return {
-        indicatorId: indicator.id,
-        name: indicator.name,
-        unit: indicator.unit,
-        cpk: parseFloat(cpk.toFixed(2)),
-        status,
-        statusLabel,
-        mean: parseFloat(mean.toFixed(2)),
-        stdDev: parseFloat(stdDev.toFixed(3)),
-        sampleSize: values.length,
-      };
-    });
-  }, [physicalTestData, monthRange, selectedMachine, selectedBrand]);
-
-  // ==================== 数据计算：预警信息 ====================
-
-  const alerts = useMemo((): AlertItem[] => {
-    const alertList: AlertItem[] = [];
-    const thisMonthData = processData.filter(r =>
-      r.inspectionDate >= monthRange.from && r.inspectionDate <= monthRange.to
-    );
-
-    const machineDefects = new Map<string, number>();
-    thisMonthData.forEach(record => {
-      if (!machineDefects.has(record.machine)) {
-        machineDefects.set(record.machine, 0);
-      }
-      ['boxDefects', 'cartonDefects', 'packDefects', 'cigaretteDefects'].forEach(key => {
-        const defects = record[key as keyof ProcessQualityRecord] as DefectRecord[] | undefined;
-        if (defects) {
-          machineDefects.set(record.machine,
-            machineDefects.get(record.machine)! + defects.reduce((s, d) => s + d.quantity, 0)
-          );
-        }
-      });
-    });
-
-    const sortedMachines = Array.from(machineDefects.entries()).sort((a, b) => b[1] - a[1]);
-    if (sortedMachines.length > 0 && sortedMachines[0][1] > 10) {
-      alertList.push({
-        id: 'machine-high-defect',
-        level: 'warning',
-        message: `${sortedMachines[0][0]}机台缺陷数量偏高（${sortedMachines[0][1]}项）`,
-        source: '外观质量',
-      });
-    }
-
-    const lowCpkIndicators = physicalTestStatus.filter(p => p.cpk !== null && p.cpk < 1.33 && p.cpk >= 1.0);
-    if (lowCpkIndicators.length > 0) {
-      alertList.push({
-        id: 'low-cpk',
-        level: 'warning',
-        message: `${lowCpkIndicators.map(i => i.name).join('、')}Cpk值需关注`,
-        source: '烟支物测',
-      });
-    }
-
-    const poorCpkIndicators = physicalTestStatus.filter(p => p.cpk !== null && p.cpk < 1.0);
-    if (poorCpkIndicators.length > 0) {
-      alertList.push({
-        id: 'poor-cpk',
-        level: 'high',
-        message: `${poorCpkIndicators.map(i => i.name).join('、')}过程能力不足`,
-        source: '烟支物测',
-      });
-    }
-
-    if (alertList.length === 0 && thisMonthData.length > 0) {
-      alertList.push({
-        id: 'no-alert',
-        level: 'normal',
-        message: '当前无重大质量异常',
-        source: '系统',
-      });
-    }
-
-    return alertList;
-  }, [processData, monthRange, physicalTestStatus]);
-
-  // ==================== AI质量总结 ====================
-
-  const aiSummary = useMemo((): string[] => {
-    const summary: string[] = [];
-    const thisMonthData = processData.filter(r =>
-      r.inspectionDate >= monthRange.from && r.inspectionDate <= monthRange.to
-    );
-
-    if (thisMonthData.length === 0 && physicalTestData.length === 0) {
-      return ['暂无数据，请先录入质量检测数据'];
-    }
-
-    const healthIdx = parseFloat(String(coreKPIs[0]?.value ?? 0));
-    const qualityRate = parseFloat(String(coreKPIs[3]?.value ?? 0));
-    if (healthIdx >= 90) {
-      summary.push(`✨ 当前整体质量状况**优秀**，健康指数 **${healthIdx}**，综合优质率 **${qualityRate}%**。`);
-    } else if (healthIdx >= 80) {
-      summary.push(`📊 当前整体质量基本达标，健康指数 **${healthIdx}**，综合优质率 **${qualityRate}%**，部分指标需关注。`);
-    } else {
-      summary.push(`⚠️ 当前整体质量存在改进空间，健康指数 **${healthIdx}**，建议重点排查质量问题。`);
-    }
-
-    const maxDefectType = [...appearanceQuality].sort((a, b) => b.defectCount - a.defectCount)[0];
-    if (maxDefectType && maxDefectType.defectCount > 0) {
-      summary.push(`🔍 **${maxDefectType.label}**外观缺陷较为突出（**${maxDefectType.defectCount}项**），建议加强该环节质量控制。`);
-    }
-
-    const topDefectMachine = machineQuality[0];
-    if (topDefectMachine && topDefectMachine.defectCount > 5) {
-      summary.push(`🎯 **${topDefectMachine.machine}机台**缺陷数量最多（**${topDefectMachine.defectCount}项**），建议重点关注。`);
-    }
-
-    const poorCpkItems = physicalTestStatus.filter(p => p.status === 'poor' || p.status === 'attention');
-    if (poorCpkItems.length > 0) {
-      summary.push(`📈 ${poorCpkItems.map(i => i.name).join('、')}过程能力${poorCpkItems.some(p => p.status === 'poor') ? '**不足**' : '**偏低**'}，建议优化工艺参数。`);
-    }
-
-    const highAlerts = alerts.filter(a => a.level === 'high');
-    const warningAlerts = alerts.filter(a => a.level === 'warning');
-    if (highAlerts.length > 0) {
-      summary.push(`🚨 发现 **${highAlerts.length}项高风险预警**，建议立即处理！`);
-    } else if (warningAlerts.length > 0) {
-      summary.push(`💡 存在 **${warningAlerts.length}项需关注**的质量指标，建议制定改进计划。`);
-    } else if (thisMonthData.length > 0) {
-      summary.push(`✅ 整体质量运行平稳，继续保持现有质量控制水平。`);
-    }
-
-    return summary.slice(0, 5);
-  }, [processData, physicalTestData, coreKPIs, appearanceQuality, machineQuality, physicalTestStatus, alerts, monthRange]);
-
-  // ==================== 渲染 ====================
+  const timeRange = useMemo<TimeRange>(() => {
+    return getTimeRange(timeType, customFrom || undefined, customTo || undefined);
+  }, [timeType, customFrom, customTo]);
+
+  const previousRange = useMemo<TimeRange>(() => getPreviousRange(timeRange), [timeRange]);
+
+  const currentRecords = useMemo(
+    () => allRecords.filter(r => r.inspectionDate >= timeRange.from && r.inspectionDate <= timeRange.to),
+    [allRecords, timeRange]
+  );
+
+  const previousRecords = useMemo(
+    () => allRecords.filter(r => r.inspectionDate >= previousRange.from && r.inspectionDate <= previousRange.to),
+    [allRecords, previousRange]
+  );
+
+  const stats = useMemo<QualityStatsWithComparison>(() => {
+    return computeStats(currentRecords, previousRecords);
+  }, [currentRecords, previousRecords]);
+
+  const gradeDistribution = useMemo(() => computeGradeDistribution(currentRecords), [currentRecords]);
+  const trendData = useMemo(() => computeQualityTrend(currentRecords, timeRange), [currentRecords, timeRange]);
+  const defectGradeData = useMemo(() => computeDefectGradeDistribution(currentRecords), [currentRecords]);
+  const defectScoreTop10 = useMemo(() => computeDefectTop10(currentRecords, 'score'), [currentRecords]);
+  const machineStats = useMemo(() => computeMachineStats(currentRecords), [currentRecords]);
+  const alerts = useMemo(
+    () => computeAlerts(stats, currentRecords, previousRecords, timeRange),
+    [stats, currentRecords, previousRecords, timeRange]
+  );
+  const health = useMemo(() => computeHealthStatus(stats, alerts), [stats, alerts]);
+
+  const comparisonLabel = previousRange.label;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950">
-      {/* 粒子背景 */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{ opacity: 0.6 }}
-      />
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6 text-slate-200">
+      {/* 背景装饰 */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-30">
+        <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-600/10 blur-3xl" />
+      </div>
 
-      {/* 渐变叠加层 */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-950/95 via-blue-950/30 to-slate-950/95 z-[1] pointer-events-none"></div>
+      <div className="relative z-10 mx-auto max-w-[1600px]">
+        {/* 顶部标题与时间筛选 */}
+        <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-slate-700/40 bg-slate-900/60 p-5 backdrop-blur-sm md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="flex items-center gap-2 text-2xl font-bold text-white">
+              <Sparkles className="h-6 w-6 text-cyan-400" />
+              质量管控驾驶舱
+            </h1>
+            <p className="mt-1 text-sm text-slate-400">
+              数据更新时间：{currentTime.toLocaleString('zh-CN')}
+            </p>
+          </div>
 
-      {/* 网格背景 */}
-      <div
-        className="fixed inset-0 z-[2] pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(59, 130, 246, 0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.5) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-        }}
-      ></div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="flex rounded-lg border border-slate-700/60 bg-slate-800/50 p-1">
+              {TIME_OPTIONS.map(opt => (
+                <button
+                  key={opt.key}
+                  onClick={() => setTimeType(opt.key)}
+                  className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
+                    timeType === opt.key
+                      ? 'bg-cyan-500/20 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.25)]'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
 
-      {/* 内容层 */}
-      <div className="relative z-10">
-        {/* 顶部品牌区 */}
-        <header className="border-b border-blue-500/20 backdrop-blur-xl bg-slate-900/40 sticky top-0 z-50">
-          <div className="max-w-[1800px] mx-auto px-8 py-5">
-            <div className="flex items-center justify-between">
-              {/* 左侧：系统名称 */}
-              <div className="flex items-center gap-5">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur-lg opacity-50 animate-pulse"></div>
-                  <div className="relative bg-gradient-to-br from-blue-500 to-cyan-500 p-3 rounded-xl">
-                    <Sparkles className="w-8 h-8 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h1
-                    className="font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 tracking-tight"
-                    style={{ fontSize: '43px', lineHeight: 1.2 }}
-                  >
-                    智·质
-                  </h1>
-                  <div className="flex justify-center mt-2 ml-8">
-                    <div className="relative inline-block">
-                      <p
-                        style={{
-                          fontSize: '40px',
-                          fontWeight: 500,
-                          letterSpacing: '3px',
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        <span style={{ color: '#a5f3fc', fontWeight: 600 }}>数智驱动</span>
-                        <span style={{ color: '#a5f3fc', fontWeight: 600, marginLeft: '0.3em' }}>，让质造更智能</span>
-                      </p>
-                      {/* 扫光效果层 */}
-                      <div
-                        className="absolute inset-0 pointer-events-none overflow-hidden rounded"
-                        style={{
-                          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 15%, rgba(220,240,255,0.45) 50%, rgba(255,255,255,0) 85%, transparent 100%)',
-                          backgroundSize: '200% 100%',
-                          animation: 'sweepLight 2.5s ease-in-out infinite',
-                          mixBlendMode: 'screen',
-                        }}
-                      />
-                      {/* 低强度科技光晕 */}
-                      <div
-                        className="absolute inset-0 pointer-events-none rounded"
-                        style={{
-                          boxShadow: '0 0 15px rgba(34, 211, 238, 0.12), 0 0 30px rgba(96, 165, 250, 0.08)',
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
+            {timeType === 'custom' && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  value={customFrom}
+                  onChange={e => setCustomFrom(e.target.value)}
+                  className="rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-sm text-slate-200 outline-none focus:border-cyan-500/50"
+                />
+                <span className="text-slate-500">至</span>
+                <input
+                  type="date"
+                  value={customTo}
+                  onChange={e => setCustomTo(e.target.value)}
+                  className="rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-sm text-slate-200 outline-none focus:border-cyan-500/50"
+                />
               </div>
+            )}
 
-              {/* 右侧：实时系统状态仪表 */}
-              <div className="flex items-center gap-6">
-                <div className="relative px-6 py-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 backdrop-blur-sm">
-                  {/* 微弱光晕背景 */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-cyan-500/5 pointer-events-none"></div>
+            <div className="flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-sm text-slate-400">
+              <Calendar className="h-4 w-4 text-cyan-400" />
+              <span>
+                {timeRange.label}：{timeRange.from} ~ {timeRange.to}
+              </span>
+            </div>
+          </div>
+        </div>
 
-                  <div className="relative text-right">
-                    {/* 日期行 */}
-                    <div className="text-base font-medium text-slate-400 tracking-widest mb-1">
-                      {formatDate(currentTime)}&nbsp;{getWeekDay(currentTime)}
-                    </div>
-
-                    {/* 科技分隔线 */}
-                    <div className="flex justify-center mb-2">
-                      <div className="w-8 h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent"></div>
-                    </div>
-
-                    {/* 时间 - 视觉核心 */}
-                    <div
-                      className="font-mono tracking-wider"
-                      style={{
-                        fontSize: '40px',
-                        fontWeight: 600,
-                        color: '#a5f3fc',
-                        lineHeight: 1,
-                        textShadow: '0 0 20px rgba(165, 243, 252, 0.3), 0 0 40px rgba(96, 165, 250, 0.15)',
-                      }}
-                    >
-                      {formatTime(currentTime)}
-                    </div>
-                  </div>
-
-                  {/* 底部扫描线动画 */}
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent opacity-60"
-                    style={{ animation: 'scanLine 3s ease-in-out infinite' }}
-                  ></div>
-                </div>
-
-                {/* 系统状态指示器 */}
-                <div className="flex flex-col items-center gap-2 px-4 py-3 rounded-xl bg-emerald-500/8 border border-emerald-500/20 backdrop-blur-sm">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse"></div>
-                  <span className="text-xs font-semibold text-emerald-400 tracking-wider">ONLINE</span>
-                </div>
+        {/* 第一层：核心指标 */}
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+          <KPICard
+            label="检验批次"
+            value={stats.current.totalBatches}
+            unit="批"
+            changePct={stats.changes.totalBatchesPct}
+            icon={<BarChart3 className="h-6 w-6" />}
+            color="#3b82f6"
+            decimals={0}
+            comparisonLabel={comparisonLabel}
+          />
+          <KPICard
+            label="合格率"
+            value={stats.current.passRate}
+            unit="%"
+            changePoints={stats.changes.passRatePoints}
+            icon={<CheckCircle2 className="h-6 w-6" />}
+            color="#10b981"
+          />
+          <KPICard
+            label="优质率"
+            value={stats.current.excellentRate}
+            unit="%"
+            changePoints={stats.changes.excellentRatePoints}
+            icon={<Shield className="h-6 w-6" />}
+            color="#06b6d4"
+          />
+          <KPICard
+            label="一等品率"
+            value={stats.current.firstRate}
+            unit="%"
+            changePoints={stats.changes.firstRatePoints}
+            icon={<Activity className="h-6 w-6" />}
+            color="#8b5cf6"
+          />
+          <KPICard
+            label="二等品率"
+            value={stats.current.secondRate}
+            unit="%"
+            changePoints={stats.changes.secondRatePoints}
+            icon={<TrendingUp className="h-6 w-6" />}
+            color="#f59e0b"
+          />
+          <KPICard
+            label="不合格率"
+            value={stats.current.unqualifiedRate}
+            unit="%"
+            changePoints={stats.changes.unqualifiedRatePoints}
+            icon={<AlertCircle className="h-6 w-6" />}
+            color="#ef4444"
+          />
+          <KPICard
+            label="平均批次扣分"
+            value={stats.current.avgScore}
+            unit="分"
+            changePoints={stats.changes.avgScore}
+            icon={<Clock className="h-6 w-6" />}
+            color="#ec4899"
+          />
+          <div
+            className="relative overflow-hidden rounded-xl border p-5"
+            style={{
+              background: 'rgba(15, 23, 42, 0.6)',
+              borderColor: `${health.status === 'healthy' ? '#10b981' : health.status === 'attention' ? '#f59e0b' : '#ef4444'}40`,
+            }}
+          >
+            <div className="flex h-full flex-col justify-between">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-medium text-slate-400">当前质量状态</span>
+                <span className="text-2xl">{health.emoji}</span>
+              </div>
+              <div className="text-xl font-bold text-white">{health.label}</div>
+              <div className="mt-2 text-xs text-slate-400">
+                {health.reasons.slice(0, 2).join('；')}
+                {health.reasons.length > 2 && '…'}
               </div>
             </div>
           </div>
+        </div>
 
-          {/* 底部发光线 */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
-        </header>
+        {/* 第二层：等级分布 + 优质率趋势 */}
+        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                <BarChart3 className="h-5 w-5 text-cyan-400" />
+                产品质量等级分布
+              </h2>
+              <span className="text-xs text-slate-500">按批次最终评级</span>
+            </div>
+            <GradeDistributionChart data={gradeDistribution} />
+          </div>
 
-        {/* 主内容区 */}
-        <main className="max-w-[1800px] mx-auto px-8 py-10 space-y-10">
+          <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                <TrendingUp className="h-5 w-5 text-emerald-400" />
+                优质率趋势
+              </h2>
+              <span className="text-xs text-slate-500">{timeRange.label}</span>
+            </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorExcellent" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#33415540" />
+                  <XAxis dataKey="label" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} unit="%" domain={[0, 100]} />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'rgba(15, 23, 42, 0.95)',
+                      border: '1px solid rgba(100, 116, 139, 0.3)',
+                      borderRadius: 8,
+                      color: '#e2e8f0',
+                    }}
+                    formatter={(value: number) => [`${value}%`, '优质率']}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="excellentRate"
+                    stroke="#06b6d4"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#colorExcellent)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
 
-          {/* ========== 第一层：质量核心指标 ========== */}
-          <section>
-            <div className="grid grid-cols-5 gap-6">
-              {coreKPIs.map((kpi, index) => (
+        {/* 第三层：合格率趋势 + 平均扣分趋势 */}
+        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                合格率趋势
+              </h2>
+              <span className="text-xs text-slate-500">{timeRange.label}</span>
+            </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorPass" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.05} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#33415540" />
+                  <XAxis dataKey="label" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} unit="%" domain={[0, 100]} />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'rgba(15, 23, 42, 0.95)',
+                      border: '1px solid rgba(100, 116, 139, 0.3)',
+                      borderRadius: 8,
+                      color: '#e2e8f0',
+                    }}
+                    formatter={(value: number) => [`${value}%`, '合格率']}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="passRate"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#colorPass)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                <Activity className="h-5 w-5 text-rose-400" />
+                平均批次扣分趋势
+              </h2>
+              <span className="text-xs text-slate-500">{timeRange.label}</span>
+            </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.05} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#33415540" />
+                  <XAxis dataKey="label" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} unit="分" />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'rgba(15, 23, 42, 0.95)',
+                      border: '1px solid rgba(100, 116, 139, 0.3)',
+                      borderRadius: 8,
+                      color: '#e2e8f0',
+                    }}
+                    formatter={(value: number) => [`${value}分`, '平均扣分']}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="avgScore"
+                    stroke="#f43f5e"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#colorScore)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        {/* 第四层：缺陷等级分布 + 缺陷扣分TOP10 */}
+        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                <Filter className="h-5 w-5 text-amber-400" />
+                缺陷等级分布
+              </h2>
+              <span className="text-xs text-slate-500">按缺陷数量</span>
+            </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={defectGradeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#33415540" vertical={false} />
+                  <XAxis dataKey="category" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'rgba(15, 23, 42, 0.95)',
+                      border: '1px solid rgba(100, 116, 139, 0.3)',
+                      borderRadius: 8,
+                      color: '#e2e8f0',
+                    }}
+                    formatter={(value: number, name: string, props: any) => {
+                      const labelMap: Record<string, string> = {
+                        A: 'A类严重缺陷',
+                        B: 'B类较重缺陷',
+                        C: 'C类一般缺陷',
+                        D: 'D类轻微缺陷',
+                      };
+                      return [value, labelMap[props.payload.category] || '缺陷'];
+                    }}
+                  />
+                  <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+                    {defectGradeData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.category === 'A'
+                            ? '#ef4444'
+                            : entry.category === 'B'
+                            ? '#f59e0b'
+                            : entry.category === 'C'
+                            ? '#3b82f6'
+                            : '#10b981'
+                        }
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                <TrendingDown className="h-5 w-5 text-rose-400" />
+                缺陷扣分 TOP10
+              </h2>
+              <span className="text-xs text-slate-500">按累计扣分排序</span>
+            </div>
+            <div className="space-y-2">
+              {defectScoreTop10.map((item, idx) => (
                 <div
-                  key={index}
-                  className={`group relative overflow-hidden rounded-2xl transition-all duration-500 cursor-pointer ${
-                    kpi.highlight
-                      ? 'bg-gradient-to-br from-blue-600/20 via-blue-500/10 to-cyan-600/20 border-2 border-blue-500/40 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02]'
-                      : 'bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/50 hover:bg-slate-800/60 hover:scale-[1.02] backdrop-blur-sm'
-                  }`}
-                  onMouseEnter={() => setHoveredCard(`kpi-${index}`)}
-                  onMouseLeave={() => setHoveredCard(null)}
+                  key={`${item.location}-${item.name}-${idx}`}
+                  className="flex items-center gap-3 rounded-lg bg-slate-800/30 px-3 py-2 transition-colors hover:bg-slate-800/50"
                 >
-                  {/* 动态光效背景 */}
-                  {kpi.highlight && (
-                    <>
-                      <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/30 rounded-full blur-3xl group-hover:bg-blue-500/40 transition-all duration-500"></div>
-                      <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-all duration-500"></div>
-                    </>
-                  )}
-
-                  {/* 扫描线动画 */}
-                  {hoveredCard === `kpi-${index}` && (
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent animate-scan"></div>
-                  )}
-
-                  <div className="relative p-7">
-                    {/* 标题和图标 */}
-                    <div className="flex items-start justify-between mb-5">
-                      <div className={`p-3 rounded-xl transition-all duration-300 ${
-                        kpi.highlight
-                          ? 'bg-gradient-to-br from-blue-500/30 to-cyan-500/30 shadow-lg shadow-blue-500/30'
-                          : 'bg-slate-700/50 group-hover:bg-slate-700/70'
-                      }`}>
-                        <span className={`transition-all duration-300 ${
-                          kpi.highlight ? 'text-blue-300 drop-shadow-lg' : 'text-slate-400 group-hover:text-slate-200'
-                        }`} style={{ filter: kpi.highlight ? `drop-shadow(0 0 10px ${kpi.glowColor})` : 'none' }}>
-                          {kpi.icon}
-                        </span>
-                      </div>
-
-                      {/* 趋势指示 */}
-                      {kpi.trend && (
-                        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur-sm transition-all ${
-                          kpi.trend === 'up' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                          kpi.trend === 'down' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-                          'bg-slate-700/50 text-slate-400 border border-slate-600/30'
-                        }`}>
-                          {kpi.trend === 'up' && <ArrowUpRight className="w-4 h-4" />}
-                          {kpi.trend === 'down' && <ArrowDownRight className="w-4 h-4" />}
-                          {kpi.trend === 'stable' && <Minus className="w-4 h-4" />}
-                          <span>{kpi.change}</span>
-                        </div>
-                      )}
+                  <span
+                    className="flex h-5 w-5 items-center justify-center rounded text-xs font-bold"
+                    style={{
+                      background: idx < 3 ? 'rgba(244, 63, 94, 0.2)' : 'rgba(100, 116, 139, 0.2)',
+                      color: idx < 3 ? '#fb7185' : '#94a3b8',
+                    }}
+                  >
+                    {idx + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-medium text-slate-200">
+                      {item.name}
+                      <span className="ml-2 text-xs text-slate-500">({item.location})</span>
                     </div>
-
-                    {/* 数值 */}
-                    <div className="mb-3">
-                      <span className={`font-black tracking-tight tabular-nums ${
-                        kpi.highlight ? 'text-5xl' : 'text-4xl'
-                      } text-transparent bg-clip-text bg-gradient-to-br ${
-                        kpi.highlight ? 'from-white via-blue-100 to-cyan-100' : 'from-white to-slate-200'
-                      }`}>
-                        <AnimatedNumber value={kpi.value} decimals={typeof kpi.value === 'string' && kpi.value.includes('.') ? 1 : 0} />
-                      </span>
-                      {kpi.unit && (
-                        <span className="ml-2 text-lg font-semibold text-slate-400">{kpi.unit}</span>
-                      )}
-                    </div>
-
-                    {/* 标签 */}
-                    <div className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-current opacity-50"></div>
-                      {kpi.label}
+                    <div className="text-xs text-slate-500">
+                      {item.category}类 · {item.count}次
                     </div>
                   </div>
-
-                  {/* 底部发光线 */}
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="text-sm font-semibold text-rose-400">{item.score}分</div>
                 </div>
               ))}
+              {defectScoreTop10.length === 0 && (
+                <div className="py-8 text-center text-sm text-slate-500">当前时间范围内无缺陷数据</div>
+              )}
             </div>
-          </section>
+          </div>
+        </div>
 
-          {/* ========== 第二层：质量趋势 + 预警 ========== */}
-          <section className="grid grid-cols-12 gap-6">
-            {/* 左侧：质量趋势图 */}
-            <div className="col-span-8">
-              <div className="relative bg-slate-800/30 rounded-2xl border border-slate-700/40 backdrop-blur-sm overflow-hidden group hover:border-blue-500/30 transition-all duration-500">
-                {/* 卡片头部光效 */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+        {/* 第五层：机台质量分析 */}
+        <div className="mb-6 rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+              <Factory className="h-5 w-5 text-purple-400" />
+              机台质量分析
+            </h2>
+            <span className="text-xs text-slate-500">按优质率排序</span>
+          </div>
+          <MachineTable data={machineStats} />
+        </div>
 
-                <div className="p-7">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-blue-500/30 rounded-xl blur-lg"></div>
-                        <div className="relative p-2.5 rounded-xl bg-blue-500/20 border border-blue-500/30">
-                          <TrendingUp className="w-6 h-6 text-blue-400" />
-                        </div>
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-bold text-white">质量趋势</h2>
-                        <p className="text-xs text-slate-500 mt-0.5">本月数据走势</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 bg-slate-900/60 rounded-xl p-1.5 border border-slate-700/40">
-                      {[
-                        { key: 'qualityRate' as const, label: '优质率' },
-                        { key: 'defectRate' as const, label: '缺陷率' },
-                        { key: 'defectCount' as const, label: '缺陷数量' },
-                      ].map(metric => (
-                        <button
-                          key={metric.key}
-                          onClick={() => setTrendMetric(metric.key)}
-                          className={`px-5 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
-                            trendMetric === metric.key
-                              ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30'
-                              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                          }`}
-                        >
-                          {metric.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* 图表区域 */}
-                  <div style={{ height: '340px' }} className="relative">
-                    {trendData.length > 0 ? (
-                      <div className="h-full flex items-end gap-3 px-4 pb-10 pt-6 relative">
-                        {/* Y轴参考线 */}
-                        <div className="absolute inset-0 px-4 pb-10 pt-6 pointer-events-none">
-                          {[0, 25, 50, 75, 100].map(percent => (
-                            <div
-                              key={percent}
-                              className="absolute left-0 right-0 border-t border-slate-700/30"
-                              style={{ bottom: `${percent}%` }}
-                            >
-                              <span className="absolute -left-1 -top-2 text-xs text-slate-600">{percent}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {trendData.map((point, idx) => {
-                          const maxValue = Math.max(...trendData.map(d => d.value), 1);
-                          const heightPercent = (point.value / maxValue) * 100;
-                          const isLast = idx === trendData.length - 1;
-
-                          return (
-                            <div
-                              key={idx}
-                              className="flex-1 flex flex-col items-center group/bar"
-                            >
-                              <div className="relative w-full flex items-end justify-center mb-3" style={{ height: '280px' }}>
-                                {/* 数值标签 */}
-                                {(isLast || hoveredCard === `trend-${idx}`) && (
-                                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-blue-500/90 text-white text-xs font-bold rounded-lg whitespace-nowrap backdrop-blur-sm z-10">
-                                    {point.value.toFixed(trendMetric === 'defectRate' ? 3 : 1)}
-                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-blue-500/90"></div>
-                                  </div>
-                                )}
-
-                                {/* 柱状图 */}
-                                <div
-                                  className="w-full max-w-[45px] relative group-hover/bar:max-w-[50px] transition-all duration-300"
-                                  onMouseEnter={() => setHoveredCard(`trend-${idx}`)}
-                                  onMouseLeave={() => setHoveredCard(null)}
-                                >
-                                  {/* 渐变柱体 */}
-                                  <div
-                                    className="w-full rounded-t-lg relative overflow-hidden transition-all duration-500"
-                                    style={{ height: `${Math.max(heightPercent, 3)}%` }}
-                                  >
-                                    <div className={`absolute inset-0 bg-gradient-to-t ${
-                                      isLast
-                                        ? 'from-blue-600 via-blue-500 to-cyan-400'
-                                        : 'from-blue-500/80 via-blue-400/80 to-cyan-300/80'
-                                    }`}></div>
-
-                                    {/* 顶部高光 */}
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-white/30 rounded-t-lg"></div>
-
-                                    {/* 光效 */}
-                                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-                                  </div>
-
-                                  {/* 发光效果 */}
-                                  {isLast && (
-                                    <div className="absolute inset-0 bg-blue-400/30 blur-xl -z-10 animate-pulse"></div>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* X轴标签 */}
-                              <span className={`text-xs font-medium transition-colors ${
-                                isLast ? 'text-blue-400' : 'text-slate-500 group-hover/bar:text-slate-400'
-                              }`}>
-                                {point.label}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="h-full flex flex-col items-center justify-center text-slate-500">
-                        <div className="relative mb-6">
-                          <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl"></div>
-                          <BarChart3 className="w-24 h-24 relative opacity-30" />
-                        </div>
-                        <p className="text-lg font-medium">暂无趋势数据</p>
-                        <p className="text-sm mt-2 text-slate-600">请先录入质量检测数据</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 右侧：质量预警 */}
-            <div className="col-span-4">
-              <div className="relative bg-slate-800/30 rounded-2xl border border-slate-700/40 backdrop-blur-sm overflow-hidden h-full hover:border-amber-500/30 transition-all duration-500">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
-
-                <div className="p-7">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-amber-500/30 rounded-xl blur-lg"></div>
-                      <div className="relative p-2.5 rounded-xl bg-amber-500/20 border border-amber-500/30">
-                        <Radio className="w-6 h-6 text-amber-400" />
-                      </div>
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-white">质量预警</h2>
-                      <p className="text-xs text-slate-500 mt-0.5">智能异常监测</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    {alerts.length > 0 ? (
-                      alerts.map(alert => (
-                        <div
-                          key={alert.id}
-                          className={`relative overflow-hidden rounded-xl border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] cursor-pointer ${
-                            alert.level === 'high'
-                              ? 'bg-red-500/10 border-red-500/30 hover:border-red-500/50 hover:bg-red-500/15'
-                              : alert.level === 'warning'
-                              ? 'bg-amber-500/10 border-amber-500/30 hover:border-amber-500/50 hover:bg-amber-500/15'
-                              : 'bg-emerald-500/10 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-emerald-500/15'
-                          }`}
-                        >
-                          {/* 左侧色条 */}
-                          <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                            alert.level === 'high' ? 'bg-red-500' :
-                            alert.level === 'warning' ? 'bg-amber-500' : 'bg-emerald-500'
-                          }`}></div>
-
-                          <div className="flex items-start gap-4 p-5 pl-6">
-                            <div className={`mt-0.5 flex-shrink-0 p-2 rounded-lg ${
-                              alert.level === 'high' ? 'bg-red-500/20' :
-                              alert.level === 'warning' ? 'bg-amber-500/20' : 'bg-emerald-500/20'
-                            }`}>
-                              {alert.level === 'high' ? <AlertTriangle className="w-5 h-5 text-red-400" /> :
-                               alert.level === 'warning' ? <AlertCircle className="w-5 h-5 text-amber-400" /> :
-                               <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm text-slate-200 leading-relaxed font-medium">{alert.message}</p>
-                              <div className="flex items-center gap-3 mt-3">
-                                <span className="text-xs px-3 py-1 rounded-lg bg-slate-800/60 text-slate-400 font-medium border border-slate-700/30">
-                                  {alert.source}
-                                </span>
-                                <span className={`text-xs font-bold px-3 py-1 rounded-lg ${
-                                  alert.level === 'high' ? 'bg-red-500/20 text-red-400' :
-                                  alert.level === 'warning' ? 'bg-amber-500/20 text-amber-400' :
-                                  'bg-emerald-500/20 text-emerald-400'
-                                }`}>
-                                  {alert.level === 'high' ? '🔴 高风险' : alert.level === 'warning' ? '🟡 关注' : '🟢 正常'}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-16 text-slate-500">
-                        <CheckCircle2 className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                        <p className="text-lg font-medium">暂无预警信息</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ========== 第三层：外观质量状态 + 机台对比 ========== */}
-          <section className="grid grid-cols-12 gap-6">
-            {/* 左侧：四类外观质量状态 */}
-            <div className="col-span-7">
-              <div className="relative bg-slate-800/30 rounded-2xl border border-slate-700/40 backdrop-blur-sm overflow-hidden hover:border-cyan-500/30 transition-all duration-500">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-
-                <div className="p-7">
-                  <div className="flex items-center gap-4 mb-7">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-cyan-500/30 rounded-xl blur-lg"></div>
-                      <div className="relative p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-500/30">
-                        <Eye className="w-6 h-6 text-cyan-400" />
-                      </div>
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-white">外观质量状态</h2>
-                      <p className="text-xs text-slate-500 mt-0.5">四类独立统计</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-5">
-                    {appearanceQuality.map(item => (
-                      <div key={item.key} className="group/item">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-4">
-                            <div
-                              className="p-3 rounded-xl transition-all duration-300 group-hover/item:scale-110"
-                              style={{
-                                background: `linear-gradient(135deg, ${item.color}20, ${item.color}10)`,
-                                border: `1px solid ${item.color}40`,
-                                boxShadow: `0 0 20px ${item.color}20`
-                              }}
-                            >
-                              <span style={{ color: item.color }}>{item.icon}</span>
-                            </div>
-                            <div>
-                              <span className="text-white font-bold text-lg">{item.label}</span>
-                              <span className="text-xs text-slate-500 ml-3 font-medium">{item.sampleCount} 个样本</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-6">
-                            <div className="text-right">
-                              <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-200">
-                                {item.qualityRate}
-                              </span>
-                              <span className="text-base text-slate-400 ml-1.5 font-semibold">%</span>
-                            </div>
-                            <div className="text-right min-w-[90px]">
-                              <span className="text-base font-bold text-slate-300">{item.defectCount}</span>
-                              <span className="text-xs text-slate-500 ml-1.5">项缺陷</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 进度条 */}
-                        <div className="h-3 bg-slate-700/30 rounded-full overflow-hidden backdrop-blur-sm border border-slate-700/20">
-                          <div
-                            className="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
-                            style={{
-                              width: `${item.qualityRate}%`,
-                              background: `linear-gradient(to right, ${item.color}, ${item.color}cc)`
-                            }}
-                          >
-                            {/* 流光效果 */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
-                            {/* 顶部高光 */}
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-white/30"></div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-
-                    {appearanceQuality.every(q => q.sampleCount === 0) && (
-                      <div className="text-center py-12 text-slate-500">
-                        <p className="text-lg font-medium">暂无外观质量数据</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 右侧：机台质量对比 */}
-            <div className="col-span-5">
-              <div className="relative bg-slate-800/30 rounded-2xl border border-slate-700/40 backdrop-blur-sm overflow-hidden hover:border-orange-500/30 transition-all duration-500">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
-
-                <div className="p-7">
-                  <div className="flex items-center justify-between mb-7">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-orange-500/30 rounded-xl blur-lg"></div>
-                        <div className="relative p-2.5 rounded-xl bg-orange-500/20 border border-orange-500/30">
-                          <Factory className="w-6 h-6 text-orange-400" />
-                        </div>
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-bold text-white">机台质量对比</h2>
-                        <p className="text-xs text-slate-500 mt-0.5">实时排名</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1 bg-slate-900/60 rounded-lg p-1 border border-slate-700/40">
-                      {[
-                        { key: 'defectCount' as const, label: '缺陷数' },
-                        { key: 'qualityRate' as const, label: '优质率' },
-                        { key: 'defectRate' as const, label: '缺陷率' },
-                      ].map(metric => (
-                        <button
-                          key={metric.key}
-                          onClick={() => setMachineMetric(metric.key)}
-                          className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-300 ${
-                            machineMetric === metric.key
-                              ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                          }`}
-                        >
-                          {metric.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* 机台排名列表 */}
-                  <div className="space-y-3">
-                    {machineQuality.map((machine, index) => {
-                      const maxValue = Math.max(...machineQuality.map(m =>
-                        machineMetric === 'defectCount' ? m.defectCount :
-                        machineMetric === 'qualityRate' ? m.qualityRate : m.defectRate
-                      ), 1);
-
-                      const currentValue = machineMetric === 'defectCount' ? machine.defectCount :
-                        machineMetric === 'qualityRate' ? machine.qualityRate : machine.defectRate;
-
-                      const percentage = (currentValue / maxValue) * 100;
-
-                      const rankColors = [
-                        'from-amber-400 to-yellow-300 text-amber-900',
-                        'from-slate-300 to-slate-200 text-slate-700',
-                        'from-orange-400 to-orange-300 text-orange-900',
-                      ];
-
-                      return (
-                        <div
-                          key={machine.machine}
-                          className="group/machine flex items-center gap-4 p-4 rounded-xl bg-slate-800/30 hover:bg-slate-800/60 border border-slate-700/20 hover:border-slate-600/40 transition-all duration-300 hover:scale-[1.02]"
-                        >
-                          {/* 排名 */}
-                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black transition-all duration-300 ${
-                            index < 3
-                              ? `bg-gradient-to-br ${rankColors[index]} shadow-lg`
-                              : 'bg-slate-700/50 text-slate-500'
-                          }`}>
-                            {index + 1}
-                          </div>
-
-                          {/* 机台名称 */}
-                          <div className="w-18 text-white font-bold text-lg">{machine.machine}</div>
-
-                          {/* 数值 */}
-                          <div className="text-sm font-bold text-slate-200 min-w-[90px]">
-                            {machineMetric === 'defectCount' ? `${currentValue} 项` :
-                             machineMetric === 'qualityRate' ? `${currentValue}%` :
-                             `${currentValue.toFixed(3)}%`}
-                          </div>
-
-                          {/* 进度条 */}
-                          <div className="flex-1 h-2.5 bg-slate-700/30 rounded-full overflow-hidden backdrop-blur-sm">
-                            <div
-                              className={`h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden ${
-                                index === 0 ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400' :
-                                index === 1 ? 'bg-gradient-to-r from-slate-400 via-slate-300 to-slate-200' :
-                                index === 2 ? 'bg-gradient-to-r from-orange-500 via-orange-400 to-amber-400' :
-                                'bg-gradient-to-r from-slate-600 to-slate-500'
-                              }`}
-                              style={{ width: `${percentage}%` }}
-                            >
-                              {/* 流光效果 */}
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    {machineQuality.every(m => m.sampleCount === 0) && (
-                      <div className="text-center py-12 text-slate-500">
-                        <p className="text-lg font-medium">暂无机台数据</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ========== 第四层：烟支物测质量状态 ========== */}
-          <section>
-            <div className="relative bg-slate-800/30 rounded-2xl border border-slate-700/40 backdrop-blur-sm overflow-hidden hover:border-green-500/30 transition-all duration-500">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
-
-              <div className="p-7">
-                <div className="flex items-center justify-between mb-7">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-green-500/30 rounded-xl blur-lg"></div>
-                      <div className="relative p-2.5 rounded-xl bg-green-500/20 border border-green-500/30">
-                        <Gauge className="w-6 h-6 text-green-400" />
-                      </div>
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-white">烟支物测质量状态</h2>
-                      <p className="text-xs text-slate-500 mt-0.5">六西格玛过程能力 · 多机台 · 多牌号</p>
-                    </div>
-                  </div>
-
-                  {/* 机台 / 牌号筛选器 */}
-                  <div className="flex items-center gap-3">
-                    {/* 机台选择 */}
-                    <div className="relative group/select">
-                      <div className="absolute inset-0 rounded-xl bg-emerald-500/10 blur-md opacity-0 group-hover/select:opacity-100 transition-opacity"></div>
-                      <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-700/50 hover:border-emerald-500/40 transition-all duration-300">
-                        <Factory className="w-4 h-4 text-emerald-400" />
-                        <select
-                          value={selectedMachine}
-                          onChange={(e) => {
-                            setSelectedMachine(e.target.value);
-                            setSelectedBrand('');
-                          }}
-                          className="bg-transparent text-sm font-medium text-slate-200 outline-none cursor-pointer min-w-[110px] appearance-none pr-6 focus:text-emerald-300 transition-colors"
-                        >
-                          <option value="" className="bg-slate-900 text-slate-300">全部机台</option>
-                          {physicalTestFilterOptions.machines.map(machine => (
-                            <option key={machine} value={machine} className="bg-slate-900 text-slate-300">{machine}</option>
-                          ))}
-                        </select>
-                        <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 pointer-events-none" />
-                      </div>
-                    </div>
-
-                    {/* 牌号选择 */}
-                    <div className="relative group/select">
-                      <div className="absolute inset-0 rounded-xl bg-cyan-500/10 blur-md opacity-0 group-hover/select:opacity-100 transition-opacity"></div>
-                      <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-700/50 hover:border-cyan-500/40 transition-all duration-300">
-                        <Cigarette className="w-4 h-4 text-cyan-400" />
-                        <select
-                          value={selectedBrand}
-                          onChange={(e) => setSelectedBrand(e.target.value)}
-                          disabled={!selectedMachine && physicalTestFilterOptions.brands.length === 0}
-                          className="bg-transparent text-sm font-medium text-slate-200 outline-none cursor-pointer min-w-[140px] appearance-none pr-6 focus:text-cyan-300 transition-colors disabled:cursor-not-allowed disabled:text-slate-600"
-                        >
-                          <option value="" className="bg-slate-900 text-slate-300">
-                            {selectedMachine ? '该机台全部牌号' : '全部牌号'}
-                          </option>
-                          {physicalTestFilterOptions.brands.map(brand => (
-                            <option key={brand} value={brand} className="bg-slate-900 text-slate-300">
-                              {BRAND_MAP[brand] || brand}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 pointer-events-none" />
-                      </div>
-                    </div>
-
-                    {/* 重置筛选 */}
-                    {(selectedMachine || selectedBrand) && (
-                      <button
-                        onClick={() => {
-                          setSelectedMachine('');
-                          setSelectedBrand('');
-                        }}
-                        className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-900/40 border border-slate-700/40 hover:border-slate-500/40 transition-all duration-300"
-                      >
-                        <Filter className="w-3.5 h-3.5" />
-                        重置
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* 当前筛选状态标签 */}
-                {(selectedMachine || selectedBrand) && (
-                  <div className="flex items-center gap-2 mb-5">
-                    <span className="text-xs text-slate-500 font-medium">当前筛选：</span>
-                    {selectedMachine && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                        <Factory className="w-3 h-3" />
-                        {selectedMachine}
-                      </span>
-                    )}
-                    {selectedBrand && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                        <Cigarette className="w-3 h-3" />
-                        {BRAND_MAP[selectedBrand] || selectedBrand}
-                      </span>
-                    )}
-                    <span className="text-xs text-slate-600 ml-1">
-                      样本 N={physicalTestStatus[0]?.sampleSize ?? 0}
-                    </span>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-4 gap-5">
-                  {physicalTestStatus.map(item => (
-                    <div
-                      key={item.indicatorId}
-                      className="group/cpk relative overflow-hidden rounded-xl bg-slate-800/50 border border-slate-700/30 hover:border-slate-600/50 transition-all duration-500 hover:scale-[1.03]"
-                    >
-                      {/* 背景光效 */}
-                      <div className={`absolute inset-0 opacity-0 group-hover/cpk:opacity-100 transition-opacity duration-500 ${
-                        item.status === 'excellent' ? 'bg-emerald-500/5' :
-                        item.status === 'good' ? 'bg-blue-500/5' :
-                        item.status === 'attention' ? 'bg-amber-500/5' :
-                        item.status === 'poor' ? 'bg-red-500/5' : ''
-                      }`}></div>
-
-                      <div className="relative p-6">
-                        <div className="flex items-start justify-between mb-5">
-                          <div>
-                            <h3 className="text-white font-bold text-lg">{item.name}</h3>
-                            <p className="text-xs text-slate-500 mt-1 font-medium">{item.unit}</p>
-                          </div>
-
-                          {/* 状态标识 */}
-                          <div className={`px-3 py-1.5 rounded-lg text-xs font-bold border backdrop-blur-sm transition-all duration-300 ${
-                            item.status === 'excellent' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-lg shadow-emerald-500/20' :
-                            item.status === 'good' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30 shadow-lg shadow-blue-500/20' :
-                            item.status === 'attention' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30 shadow-lg shadow-amber-500/20' :
-                            item.status === 'poor' ? 'bg-red-500/20 text-red-400 border-red-500/30 shadow-lg shadow-red-500/20' :
-                            'bg-slate-700/50 text-slate-500 border-slate-600/30'
-                          }`}>
-                            {item.statusLabel}
-                          </div>
-                        </div>
-
-                        {/* Cpk值 */}
-                        <div className="mb-4">
-                          {item.cpk !== null ? (
-                            <div className="flex items-baseline gap-2">
-                              <span className={`text-4xl font-black tabular-nums ${
-                                item.status === 'excellent' ? 'text-emerald-400' :
-                                item.status === 'good' ? 'text-blue-400' :
-                                item.status === 'attention' ? 'text-amber-400' :
-                                item.status === 'poor' ? 'text-red-400' : 'text-slate-500'
-                              }`}>
-                                {item.cpk}
-                              </span>
-                              <span className="text-base font-bold text-slate-500">Cpk</span>
-                            </div>
-                          ) : (
-                            <span className="text-2xl text-slate-600 font-bold">-</span>
-                          )}
-                        </div>
-
-                        {/* 补充信息 */}
-                        <div className="grid grid-cols-2 gap-3 text-xs mb-3">
-                          <div className="px-3 py-2 rounded-lg bg-slate-700/30 border border-slate-700/20">
-                            <span className="text-slate-500 block mb-0.5">均值</span>
-                            <span className="text-slate-200 font-bold">{item.mean}</span>
-                          </div>
-                          <div className="px-3 py-2 rounded-lg bg-slate-700/30 border border-slate-700/20">
-                            <span className="text-slate-500 block mb-0.5">σ</span>
-                            <span className="text-slate-200 font-bold">{item.stdDev}</span>
-                          </div>
-                        </div>
-
-                        <div className="text-xs text-slate-600 font-medium px-3 py-1.5 rounded bg-slate-700/20 inline-block">
-                          样本 N={item.sampleSize}
-                        </div>
-                      </div>
-
-                      {/* 底部发光线 */}
-                      <div className={`absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover/cpk:opacity-100 transition-opacity duration-500 ${
-                        item.status === 'excellent' ? 'bg-emerald-500' :
-                        item.status === 'good' ? 'bg-blue-500' :
-                        item.status === 'attention' ? 'bg-amber-500' :
-                        item.status === 'poor' ? 'bg-red-500' : 'bg-slate-600'
-                      }`}></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ========== 第五层：AI质量总结 ========== */}
-          <section>
-            <div className="relative bg-gradient-to-br from-violet-950/40 via-purple-950/20 to-slate-900/40 rounded-2xl border border-violet-500/20 backdrop-blur-sm overflow-hidden hover:border-violet-500/40 transition-all duration-500">
-              {/* 背景装饰 */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl"></div>
-
-              {/* 网格图案 */}
-              <div
-                className="absolute inset-0 opacity-[0.02]"
-                style={{
-                  backgroundImage: `
-                    radial-gradient(circle at 1px 1px, white 1px, transparent 0)
-                  `,
-                  backgroundSize: '20px 20px',
-                }}
-              ></div>
-
-              <div className="relative p-7">
-                <div className="flex items-center gap-4 mb-7">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-violet-500/40 rounded-2xl blur-xl animate-pulse"></div>
-                    <div className="relative p-3 rounded-2xl bg-gradient-to-br from-violet-500/30 to-purple-500/30 border border-violet-500/40">
-                      <Brain className="w-7 h-7 text-violet-400" />
-                    </div>
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">
-                      AI 质量总结
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">基于当前数据的智能分析与建议</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {aiSummary.map((summary, index) => (
-                    <div
-                      key={index}
-                      className="group/ai flex items-start gap-5 p-5 rounded-xl bg-slate-800/40 border border-slate-700/20 hover:bg-slate-800/60 hover:border-violet-500/30 transition-all duration-300 hover:translate-x-1"
-                    >
-                      <div className="mt-0.5 flex-shrink-0">
-                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover/ai:scale-110 transition-transform duration-300">
-                          <span className="text-sm font-black text-white">{index + 1}</span>
-                        </div>
-                      </div>
-                      <p className="flex-1 text-sm text-slate-300 leading-relaxed font-medium pt-1" dangerouslySetInnerHTML={{
-                        __html: summary.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
-                      }}></p>
-                    </div>
-                  ))}
-
-                  {aiSummary.length === 0 && (
-                    <div className="text-center py-16 text-slate-500">
-                      <Brain className="w-20 h-20 mx-auto mb-5 opacity-20" />
-                      <p className="text-lg font-medium">暂无数据可供分析</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 底部信息 */}
-          <footer className="py-8 border-t border-slate-800/50 text-center relative">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
-            <p className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-              智·质 —— 卷烟数智化质量管理与智能分析平台
-            </p>
-            <p className="text-xs text-slate-600 mt-2 font-medium">
-              数据自动同步自各业务模块 · 最后更新时间 {formatDate(currentTime)} {formatTime(currentTime)}
-            </p>
-          </footer>
-
-        </main>
+        {/* 第六层：质量异常提醒 */}
+        <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+              <AlertTriangle className="h-5 w-5 text-amber-400" />
+              质量异常提醒
+            </h2>
+            <span className="text-xs text-slate-500">基于同一时间段自动研判</span>
+          </div>
+          <AlertList alerts={alerts} />
+        </div>
       </div>
-
-      {/* 自定义CSS动画 */}
-      <style>{`
-        @keyframes scan {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        @keyframes textShimmer {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-        @keyframes glow {
-          0% {
-            filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.4)) drop-shadow(0 0 10px rgba(96, 165, 250, 0.3));
-          }
-          100% {
-            filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.8)) drop-shadow(0 0 30px rgba(167, 139, 250, 0.6)) drop-shadow(0 0 45px rgba(96, 165, 250, 0.4));
-          }
-        }
-        @keyframes sweepLight {
-          0%, 20% { background-position: -100% 0; opacity: 0; }
-          40% { opacity: 1; }
-          60% { background-position: 100% 0; opacity: 1; }
-          80%, 100% { background-position: 150% 0; opacity: 0; }
-        }
-        @keyframes scanLine {
-          0%, 100% { opacity: 0.3; transform: scaleX(0.5); }
-          50% { opacity: 0.8; transform: scaleX(1); }
-        }
-        .animate-scan {
-          animation: scan 2s linear infinite;
-        }
-        .animate-shimmer {
-          animation: shimmer 2s infinite;
-        }
-      `}</style>
     </div>
   );
 };

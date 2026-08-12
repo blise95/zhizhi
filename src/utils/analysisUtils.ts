@@ -25,6 +25,7 @@ export interface DefectRecord {
   defectName: string;    // 缺陷名称
   category: string;      // 缺陷类别 (A/B/C/D)
   quantity: number;      // 缺陷数量
+  scoreCategory?: 'box' | 'carton' | 'pack' | 'physical' | 'appearance' | 'misc'; // 烟支缺陷细分评分类别
 }
 
 // 过程质量记录
