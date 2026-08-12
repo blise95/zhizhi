@@ -340,6 +340,7 @@ const QualityDashboard: React.FC = () => {
   const [customTo, setCustomTo] = useState<string>('');
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [allRecords, setAllRecords] = useState<ProcessQualityRecord[]>([]);
+  const [activeDefectIndex, setActiveDefectIndex] = useState<number | null>(null);
 
   // 实时更新时间
   useEffect(() => {
@@ -687,49 +688,190 @@ const QualityDashboard: React.FC = () => {
                 <Filter className="h-5 w-5 text-amber-400" />
                 缺陷等级分布
               </h2>
-              <span className="text-xs text-slate-500">按缺陷数量</span>
+              <span className="text-xs text-slate-500">按缺陷数量 · 扣分</span>
             </div>
-            <div className="h-64">
+            <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={defectGradeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#33415540" vertical={false} />
-                  <XAxis dataKey="category" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                <PieChart>
+                  <defs>
+                    <linearGradient id="defectGradientA" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#ff8a8a" />
+                      <stop offset="100%" stopColor="#ef4444" />
+                    </linearGradient>
+                    <linearGradient id="defectGradientB" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#fcd34d" />
+                      <stop offset="100%" stopColor="#f59e0b" />
+                    </linearGradient>
+                    <linearGradient id="defectGradientC" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#60a5fa" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                    <linearGradient id="defectGradientD" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#34d399" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                    <filter id="defectGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
                   <Tooltip
-                    contentStyle={{
-                      background: 'rgba(15, 23, 42, 0.95)',
-                      border: '1px solid rgba(100, 116, 139, 0.3)',
-                      borderRadius: 8,
-                      color: '#e2e8f0',
-                    }}
-                    formatter={(value: number, name: string, props: any) => {
-                      const labelMap: Record<string, string> = {
-                        A: 'A类严重缺陷',
-                        B: 'B类较重缺陷',
-                        C: 'C类一般缺陷',
-                        D: 'D类轻微缺陷',
-                      };
-                      return [value, labelMap[props.payload.category] || '缺陷'];
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload as DefectGradeItem;
+                        const labelMap: Record<string, string> = {
+                          A: 'A类严重缺陷',
+                          B: 'B类较重缺陷',
+                          C: 'C类一般缺陷',
+                          D: 'D类轻微缺陷',
+                        };
+                        const total = defectGradeData.reduce((sum, d) => sum + d.count, 0);
+                        const pct = total > 0 ? ((data.count / total) * 100).toFixed(1) : '0.0';
+                        return (
+                          <div className="rounded-xl border border-slate-700/50 bg-slate-900/95 p-3 shadow-2xl backdrop-blur-md">
+                            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+                              <span
+                                className="h-2.5 w-2.5 rounded-full shadow-[0_0_8px_currentColor]"
+                                style={{
+                                  background:
+                                    data.category === 'A'
+                                      ? '#ef4444'
+                                      : data.category === 'B'
+                                      ? '#f59e0b'
+                                      : data.category === 'C'
+                                      ? '#3b82f6'
+                                      : '#10b981',
+                                  boxShadow: `0 0 10px ${
+                                    data.category === 'A'
+                                      ? '#ef4444'
+                                      : data.category === 'B'
+                                      ? '#f59e0b'
+                                      : data.category === 'C'
+                                      ? '#3b82f6'
+                                      : '#10b981'
+                                  }`,
+                                }}
+                              />
+                              {labelMap[data.category] || '缺陷'}
+                            </div>
+                            <div className="space-y-1 text-xs text-slate-300">
+                              <div className="flex justify-between gap-5">
+                                <span className="text-slate-400">缺陷数量</span>
+                                <span className="font-mono font-semibold text-white">{data.count}</span>
+                              </div>
+                              <div className="flex justify-between gap-5">
+                                <span className="text-slate-400">数量占比</span>
+                                <span className="font-mono font-semibold text-white">{pct}%</span>
+                              </div>
+                              <div className="flex justify-between gap-5">
+                                <span className="text-slate-400">累计扣分</span>
+                                <span className="font-mono font-semibold text-white">{data.score} 分</span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
                     }}
                   />
-                  <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                    {defectGradeData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={
-                          entry.category === 'A'
-                            ? '#ef4444'
-                            : entry.category === 'B'
-                            ? '#f59e0b'
-                            : entry.category === 'C'
-                            ? '#3b82f6'
-                            : '#10b981'
-                        }
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
+                  <Pie
+                    data={defectGradeData}
+                    dataKey="count"
+                    nameKey="category"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={58}
+                    outerRadius={92}
+                    paddingAngle={3}
+                    cornerRadius={8}
+                    stroke="rgba(15,23,42,0.8)"
+                    strokeWidth={3}
+                    onMouseEnter={(_, index) => setActiveDefectIndex(index)}
+                    onMouseLeave={() => setActiveDefectIndex(null)}
+                  >
+                    {defectGradeData.map((entry, index) => {
+                      const isActive = activeDefectIndex === index;
+                      const gradientId =
+                        entry.category === 'A'
+                          ? 'defectGradientA'
+                          : entry.category === 'B'
+                          ? 'defectGradientB'
+                          : entry.category === 'C'
+                          ? 'defectGradientC'
+                          : 'defectGradientD';
+                      return (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={`url(#${gradientId})`}
+                          stroke={isActive ? 'rgba(255,255,255,0.9)' : 'rgba(15,23,42,0.8)'}
+                          strokeWidth={isActive ? 4 : 3}
+                          filter={isActive ? 'url(#defectGlow)' : undefined}
+                        />
+                      );
+                    })}
+                  </Pie>
+                  <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="fill-slate-400 text-xs tracking-wider">
+                    缺陷总数
+                  </text>
+                  <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle" className="fill-white text-2xl font-bold tracking-tight">
+                    {stats.current.totalDefects}
+                  </text>
+                </PieChart>
               </ResponsiveContainer>
+            </div>
+
+            {/* 自定义图例 */}
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {defectGradeData.map((item, idx) => {
+                const labelMap: Record<string, string> = {
+                  A: 'A类严重缺陷',
+                  B: 'B类较重缺陷',
+                  C: 'C类一般缺陷',
+                  D: 'D类轻微缺陷',
+                };
+                const colorMap: Record<string, string> = {
+                  A: '#ef4444',
+                  B: '#f59e0b',
+                  C: '#3b82f6',
+                  D: '#10b981',
+                };
+                const total = defectGradeData.reduce((sum, d) => sum + d.count, 0);
+                const pct = total > 0 ? ((item.count / total) * 100).toFixed(1) : '0.0';
+                const isActive = activeDefectIndex === idx;
+                return (
+                  <div
+                    key={item.category}
+                    className={`flex items-center gap-2 rounded-lg border p-2 transition-all duration-200 ${
+                      isActive
+                        ? 'border-slate-500/60 bg-slate-800/70'
+                        : 'border-slate-700/30 bg-slate-800/20 hover:border-slate-600/50 hover:bg-slate-800/40'
+                    }`}
+                    onMouseEnter={() => setActiveDefectIndex(idx)}
+                    onMouseLeave={() => setActiveDefectIndex(null)}
+                  >
+                    <div
+                      className="h-8 w-1 rounded-full"
+                      style={{
+                        background: `linear-gradient(180deg, ${colorMap[item.category]}88, ${colorMap[item.category]})`,
+                        boxShadow: isActive ? `0 0 10px ${colorMap[item.category]}` : undefined,
+                      }}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-xs font-medium text-slate-200">{labelMap[item.category]}</div>
+                      <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                        <span>{item.count}次</span>
+                        <span>·</span>
+                        <span>{pct}%</span>
+                        <span>·</span>
+                        <span>{item.score}分</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
