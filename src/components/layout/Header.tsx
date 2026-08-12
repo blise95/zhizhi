@@ -3,7 +3,6 @@ import {
   Bell,
   User,
   Clock,
-  Wifi,
   Server,
   ChevronRight,
   LogOut,
@@ -74,11 +73,6 @@ export function Header({ currentPage, breadcrumbs, currentUser, onLogout }: Head
             <div className="flex items-center gap-1.5">
               <Server className="w-3.5 h-3.5 text-quality-normal" />
               <span className="text-xs text-muted-foreground">服务正常</span>
-            </div>
-            <div className="w-px h-3 bg-border"></div>
-            <div className="flex items-center gap-1.5">
-              <Wifi className="w-3.5 h-3.5 text-brand-blue" />
-              <span className="text-xs text-muted-foreground">已连接</span>
             </div>
           </div>
 
