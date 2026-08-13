@@ -23,6 +23,7 @@ import {
   CIGARETTE_DEFECTS,
   getLocations,
   getDefectsByLocation,
+  type ScoreCategory,
 } from '@/data/defectLibrary';
 
 // 单条缺陷记录接口
@@ -33,6 +34,7 @@ interface DefectRecord {
   defectCode: string;
   category: string;
   quantity: number;
+  scoreCategory?: ScoreCategory;
 }
 
 // 缺陷模块配置
@@ -181,6 +183,9 @@ export function AppearanceDefectInput({ onDataChange, initialData }: AppearanceD
       updateDefectRecord(moduleKey, recordId, 'defectName', defect.name);
       updateDefectRecord(moduleKey, recordId, 'defectCode', defect.code);
       updateDefectRecord(moduleKey, recordId, 'category', defect.category);
+      if (defect.scoreCategory) {
+        updateDefectRecord(moduleKey, recordId, 'scoreCategory', defect.scoreCategory);
+      }
     }
   };
 

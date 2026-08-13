@@ -39,6 +39,7 @@ interface DefectRecord {
   defectCode: string;
   category: string;
   quantity: number;
+  scoreCategory?: 'box' | 'carton' | 'pack' | 'physical' | 'appearance' | 'misc';
 }
 
 // 单条历史记忆记录
@@ -285,6 +286,7 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
             defectCode: d.defectCode || '',
             category: d.category,
             quantity: d.quantity,
+            scoreCategory: d.scoreCategory,
           }));
         }
 
@@ -296,6 +298,7 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
             defectCode: d.defectCode || '',
             category: d.category,
             quantity: d.quantity,
+            scoreCategory: d.scoreCategory,
           }));
         }
 
@@ -307,6 +310,7 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
             defectCode: d.defectCode || '',
             category: d.category,
             quantity: d.quantity,
+            scoreCategory: d.scoreCategory,
           }));
         }
 
@@ -318,6 +322,7 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
             defectCode: d.defectCode || '',
             category: d.category,
             quantity: d.quantity,
+            scoreCategory: d.scoreCategory,
           }));
         }
 

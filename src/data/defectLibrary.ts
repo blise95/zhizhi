@@ -10,11 +10,14 @@
  * - J开头：烟支外观缺陷（烟支本身及物理指标）
  */
 
+export type ScoreCategory = 'box' | 'carton' | 'pack' | 'physical' | 'appearance' | 'misc';
+
 export interface DefectItem {
   code: string;           // 缺陷代码
   name: string;           // 缺陷名称
   category: string;       // 缺陷类别（A/B/C/D）
   standard: string;       // 判定标准
+  scoreCategory?: ScoreCategory; // 评分系数类别（缺省按部位推断）
 }
 
 export interface DefectLocation {
@@ -519,20 +522,31 @@ export const CIGARETTE_DEFECTS: DefectCategory = {
     {
       location: '其他',
       defects: [
-        { code: 'JACHB', name: '错牌混牌', category: 'B', standard: '烟支卷烟材料错用' },
-        { code: 'JAZLC', name: '重量', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JAYZC', name: '圆周', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JAXZC', name: '吸阻', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JACDC', name: '长度', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JAZTC', name: '总通风度', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JALTC', name: '嘴通风度', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JAYDC', name: '硬度', category: 'C', standard: '检测值超限且超限值＞允差的50%' },
-        { code: 'JASFB', name: '含水率', category: 'B', standard: '≤10.5%或≥13.5%' },
-        { code: 'JAHMB', name: '含末率', category: 'B', standard: '超上限且超限值＞上限值的50%' },
-        { code: 'JADLC', name: '端部落丝量', category: 'C', standard: '检测值≥15mg' },
-        { code: 'JAXHA', name: '熄火', category: 'A', standard: '连续阴燃长度＜40mm' },
-        { code: 'JAYRA', name: '引燃强度', category: 'A', standard: '熄火测试通过率≤75%' },
-        { code: 'JAYSB', name: '压实端位置', category: 'B', standard: '绝对值＞8mm' },
+        { code: 'JACHB', name: '错牌混牌', category: 'B', standard: '烟支卷烟材料错用', scoreCategory: 'misc' },
+        { code: 'JAZLC', name: '重量', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAZLD', name: '重量', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAYZC', name: '圆周', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAYZD', name: '圆周', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAXZC', name: '吸阻', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAXZD', name: '吸阻', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JACDC', name: '长度', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JACDD', name: '长度', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAZTC', name: '总通风度', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAZTD', name: '总通风度', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JALTC', name: '嘴通风度', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JALTD', name: '硬度', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAYDC', name: '硬度', category: 'C', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JAYDD', name: '硬度', category: 'D', standard: '检测值超限且超限值＞允差的50%', scoreCategory: 'physical' },
+        { code: 'JASFB', name: '含水率', category: 'B', standard: '≤10.5%或≥13.5%', scoreCategory: 'physical' },
+        { code: 'JASFC', name: '含水率', category: 'C', standard: '≤10.5%或≥13.5%', scoreCategory: 'physical' },
+        { code: 'JAHMB', name: '含末率', category: 'B', standard: '超上限且超限值＞上限值的50%', scoreCategory: 'physical' },
+        { code: 'JADLC', name: '端部落丝量', category: 'C', standard: '检测值≥15mg', scoreCategory: 'physical' },
+        { code: 'JADLD', name: '端部落丝量', category: 'D', standard: '检测值≥15mg', scoreCategory: 'physical' },
+        { code: 'JAXHA', name: '熄火', category: 'A', standard: '连续阴燃长度＜40mm', scoreCategory: 'physical' },
+        { code: 'JAYRA', name: '引燃强度', category: 'A', standard: '熄火测试通过率≤75%', scoreCategory: 'physical' },
+        { code: 'JAYSB', name: '压实端位置', category: 'B', standard: '绝对值＞8mm', scoreCategory: 'physical' },
+        { code: 'JAYSC', name: '压实端位置', category: 'C', standard: '绝对值＞8mm', scoreCategory: 'physical' },
+        { code: 'JAYSD', name: '压实端位置', category: 'D', standard: '绝对值＞8mm', scoreCategory: 'physical' },
       ]
     }
   ]
