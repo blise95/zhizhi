@@ -310,14 +310,37 @@ export function getPreviousRange(range: TimeRange): TimeRange {
 // ==================== 扣分与评级逻辑 ====================
 
 /**
- * 将 defect 中的 scoreCategory（或根据 location 推断）映射为评分类别
+ * 烟支缺陷名称到评分类别的兜底映射
+ * 杂项：含水率、含末率、端部落丝量、熄火、引燃强度、错牌混牌
+ * 物测：重量、圆周、吸阻、长度、总通风度、嘴通风度、硬度
+ * 外观：其余所有烟支缺陷
+ */
+const CIGARETTE_SCORE_CATEGORY_BY_NAME: Record<string, ScoreCategory> = {
+  错牌混牌: 'misc',
+  含水率: 'misc',
+  含末率: 'misc',
+  端部落丝量: 'misc',
+  熄火: 'misc',
+  引燃强度: 'misc',
+  重量: 'physical',
+  圆周: 'physical',
+  吸阻: 'physical',
+  长度: 'physical',
+  总通风度: 'physical',
+  嘴通风度: 'physical',
+  硬度: 'physical',
+  压实端位置: 'appearance',
+};
+
+/**
+ * 将 defect 中的 scoreCategory（或根据缺陷名称推断）映射为评分类别
  */
 function resolveScoreCategory(defect: DefectRecord): ScoreCategory {
   if ((defect as any).scoreCategory) {
     return (defect as any).scoreCategory as ScoreCategory;
   }
-  // 默认：烟支缺陷无细分类型时，按外观处理
-  return 'appearance';
+  const name = defect.defectName || '';
+  return CIGARETTE_SCORE_CATEGORY_BY_NAME[name] || 'appearance';
 }
 
 /**
