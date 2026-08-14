@@ -218,6 +218,14 @@
     padding-right: 2.5rem;
   }
 
+  /* 筛选快速按钮 */
+  .filter-quick-btn {
+    @apply px-3 py-1.5 rounded-md text-xs font-medium border border-slate-600/30 text-slate-300 bg-slate-800/40 hover:bg-blue-500/10 hover:text-blue-300 hover:border-blue-500/30 transition-all duration-200;
+  }
+  .filter-quick-btn.active {
+    @apply bg-blue-500/20 text-blue-300 border-blue-500/40;
+  }
+
   /* 按钮统一样式 */
   .btn-primary {
     @apply px-4 py-2 rounded-lg text-sm font-medium text-white bg-brand-blue hover:bg-brand-blue-light transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98];
