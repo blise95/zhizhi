@@ -238,7 +238,7 @@ export function MaterialInspectionQuery() {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `材料到厂检验查询_${getTodayDate()}.csv`;
+    link.download = `材料检验结果查询_${getTodayDate()}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
   };
@@ -295,8 +295,8 @@ export function MaterialInspectionQuery() {
     <div className="p-6 space-y-6 print:p-0">
       {/* 页面标题 */}
       <div className="print:hidden">
-        <h1 className="text-page-title text-foreground">材料到厂检验查询</h1>
-        <p className="text-body text-muted-foreground">辅料质量管控 / 材料到厂检验查询</p>
+        <h1 className="text-page-title text-foreground">材料检验结果查询</h1>
+        <p className="text-body text-muted-foreground">辅料质量管控 / 材料检验结果查询</p>
       </div>
 
       {/* 数据概览 */}

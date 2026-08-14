@@ -101,10 +101,10 @@ function App() {
         ],
       },
       'material-query': {
-        title: '材料到厂检验查询',
+        title: '材料检验结果查询',
         breadcrumbs: [
           { label: '辅料质量管控' },
-          { label: '材料到厂检验查询' },
+          { label: '材料检验结果查询' },
         ],
       },
       'tobacco-inspection': {
@@ -115,10 +115,10 @@ function App() {
         ],
       },
       'tobacco-query': {
-        title: '烟丝到厂检验查询',
+        title: '烟丝检验结果查询',
         breadcrumbs: [
           { label: '辅料质量管控' },
-          { label: '烟丝到厂检验查询' },
+          { label: '烟丝检验结果查询' },
         ],
       },
       'box-analysis': {

@@ -54,8 +54,8 @@ const menuData: MenuItem[] = [
     icon: <SearchCheck className="w-5 h-5" />,
     children: [
       { id: 'process-query', label: '过程质量数据查询' },
-      { id: 'material-query', label: '材料到厂检验查询' },
-      { id: 'tobacco-query', label: '烟丝到厂检验查询' },
+      { id: 'material-query', label: '材料检验结果查询' },
+      { id: 'tobacco-query', label: '烟丝检验结果查询' },
       { id: 'physical-test-query', label: '烟支物测数据查询' },
     ],
   },

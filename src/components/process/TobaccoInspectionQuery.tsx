@@ -280,7 +280,7 @@ export function TobaccoInspectionQuery() {
     const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `烟丝到厂检验查询_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `烟丝检验结果查询_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
   };
 
@@ -293,8 +293,8 @@ export function TobaccoInspectionQuery() {
     <div className="p-6 space-y-6">
       {/* 页面标题 */}
       <div>
-        <h1 className="text-page-title text-foreground">烟丝到厂检验查询</h1>
-        <p className="text-body text-muted-foreground mt-1">辅料质量管控 / 烟丝到厂检验查询</p>
+        <h1 className="text-page-title text-foreground">烟丝检验结果查询</h1>
+        <p className="text-body text-muted-foreground mt-1">辅料质量管控 / 烟丝检验结果查询</p>
       </div>
 
       {/* 数据概览 */}

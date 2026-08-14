@@ -655,7 +655,7 @@ export function TobaccoInspectionInput() {
             <p className="text-base font-medium text-green-400 mb-1">{submitMessage || '数据已成功保存'}</p>
             <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
               数据已保存到数据库<br/>
-              可在「烟丝到厂检验查询」页面查看
+              可在「烟丝检验结果查询」页面查看
             </p>
 
             {/* 关闭按钮 */}
