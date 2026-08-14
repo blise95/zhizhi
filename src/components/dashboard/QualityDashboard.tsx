@@ -121,6 +121,7 @@ interface KPICardProps {
   unit?: string;
   changePoints?: number;
   changePct?: number;
+  changeUnit?: string;
   icon: React.ReactNode;
   color: string;
   decimals?: number;
@@ -133,6 +134,7 @@ const KPICard: React.FC<KPICardProps> = ({
   unit = '',
   changePoints,
   changePct,
+  changeUnit = '个百分点',
   icon,
   color,
   decimals = 1,
@@ -184,7 +186,7 @@ const KPICard: React.FC<KPICardProps> = ({
               >
                 {isPct
                   ? `${Math.abs(effectiveChange).toFixed(1)}%`
-                  : `${Math.abs(effectiveChange).toFixed(1)}个百分点`}
+                  : `${Math.abs(effectiveChange).toFixed(decimals)}${changeUnit}`}
                 {comparisonLabel && ` · ${comparisonLabel}`}
               </span>
             </div>
@@ -238,7 +240,7 @@ const MachineTable: React.FC<{ data: MachineStats[] }> = ({ data }) => {
             <th className="pb-3 font-medium">检验批次</th>
             <th className="pb-3 font-medium">优质率</th>
             <th className="pb-3 font-medium">合格率</th>
-            <th className="pb-3 font-medium">平均扣分</th>
+            <th className="pb-3 font-medium">累计扣分</th>
             <th className="pb-3 font-medium">缺陷数</th>
             <th className="pb-3 font-medium">不合格批</th>
           </tr>
@@ -263,7 +265,7 @@ const MachineTable: React.FC<{ data: MachineStats[] }> = ({ data }) => {
                 </span>
               </td>
               <td className="py-3 text-slate-300">{item.passRate}%</td>
-              <td className="py-3 text-slate-300">{item.avgScore}</td>
+              <td className="py-3 text-slate-300">{item.totalScore}</td>
               <td className="py-3 text-slate-300">{item.defectCount}</td>
               <td className="py-3">
                 {item.unqualifiedCount > 0 ? (
@@ -509,12 +511,14 @@ const QualityDashboard: React.FC = () => {
             color="#ef4444"
           />
           <KPICard
-            label="平均批次扣分"
-            value={stats.current.avgScore}
+            label="累计批次扣分"
+            value={stats.current.totalScore}
             unit="分"
-            changePoints={stats.changes.avgScore}
+            changePoints={stats.changes.totalScore}
+            changeUnit="分"
             icon={<Clock className="h-6 w-6" />}
             color="#ec4899"
+            decimals={0}
           />
           <div
             className="relative overflow-hidden rounded-xl border p-5"
@@ -593,7 +597,7 @@ const QualityDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* 第三层：合格率趋势 + 平均扣分趋势 */}
+        {/* 第三层：合格率趋势 + 累计扣分趋势 */}
         <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-5 backdrop-blur-sm">
             <div className="mb-4 flex items-center justify-between">
@@ -641,7 +645,7 @@ const QualityDashboard: React.FC = () => {
             <div className="mb-4 flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
                 <Activity className="h-5 w-5 text-rose-400" />
-                平均批次扣分趋势
+                累计批次扣分趋势
               </h2>
               <span className="text-xs text-slate-500">{timeRange.label}</span>
             </div>
@@ -664,11 +668,11 @@ const QualityDashboard: React.FC = () => {
                       borderRadius: 8,
                       color: '#e2e8f0',
                     }}
-                    formatter={(value: number) => [`${value}分`, '平均扣分']}
+                    formatter={(value: number) => [`${value}分`, '累计扣分']}
                   />
                   <Area
                     type="monotone"
-                    dataKey="avgScore"
+                    dataKey="totalScore"
                     stroke="#f43f5e"
                     strokeWidth={2}
                     fillOpacity={1}

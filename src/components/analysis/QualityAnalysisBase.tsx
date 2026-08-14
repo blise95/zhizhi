@@ -332,7 +332,10 @@ export function QualityAnalysisBase({ defectType }: QualityAnalysisBaseProps) {
                       width={80}
                     />
                     <Tooltip
-                      contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(244, 63, 94, 0.25)', borderRadius: 8, color: '#e2e8f0' }}
+                      cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                      contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(244, 63, 94, 0.25)', borderRadius: 8 }}
+                      itemStyle={{ color: '#e2e8f0' }}
+                      labelStyle={{ color: '#94a3b8' }}
                       formatter={(value: number, _name: string, props: any) => [`${value} 次（${props.payload.percentage}%）`, props.payload.name]}
                     />
                     <Bar dataKey="count" name="缺陷数量" fill="url(#top5Gradient)" radius={[0, 6, 6, 0]} barSize={22}>
@@ -387,7 +390,10 @@ export function QualityAnalysisBase({ defectType }: QualityAnalysisBaseProps) {
                       <XAxis dataKey="date" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => v.slice(5)} />
                       <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
                       <Tooltip
-                        contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(59, 130, 246, 0.25)', borderRadius: 8, color: '#e2e8f0' }}
+                        cursor={{ stroke: 'rgba(255, 255, 255, 0.08)', strokeWidth: 1 }}
+                        contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(59, 130, 246, 0.25)', borderRadius: 8 }}
+                        itemStyle={{ color: '#e2e8f0' }}
+                        labelStyle={{ color: '#94a3b8' }}
                       />
                       <Legend wrapperStyle={{ paddingTop: 12, fontSize: 12 }} />
                       <Area type="monotone" dataKey="defectCount" name="缺陷数量" stroke="#3b82f6" strokeWidth={2} fill="url(#trendArea)" />
@@ -450,7 +456,9 @@ export function QualityAnalysisBase({ defectType }: QualityAnalysisBaseProps) {
                         TOTAL
                       </text>
                       <Tooltip
-                        contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(139, 92, 246, 0.25)', borderRadius: 8, color: '#e2e8f0' }}
+                        contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(139, 92, 246, 0.25)', borderRadius: 8 }}
+                        itemStyle={{ color: '#e2e8f0' }}
+                        labelStyle={{ color: '#94a3b8' }}
                         formatter={(value: number, _name: string, props: any) => [`${value} 次（${props.payload.percentage}%）`, props.payload.name]}
                       />
                     </PieChart>
@@ -516,7 +524,12 @@ export function QualityAnalysisBase({ defectType }: QualityAnalysisBaseProps) {
                       <CartesianGrid strokeDasharray="3 3" stroke="#33415540" vertical={false} />
                       <XAxis dataKey="machine" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                      <Tooltip contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(6, 182, 212, 0.25)', borderRadius: 8, color: '#e2e8f0' }} />
+                      <Tooltip
+                        cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                        contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(6, 182, 212, 0.25)', borderRadius: 8 }}
+                        itemStyle={{ color: '#e2e8f0' }}
+                        labelStyle={{ color: '#94a3b8' }}
+                      />
                       <Bar dataKey="defectCount" name="缺陷数量" fill="url(#machineGradient)" radius={[6, 6, 0, 0]} barSize={32} />
                     </BarChart>
                   </ResponsiveContainer>

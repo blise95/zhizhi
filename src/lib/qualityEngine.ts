@@ -144,6 +144,8 @@ export interface QualityStatsWithComparison {
     unqualifiedRatePoints: number;
     avgScore: number;
     avgScorePct: number;
+    totalScore: number;
+    totalScorePct: number;
     defectRatePoints: number;
   };
 }
@@ -491,6 +493,8 @@ export function computeStats(
       unqualifiedRatePoints: parseFloat((current.unqualifiedRate - previous.unqualifiedRate).toFixed(2)),
       avgScore: parseFloat((current.avgScore - previous.avgScore).toFixed(2)),
       avgScorePct: safePct(current.avgScore, previous.avgScore),
+      totalScore: current.totalScore - previous.totalScore,
+      totalScorePct: safePct(current.totalScore, previous.totalScore),
       defectRatePoints: parseFloat((current.defectRate - previous.defectRate).toFixed(2)),
     },
   };

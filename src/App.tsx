@@ -14,13 +14,26 @@ import { BoxQualityAnalysis } from './components/analysis/BoxQualityAnalysis';
 import { CartonQualityAnalysis } from './components/analysis/CartonQualityAnalysis';
 import { PackQualityAnalysis } from './components/analysis/PackQualityAnalysis';
 import { CigaretteQualityAnalysis } from './components/analysis/CigaretteQualityAnalysis';
+import { ComprehensiveQualityAnalysis } from './components/analysis/ComprehensiveQualityAnalysis';
+import { AIPredictionAnalysis } from './components/analysis/AIPredictionAnalysis';
 import Login, { getCurrentUser, logout } from './components/auth/Login';
 
 function App() {
-  const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [activeMenu, setActiveMenu] = useState(() => {
+    try {
+      return localStorage.getItem('zhiquality_active_menu') || 'dashboard';
+    } catch {
+      return 'dashboard';
+    }
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<{ username: string; displayName: string; role: string } | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // 持久化当前菜单，刷新后保持页面
+  useEffect(() => {
+    localStorage.setItem('zhiquality_active_menu', activeMenu);
+  }, [activeMenu]);
 
   // 检查登录状态
   useEffect(() => {
@@ -149,6 +162,13 @@ function App() {
           { label: '烟支外观质量分析' },
         ],
       },
+      'comprehensive-analysis': {
+        title: '综合质量汇总分析',
+        breadcrumbs: [
+          { label: '质量分析中心' },
+          { label: '综合质量汇总分析' },
+        ],
+      },
       'ai-prediction': {
         title: 'AI质量趋势预测',
         breadcrumbs: [
@@ -192,6 +212,10 @@ function App() {
         return <PackQualityAnalysis />;
       case 'cigarette-analysis':
         return <CigaretteQualityAnalysis />;
+      case 'comprehensive-analysis':
+        return <ComprehensiveQualityAnalysis />;
+      case 'ai-prediction':
+        return <AIPredictionAnalysis />;
       default:
         // 其他页面的占位符
         return (

@@ -68,6 +68,7 @@ const menuData: MenuItem[] = [
       { id: 'carton-analysis', label: '条装外观质量分析' },
       { id: 'pack-analysis', label: '盒装外观质量分析' },
       { id: 'cigarette-analysis', label: '烟支外观质量分析' },
+      { id: 'comprehensive-analysis', label: '综合质量汇总分析' },
     ],
   },
   {
