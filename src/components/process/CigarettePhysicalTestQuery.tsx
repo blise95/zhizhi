@@ -47,6 +47,15 @@ import type {
 import {
   PHYSICAL_TEST_INDICATORS,
 } from '@/data/physicalTestTypes';
+import {
+  getBrandStandards,
+  getIndicatorStandard,
+  checkPhysicalValue,
+  formatStandardValue,
+  formatStandardRange,
+  resolveBrandName,
+  type PhysicalIndicatorKey,
+} from '@/services/cigarettePhysicalStandardService';
 
 // 筛选条件接口
 interface FilterConditions {
@@ -101,13 +110,20 @@ const MACHINES = [
 // 每页显示条数
 const PAGE_SIZE = 15;
 
-// 规格限配置（基于行业标准，可根据实际产品标准调整）
-const SPEC_LIMITS: Record<string, { USL: number; LSL: number; target: number }> = {
-  weight: { USL: 920, LSL: 880, target: 900 },           // 重量 mg
-  circumference: { USL: 24.35, LSL: 24.05, target: 24.20 }, // 圆周 mm
-  drawResistance: { USL: 1150, LSL: 850, target: 1000 },    // 吸阻 mmH2O
-  ventilationLength: { USL: 30, LSL: 20, target: 25 },       // 通风度/长度 %/mm
-};
+// 烟支物测规格限统一从标准库读取，不再写死
+function getSpecLimits(brand: string, indicatorId: string) {
+  const std = getIndicatorStandard(brand, indicatorId as PhysicalIndicatorKey);
+  if (!std || std.standard.value == null || std.standard.min == null || std.standard.max == null) {
+    return null;
+  }
+  return {
+    USL: std.standard.max,
+    LSL: std.standard.min,
+    target: std.standard.value,
+    unit: std.unit,
+    display: formatStandardValue(std),
+  };
+}
 
 // 趋势图数据点接口
 interface TrendDataPoint {
@@ -168,8 +184,14 @@ export function CigarettePhysicalTestQuery() {
     try {
       const records = JSON.parse(localStorage.getItem('physicalTestRecords') || '[]');
       const validRecords = Array.isArray(records) ? records.filter(r =>
-        r && r.id && r.date && (r.weight || r.circumference || r.drawResistance || r.ventilationLength)
-      ) : [];
+        r && r.id && r.date && (r.weight || r.circumference || r.drawResistance || r.ventilation || r.length)
+      ).map(r => {
+        // 兼容旧数据：将 ventilationLength 合并到 ventilation
+        if (r.ventilationLength && !r.ventilation) {
+          return { ...r, ventilation: r.ventilationLength };
+        }
+        return r;
+      }) : [];
       setAllData(validRecords);
     } catch (error) {
       console.error('加载烟支物测数据失败:', error);
@@ -224,38 +246,39 @@ export function CigarettePhysicalTestQuery() {
     const indicator = PHYSICAL_TEST_INDICATORS.find(ind => ind.id === selectedIndicator);
     if (!indicator) return [];
 
-    const specLimits = SPEC_LIMITS[selectedIndicator];
-    if (!specLimits) return [];
-
-    // 提取有效数据点
+    // 提取有效数据点（优先使用筛选牌号的标准，无筛选时使用逐条记录牌号标准）
     const dataPoints: TrendDataPoint[] = [];
     filteredData.forEach((record, idx) => {
       const data = record[indicator.id as keyof PhysicalTestRecord] as IndicatorData;
       if (data && data.x !== '' && data.x != null) {
         const value = parseFloat(String(data.x));
         if (!isNaN(value)) {
+          const brand = filters.brand || record.brand;
+          const specLimits = getSpecLimits(brand, indicator.id);
           dataPoints.push({
             index: idx + 1,
             label: `${record.date} ${record.machine || ''}`,
             value: value,
             date: record.date,
             machine: record.machine || '',
-            isOutSpec: value > specLimits.USL || value < specLimits.LSL,
+            isOutSpec: specLimits ? (value > specLimits.USL || value < specLimits.LSL) : false,
           });
         }
       }
     });
 
     return dataPoints;
-  }, [filteredData, selectedIndicator]);
+  }, [filteredData, selectedIndicator, filters.brand]);
 
   // 计算过程统计量
   const processStats = useMemo(() => {
     if (trendData.length === 0) {
-      return { CL: 0, USL: 0, LSL: 0, target: 0, stdDev: 0, outSpecCount: 0, outSpecRate: 0 };
+      return { CL: 0, USL: 0, LSL: 0, target: 0, stdDev: 0, outSpecCount: 0, outSpecRate: 0, unit: '' };
     }
 
-    const specLimits = SPEC_LIMITS[selectedIndicator];
+    // 统一使用当前筛选牌号或第一条记录牌号的标准
+    const referenceBrand = filters.brand || filteredData[0]?.brand || '';
+    const specLimits = getSpecLimits(referenceBrand, selectedIndicator);
     const values = trendData.map(d => d.value);
 
     // 计算均值（CL）
@@ -273,14 +296,15 @@ export function CigarettePhysicalTestQuery() {
 
     return {
       CL: parseFloat(CL.toFixed(3)),
-      USL: specLimits.USL,
-      LSL: specLimits.LSL,
-      target: specLimits.target,
+      USL: specLimits?.USL ?? 0,
+      LSL: specLimits?.LSL ?? 0,
+      target: specLimits?.target ?? 0,
+      unit: specLimits?.unit ?? '',
       stdDev: parseFloat(stdDev.toFixed(3)),
       outSpecCount,
       outSpecRate: parseFloat(outSpecRate.toFixed(1)),
     };
-  }, [trendData, selectedIndicator]);
+  }, [trendData, selectedIndicator, filters.brand, filteredData]);
 
   // 过程状态判断
   const processStatus = useMemo(() => {

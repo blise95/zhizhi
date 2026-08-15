@@ -1,5 +1,5 @@
 """
-智质通 AI 问答模块 API 服务
+智合 AI 问答模块 API 服务
 
 提供 /ask 接口供前端调用。
 """
@@ -18,11 +18,21 @@ import config
 from core.vectorstore import QualityVectorStore
 from core.retriever import QualityRetriever
 from core.business_data import BusinessDataProvider
+from core.physical_standard import (
+    get_metadata as get_physical_metadata,
+    get_all_brands as get_physical_brands,
+    get_brand_standards,
+    get_indicator_standard,
+    check_value as check_physical_value,
+    calc_deviation as calc_physical_deviation,
+    format_standard as format_physical_standard,
+    format_range as format_physical_range,
+)
 from graph.graph import ZhiZhiAssistant
 
 
 app = FastAPI(
-    title="智质通 AI 问答模块",
+    title="智合 AI 问答模块",
     description="质量管控系统中的专业质量知识问答与质量数据分析助手",
     version="1.0.0",
 )
@@ -67,14 +77,21 @@ class AskResponse(BaseModel):
     business_results: Optional[dict] = None
 
 
+class PhysicalCheckRequest(BaseModel):
+    brand: str
+    indicator: str
+    value: float
+
+
 @app.get("/")
 def root():
-    return {"message": "智质通 AI 问答模块已启动", "version": "1.0.0"}
+    return {"message": "智合 AI 问答模块已启动", "version": "1.0.0"}
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "vector_store_exists": QualityVectorStore(config.VECTOR_STORE_PATH).exists()}
+    vector_store_exists = config.VECTOR_STORE_PATH.exists() and any(config.VECTOR_STORE_PATH.iterdir())
+    return {"status": "ok", "vector_store_exists": vector_store_exists}
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -85,6 +102,73 @@ def ask(req: AskRequest):
         assistant = get_assistant()
         result = assistant.ask(req.question.strip())
         return AskResponse(**result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/cigarette-physical-standards")
+def list_physical_standards():
+    """返回烟支物测标准库全部数据"""
+    try:
+        return {
+            "metadata": get_physical_metadata(),
+            "brands": get_physical_brands(),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/cigarette-physical-standards/{brand}")
+def get_brand_physical_standards(brand: str):
+    """返回某牌号的全部物测标准"""
+    try:
+        std = get_brand_standards(brand)
+        if not std:
+            raise HTTPException(status_code=404, detail=f"未找到牌号 {brand} 的物测标准")
+        return std
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/cigarette-physical-standards/{brand}/{indicator}")
+def get_indicator_physical_standard(brand: str, indicator: str):
+    """返回某牌号某指标的标准"""
+    try:
+        std = get_indicator_standard(brand, indicator)
+        if not std:
+            raise HTTPException(status_code=404, detail=f"未找到该牌号/指标的标准")
+        return {
+            "brand": brand,
+            "indicator": indicator,
+            "standard": std,
+            "display": format_physical_standard(std),
+            "range": format_physical_range(std),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/cigarette-physical-check")
+def check_physical_standard(req: PhysicalCheckRequest):
+    """判定某牌号某指标的实际检测值是否合格"""
+    try:
+        std = get_indicator_standard(req.brand, req.indicator)
+        result = check_physical_value(req.brand, req.indicator, req.value)
+        deviation = calc_physical_deviation(req.brand, req.indicator, req.value)
+        return {
+            "brand": req.brand,
+            "indicator": req.indicator,
+            "value": req.value,
+            "result": result,
+            "deviation": deviation,
+            "standard": std,
+            "standardDisplay": format_physical_standard(std),
+            "standardRange": format_physical_range(std),
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

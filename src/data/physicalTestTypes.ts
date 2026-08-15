@@ -1,6 +1,6 @@
 /**
  * 烟支物测指标数据结构定义
- * 基于"物测表格.xlsx"实际内容
+ * 基于"烟支物测指标标准.xlsx"统一标准库
  */
 
 // 物测指标类型
@@ -10,6 +10,7 @@ export interface PhysicalTestIndicator {
   nameEn: string;          // 指标名称（英文）
   unit?: string;           // 单位
   subItems: SubItem[];     // 子项（X, SD, MAX, MIN）
+  standardKey: string;     // 对应标准库中的指标 key
 }
 
 // 子项类型
@@ -33,11 +34,12 @@ export interface PhysicalTestRecord {
   recorder: string;                // 记录人
   testTime: string;                // 烟支检测时间
 
-  // 物测指标数据
-  weight: IndicatorData;           // 重量
-  circumference: IndicatorData;    // 圆周
+  // 物测指标数据（与统一标准库对齐）
+  length: IndicatorData;           // 长度
+  circumference: IndicatorData;    // 烟支圆周
   drawResistance: IndicatorData;   // 吸阻
-  ventilationLength: IndicatorData; // 通风度/长度
+  weight: IndicatorData;           // 重量
+  ventilation: IndicatorData;      // 通风度
 
   // 元数据
   createdAt: string;
@@ -53,13 +55,14 @@ export interface IndicatorData {
   min: string | number;    // 最小值 MIN
 }
 
-// 物测指标配置（基于Excel表格）
+// 物测指标配置（与 public/data/cigarette_physical_standards.json 对齐）
 export const PHYSICAL_TEST_INDICATORS: PhysicalTestIndicator[] = [
   {
-    id: 'weight',
-    name: '重量',
-    nameEn: 'Weight',
-    unit: 'mg',
+    id: 'length',
+    name: '长度',
+    nameEn: 'Length',
+    unit: 'mm',
+    standardKey: 'length',
     subItems: [
       { key: 'x', label: 'X', fullName: '平均值', placeholder: '请输入X' },
       { key: 'sd', label: 'SD', fullName: '标准差', placeholder: '请输入SD' },
@@ -69,9 +72,10 @@ export const PHYSICAL_TEST_INDICATORS: PhysicalTestIndicator[] = [
   },
   {
     id: 'circumference',
-    name: '圆周',
+    name: '烟支圆周',
     nameEn: 'Circumference',
     unit: 'mm',
+    standardKey: 'circumference',
     subItems: [
       { key: 'x', label: 'X', fullName: '平均值', placeholder: '请输入X' },
       { key: 'sd', label: 'SD', fullName: '标准差', placeholder: '请输入SD' },
@@ -83,7 +87,8 @@ export const PHYSICAL_TEST_INDICATORS: PhysicalTestIndicator[] = [
     id: 'drawResistance',
     name: '吸阻',
     nameEn: 'Draw Resistance',
-    unit: 'mmH2O',
+    unit: 'pa',
+    standardKey: 'drawResistance',
     subItems: [
       { key: 'x', label: 'X', fullName: '平均值', placeholder: '请输入X' },
       { key: 'sd', label: 'SD', fullName: '标准差', placeholder: '请输入SD' },
@@ -92,10 +97,24 @@ export const PHYSICAL_TEST_INDICATORS: PhysicalTestIndicator[] = [
     ]
   },
   {
-    id: 'ventilationLength',
-    name: '通风度/长度',
-    nameEn: 'Ventilation/Length',
-    unit: '% / mm',
+    id: 'weight',
+    name: '重量',
+    nameEn: 'Weight',
+    unit: 'mg',
+    standardKey: 'weight',
+    subItems: [
+      { key: 'x', label: 'X', fullName: '平均值', placeholder: '请输入X' },
+      { key: 'sd', label: 'SD', fullName: '标准差', placeholder: '请输入SD' },
+      { key: 'max', label: 'MAX', fullName: '最大值', placeholder: '请输入MAX' },
+      { key: 'min', label: 'MIN', fullName: '最小值', placeholder: '请输入MIN' },
+    ]
+  },
+  {
+    id: 'ventilation',
+    name: '通风度',
+    nameEn: 'Ventilation',
+    unit: '%',
+    standardKey: 'ventilation',
     subItems: [
       { key: 'x', label: 'X', fullName: '平均值', placeholder: '请输入X' },
       { key: 'sd', label: 'SD', fullName: '标准差', placeholder: '请输入SD' },
@@ -123,8 +142,9 @@ export const createEmptyPhysicalTestRecord = (): Omit<PhysicalTestRecord, 'id' |
   brand: '',
   recorder: '',
   testTime: '',
-  weight: createEmptyIndicatorData(),
+  length: createEmptyIndicatorData(),
   circumference: createEmptyIndicatorData(),
   drawResistance: createEmptyIndicatorData(),
-  ventilationLength: createEmptyIndicatorData()
+  weight: createEmptyIndicatorData(),
+  ventilation: createEmptyIndicatorData()
 });

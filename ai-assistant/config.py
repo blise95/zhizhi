@@ -1,5 +1,5 @@
 """
-智质通 AI 问答模块配置
+智合 AI 问答模块配置
 """
 import os
 from pathlib import Path
@@ -38,8 +38,9 @@ OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
 OPENAI_EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
 
 # LLM 配置
-# 可选：openai / ollama
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama").lower()
+# 可选：openai / ollama / zhipu / mock
+# mock 为本地演示模式，直接基于检索结果拼接回答，无需外部 LLM
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "mock").lower()
 
 OLLAMA_CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
 
@@ -73,6 +74,8 @@ def get_embedding_config():
 
 def get_llm_config():
     """返回当前启用的 LLM 配置"""
+    if LLM_PROVIDER == "mock":
+        return {"provider": "mock"}
     if LLM_PROVIDER == "ollama":
         return {
             "provider": "ollama",

@@ -54,8 +54,14 @@ class QualityVectorStore:
     def __init__(self, persist_dir: Path, embeddings: Optional[Embeddings] = None):
         self.persist_dir = Path(persist_dir)
         self.persist_dir.parent.mkdir(parents=True, exist_ok=True)
-        self.embeddings = embeddings or create_embeddings()
+        self._embeddings_arg = embeddings
+        self.embeddings: Optional[Embeddings] = embeddings
         self.db: Optional[Chroma] = None
+
+    def _ensure_embeddings(self) -> Embeddings:
+        if self.embeddings is None:
+            self.embeddings = create_embeddings()
+        return self.embeddings
 
     def exists(self) -> bool:
         """判断向量库是否已存在"""
@@ -72,7 +78,7 @@ class QualityVectorStore:
 
         self.db = Chroma.from_texts(
             texts=texts,
-            embedding=self.embeddings,
+            embedding=self._ensure_embeddings(),
             metadatas=metadatas,
             collection_name=collection_name,
             persist_directory=str(self.persist_dir),
@@ -83,7 +89,7 @@ class QualityVectorStore:
         """加载已有向量库"""
         self.db = Chroma(
             persist_directory=str(self.persist_dir),
-            embedding_function=self.embeddings,
+            embedding_function=self._ensure_embeddings(),
             collection_name=collection_name,
         )
         return self.db

@@ -12,6 +12,13 @@ import { rateRecords, calculateBatchRating } from '../lib/qualityEngine';
 import type { ProcessQualityRecord, DefectRecord, FilterConditions } from './analysisUtils';
 import type { PhysicalTestRecord } from '../data/physicalTestTypes';
 import { DefectType, getDefectFieldByType, DEFECT_RATE_BASE, formatLocalDate } from './analysisUtils';
+import {
+  STANDARD_INDICATORS,
+  getBrandStandards,
+  getIndicatorStandard,
+  resolveBrandName,
+  type PhysicalIndicatorKey,
+} from '../services/cigarettePhysicalStandardService';
 
 export type PeriodType = 'month' | 'quarter' | 'halfYear' | 'year';
 
@@ -133,13 +140,8 @@ const FIELD_CONFIG: { field: DefectType; label: string; color: string }[] = [
 
 const MONTH_LABELS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
-// 物测指标配置（名称、单位、标准中心/上下限）
-export const PHYSICAL_INDICATOR_CONFIG: Record<string, { name: string; unit: string; center: number; upper: number; lower: number }> = {
-  weight: { name: '烟支重量', unit: 'mg', center: 900, upper: 930, lower: 870 },
-  circumference: { name: '烟支圆周', unit: 'mm', center: 24.3, upper: 24.5, lower: 24.1 },
-  drawResistance: { name: '烟支吸阻', unit: 'mmH2O', center: 1100, upper: 1200, lower: 1000 },
-  ventilationLength: { name: '烟支长度', unit: 'mm', center: 84, upper: 85, lower: 83 },
-};
+// 物测指标配置统一从 public/data/cigarette_physical_standards.json 读取，
+// 不再写死标准值。以下仅保留指标字段到中文名的映射。
 
 // ==================== 周期计算 ====================
 
@@ -638,31 +640,40 @@ export function calculatePhysicalIndicatorAnalysis(
 ): PhysicalIndicatorAnalysis[] {
   const buckets = createPhysicalBuckets(range);
 
-  return Object.entries(PHYSICAL_INDICATOR_CONFIG).map(([indicatorId, config]) => {
+  // 取参考牌号：优先使用 records 中第一条记录的牌号（通常筛选后一致）
+  const referenceBrand = records.length > 0 ? resolveBrandName(records[0].brand) : null;
+  const brandStd = referenceBrand ? getBrandStandards(referenceBrand) : null;
+
+  return STANDARD_INDICATORS.map((indicator) => {
+    const std = brandStd?.indicators[indicator.key as PhysicalIndicatorKey];
+    const center = std?.standard.value ?? 0;
+    const upper = std?.standard.max ?? 0;
+    const lower = std?.standard.min ?? 0;
+
     const data: PhysicalTrendPoint[] = buckets.map(bucket => {
       const matched = records.filter(r => bucket.match(r.date));
       const values = matched
-        .map(r => parsePhysicalValue((r as any)[indicatorId]?.x))
+        .map(r => parsePhysicalValue((r as any)[indicator.key]?.x))
         .filter((v): v is number => v !== null);
 
       const avgX = values.length > 0
         ? parseFloat((values.reduce((s, v) => s + v, 0) / values.length).toFixed(3))
-        : config.center;
+        : center;
 
       return {
         label: bucket.label,
         fullLabel: bucket.fullLabel,
         x: avgX,
-        upper: config.upper,
-        lower: config.lower,
-        center: config.center,
+        upper,
+        lower,
+        center,
       };
     });
 
     return {
-      indicatorId,
-      name: config.name,
-      unit: config.unit,
+      indicatorId: indicator.key,
+      name: indicator.name,
+      unit: indicator.unit,
       data,
     };
   });

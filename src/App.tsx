@@ -16,6 +16,7 @@ import { PackQualityAnalysis } from './components/analysis/PackQualityAnalysis';
 import { CigaretteQualityAnalysis } from './components/analysis/CigaretteQualityAnalysis';
 import { ComprehensiveQualityAnalysis } from './components/analysis/ComprehensiveQualityAnalysis';
 import { AIPredictionAnalysis } from './components/analysis/AIPredictionAnalysis';
+import { ZhiZhiFloatingChat } from './components/common/ZhiZhiFloatingChat';
 import Login, { getCurrentUser, logout } from './components/auth/Login';
 
 function App() {
@@ -261,6 +262,9 @@ function App() {
           {renderContent()}
         </main>
       </div>
+
+      {/* 智合 AI 智能副驾驶 */}
+      <ZhiZhiFloatingChat />
     </div>
   );
 }

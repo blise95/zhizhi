@@ -1,0 +1,731 @@
+{
+  "metadata": {
+    "source": "烟支物测指标标准.xlsx",
+    "totalBrands": 11,
+    "indicators": [
+      "长度",
+      "烟支圆周",
+      "吸阻",
+      "重量",
+      "通风度"
+    ],
+    "updatedAt": "2026-08-15"
+  },
+  "standards": {
+    "摩登（中东-EU）": {
+      "brand": "摩登（中东-EU）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 24.2,
+            "tolerance": 0.2,
+            "min": 24.0,
+            "max": 24.4,
+            "unit": "mm",
+            "raw": "24.20±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 105.0,
+            "tolerance": 20.0,
+            "min": 85.0,
+            "max": 125.0,
+            "unit": "pa",
+            "raw": "105±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 810.0,
+            "tolerance": 70.0,
+            "min": 740.0,
+            "max": 880.0,
+            "unit": "mg",
+            "raw": "810±70"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 18.0,
+            "tolerance": 10.0,
+            "min": 8.0,
+            "max": 28.0,
+            "unit": "%",
+            "raw": "18±10"
+          }
+        }
+      }
+    },
+    "摩登（普通红吉布提）": {
+      "brand": "摩登（普通红吉布提）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 24.2,
+            "tolerance": 0.2,
+            "min": 24.0,
+            "max": 24.4,
+            "unit": "mm",
+            "raw": "24.20±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 105.0,
+            "tolerance": 20.0,
+            "min": 85.0,
+            "max": 125.0,
+            "unit": "pa",
+            "raw": "105±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 810.0,
+            "tolerance": 70.0,
+            "min": 740.0,
+            "max": 880.0,
+            "unit": "mg",
+            "raw": "810±70"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": null,
+            "tolerance": null,
+            "min": null,
+            "max": null,
+            "unit": "%",
+            "raw": "无通风度"
+          }
+        }
+      }
+    },
+    "摩登（普通红国际）": {
+      "brand": "摩登（普通红国际）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 24.2,
+            "tolerance": 0.2,
+            "min": 24.0,
+            "max": 24.4,
+            "unit": "mm",
+            "raw": "24.20±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 90.0,
+            "tolerance": 20.0,
+            "min": 70.0,
+            "max": 110.0,
+            "unit": "pa",
+            "raw": "90±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 810.0,
+            "tolerance": 80.0,
+            "min": 730.0,
+            "max": 890.0,
+            "unit": "mg",
+            "raw": "810±80"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 40.0,
+            "tolerance": 10.0,
+            "min": 30.0,
+            "max": 50.0,
+            "unit": "%",
+            "raw": "40±10"
+          }
+        }
+      }
+    },
+    "摩登（普通银国际）": {
+      "brand": "摩登（普通银国际）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 24.2,
+            "tolerance": 0.2,
+            "min": 24.0,
+            "max": 24.4,
+            "unit": "mm",
+            "raw": "24.20±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 80.0,
+            "tolerance": 20.0,
+            "min": 60.0,
+            "max": 100.0,
+            "unit": "pa",
+            "raw": "80±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 810.0,
+            "tolerance": 80.0,
+            "min": 730.0,
+            "max": 890.0,
+            "unit": "mg",
+            "raw": "810±80"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 50.0,
+            "tolerance": 10.0,
+            "min": 40.0,
+            "max": 60.0,
+            "unit": "%",
+            "raw": "50±10"
+          }
+        }
+      }
+    },
+    "摩登（细支）": {
+      "brand": "摩登（细支）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 97.0,
+            "tolerance": 0.5,
+            "min": 96.5,
+            "max": 97.5,
+            "unit": "mm",
+            "raw": "97.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 19.01,
+            "tolerance": 0.2,
+            "min": 18.81,
+            "max": 19.21,
+            "unit": "mm",
+            "raw": "19.01±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 135.0,
+            "tolerance": 20.0,
+            "min": 115.0,
+            "max": 155.0,
+            "unit": "pa",
+            "raw": "135±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 590.0,
+            "tolerance": 70.0,
+            "min": 520.0,
+            "max": 660.0,
+            "unit": "mg",
+            "raw": "590±70"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 49.0,
+            "tolerance": 10.0,
+            "min": 39.0,
+            "max": 59.0,
+            "unit": "%",
+            "raw": "49±10"
+          }
+        }
+      }
+    },
+    "摩登（细支金）": {
+      "brand": "摩登（细支金）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 97.0,
+            "tolerance": 0.5,
+            "min": 96.5,
+            "max": 97.5,
+            "unit": "mm",
+            "raw": "97.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 19.01,
+            "tolerance": 0.2,
+            "min": 18.81,
+            "max": 19.21,
+            "unit": "mm",
+            "raw": "19.01±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 135.0,
+            "tolerance": 20.0,
+            "min": 115.0,
+            "max": 155.0,
+            "unit": "pa",
+            "raw": "135±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 590.0,
+            "tolerance": 70.0,
+            "min": 520.0,
+            "max": 660.0,
+            "unit": "mg",
+            "raw": "590±70"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 45.0,
+            "tolerance": 10.0,
+            "min": 35.0,
+            "max": 55.0,
+            "unit": "%",
+            "raw": "45±10"
+          }
+        }
+      }
+    },
+    "摩登（超细支）": {
+      "brand": "摩登（超细支）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 16.96,
+            "tolerance": 0.2,
+            "min": 16.76,
+            "max": 17.16,
+            "unit": "mm",
+            "raw": "16.96±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 150.0,
+            "tolerance": 20.0,
+            "min": 130.0,
+            "max": 170.0,
+            "unit": "pa",
+            "raw": "150±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 430.0,
+            "tolerance": 50.0,
+            "min": 380.0,
+            "max": 480.0,
+            "unit": "mg",
+            "raw": "430±50"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 45.0,
+            "tolerance": 10.0,
+            "min": 35.0,
+            "max": 55.0,
+            "unit": "%",
+            "raw": "45±10"
+          }
+        }
+      }
+    },
+    "摩登（超细银）": {
+      "brand": "摩登（超细银）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 16.96,
+            "tolerance": 0.2,
+            "min": 16.76,
+            "max": 17.16,
+            "unit": "mm",
+            "raw": "16.96±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 150.0,
+            "tolerance": 20.0,
+            "min": 130.0,
+            "max": 170.0,
+            "unit": "pa",
+            "raw": "150±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 445.0,
+            "tolerance": 60.0,
+            "min": 385.0,
+            "max": 505.0,
+            "unit": "mg",
+            "raw": "445±60"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 45.0,
+            "tolerance": 10.0,
+            "min": 35.0,
+            "max": 55.0,
+            "unit": "%",
+            "raw": "45±10"
+          }
+        }
+      }
+    },
+    "摩登（超细金）": {
+      "brand": "摩登（超细金）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 16.96,
+            "tolerance": 0.2,
+            "min": 16.76,
+            "max": 17.16,
+            "unit": "mm",
+            "raw": "16.96±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 110.0,
+            "tolerance": 20.0,
+            "min": 90.0,
+            "max": 130.0,
+            "unit": "pa",
+            "raw": "110±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 445.0,
+            "tolerance": 60.0,
+            "min": 385.0,
+            "max": 505.0,
+            "unit": "mg",
+            "raw": "445±60"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 63.0,
+            "tolerance": 10.0,
+            "min": 53.0,
+            "max": 73.0,
+            "unit": "%",
+            "raw": "63±10"
+          }
+        }
+      }
+    },
+    "摩登（超细黑）": {
+      "brand": "摩登（超细黑）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 16.96,
+            "tolerance": 0.2,
+            "min": 16.76,
+            "max": 17.16,
+            "unit": "mm",
+            "raw": "16.96±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 135.0,
+            "tolerance": 20.0,
+            "min": 115.0,
+            "max": 155.0,
+            "unit": "pa",
+            "raw": "135±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 430.0,
+            "tolerance": 50.0,
+            "min": 380.0,
+            "max": 480.0,
+            "unit": "mg",
+            "raw": "430±50"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 52.0,
+            "tolerance": 10.0,
+            "min": 42.0,
+            "max": 62.0,
+            "unit": "%",
+            "raw": "52±10"
+          }
+        }
+      }
+    },
+    "摩登（97超细白）": {
+      "brand": "摩登（97超细白）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 97.0,
+            "tolerance": 0.5,
+            "min": 96.5,
+            "max": 97.5,
+            "unit": "mm",
+            "raw": "97.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 16.96,
+            "tolerance": 0.2,
+            "min": 16.76,
+            "max": 17.16,
+            "unit": "mm",
+            "raw": "16.96±0.20"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 95.0,
+            "tolerance": 10.0,
+            "min": 85.0,
+            "max": 105.0,
+            "unit": "pa",
+            "raw": "95±10"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 504.0,
+            "tolerance": 50.0,
+            "min": 454.0,
+            "max": 554.0,
+            "unit": "mg",
+            "raw": "504±50"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 70.0,
+            "tolerance": 10.0,
+            "min": 60.0,
+            "max": 80.0,
+            "unit": "%",
+            "raw": "70±10"
+          }
+        }
+      }
+    }
+  }
+}

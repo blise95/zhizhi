@@ -131,6 +131,7 @@ class BusinessDataProvider:
                 "total_batches": 0,
                 "total_defects": 0,
                 "defect_batches": 0,
+                "defect_rate": 0,
                 "machines": [],
                 "brands": [],
             }

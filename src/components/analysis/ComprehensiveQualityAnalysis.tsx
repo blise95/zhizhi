@@ -61,7 +61,6 @@ import {
   calculatePeriodComparison,
   calculatePhysicalIndicatorAnalysis,
   generateAIComprehensiveAnalysis,
-  PHYSICAL_INDICATOR_CONFIG,
 } from '../../utils/comprehensiveAnalysisUtils';
 
 // 筛选选项
@@ -805,13 +804,12 @@ export function ComprehensiveQualityAnalysis() {
             </div>
             <div className="grid grid-cols-2 gap-6">
               {physicalAnalysis.map(indicator => {
-                const config = PHYSICAL_INDICATOR_CONFIG[indicator.indicatorId];
-                const hasData = indicator.data.some(d => d.x !== config.center);
+                const hasData = indicator.data.some(d => d.x !== indicator.data[0]?.center);
                 return (
                   <div key={indicator.indicatorId} className="p-4 rounded-xl bg-slate-900/40 border border-slate-700/20">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-bold text-white">{config.name}</h3>
-                      <span className="text-xs text-slate-500 font-mono">{config.unit}</span>
+                      <h3 className="text-sm font-bold text-white">{indicator.name}</h3>
+                      <span className="text-xs text-slate-500 font-mono">{indicator.unit}</span>
                     </div>
                     <div className="h-56">
                       {hasData ? (
@@ -827,15 +825,15 @@ export function ComprehensiveQualityAnalysis() {
                               labelStyle={{ color: '#94a3b8' }}
                             />
                             <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} />
-                            <ReferenceLine y={config.center} stroke="#10b981" strokeDasharray="5 5" label={{ value: '中心值', fill: '#10b981', fontSize: 10 }} />
-                            <ReferenceLine y={config.upper} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '上限', fill: '#f59e0b', fontSize: 10 }} />
-                            <ReferenceLine y={config.lower} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '下限', fill: '#f59e0b', fontSize: 10 }} />
+                            <ReferenceLine y={indicator.data[0]?.center} stroke="#10b981" strokeDasharray="5 5" label={{ value: '中心值', fill: '#10b981', fontSize: 10 }} />
+                            <ReferenceLine y={indicator.data[0]?.upper} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '上限', fill: '#f59e0b', fontSize: 10 }} />
+                            <ReferenceLine y={indicator.data[0]?.lower} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '下限', fill: '#f59e0b', fontSize: 10 }} />
                             <Line type="monotone" dataKey="x" name="实际检测值" stroke="#06b6d4" strokeWidth={2} dot={{ fill: '#06b6d4', r: 3 }} activeDot={{ r: 5 }} />
                           </ComposedChart>
                         </ResponsiveContainer>
                       ) : (
                         <div className="h-full flex items-center justify-center text-slate-500 text-xs">
-                          当前周期暂无{config.name}数据
+                          当前周期暂无{indicator.name}数据
                         </div>
                       )}
                     </div>

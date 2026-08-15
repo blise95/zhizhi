@@ -19,6 +19,15 @@ import {
 } from 'lucide-react';
 import { ImageCapture } from '../common/ImageCapture';
 import type { ParsedPhysicalForm } from '@/services/ocrService';
+import {
+  getBrandStandards,
+  getIndicatorStandard,
+  checkPhysicalValue,
+  formatStandardValue,
+  formatStandardRange,
+  resolveBrandName,
+  type PhysicalIndicatorKey,
+} from '@/services/cigarettePhysicalStandardService';
 
 // 导入类型定义
 import type {
@@ -135,9 +144,17 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
     setShowOCR(false);
   };
 
+  // 当前牌号对应的标准库
+  const [brandStandards, setBrandStandards] = useState(() =>
+    resolveBrandName(basicInfo.brand) ? getBrandStandards(basicInfo.brand) : null
+  );
+
   // 更新基础信息
   const updateBasicInfo = (field: string, value: string) => {
     setBasicInfo(prev => ({ ...prev, [field]: value }));
+    if (field === 'brand') {
+      setBrandStandards(resolveBrandName(value) ? getBrandStandards(value) : null);
+    }
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -186,10 +203,11 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
     const record: PhysicalTestRecord = {
       id: Date.now().toString(),
       ...basicInfo,
-      weight: indicatorData['weight'] || createEmptyIndicatorData(),
+      length: indicatorData['length'] || createEmptyIndicatorData(),
       circumference: indicatorData['circumference'] || createEmptyIndicatorData(),
       drawResistance: indicatorData['drawResistance'] || createEmptyIndicatorData(),
-      ventilationLength: indicatorData['ventilationLength'] || createEmptyIndicatorData(),
+      weight: indicatorData['weight'] || createEmptyIndicatorData(),
+      ventilation: indicatorData['ventilation'] || createEmptyIndicatorData(),
       createdAt: now,
       updatedAt: now,
       uploader: currentUser?.displayName || currentUser?.username || '未知用户',
@@ -565,46 +583,60 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
           <table className="w-full">
             <thead>
               <tr className="border-b border-border/50">
-                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground w-32">指标名称</th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-foreground w-16">单位</th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-foreground w-28">X<br/><span className="font-normal text-xs text-muted-foreground">平均值</span></th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-foreground w-28">SD<br/><span className="font-normal text-xs text-muted-foreground">标准差</span></th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-foreground w-28">MAX<br/><span className="font-normal text-xs text-muted-foreground">最大值</span></th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-foreground w-28">MIN<br/><span className="font-normal text-xs text-muted-foreground">最小值</span></th>
+                <th className="px-3 py-3 text-left text-sm font-semibold text-foreground w-28">指标名称</th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-14">单位</th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-24">标准值/范围</th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-24">X<br/><span className="font-normal text-xs text-muted-foreground">平均值</span></th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-24">SD<br/><span className="font-normal text-xs text-muted-foreground">标准差</span></th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-24">MAX<br/><span className="font-normal text-xs text-muted-foreground">最大值</span></th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-24">MIN<br/><span className="font-normal text-xs text-muted-foreground">最小值</span></th>
+                <th className="px-3 py-3 text-center text-sm font-semibold text-foreground w-20">判定</th>
               </tr>
             </thead>
             <tbody>
               {PHYSICAL_TEST_INDICATORS.map((indicator) => {
                 const data = indicatorData[indicator.id] || createEmptyIndicatorData();
+                const std = brandStandards?.indicators[indicator.standardKey as PhysicalIndicatorKey];
+                const xNum = data.x === '' || data.x == null ? NaN : Number(data.x);
+                const pass = !Number.isNaN(xNum) && std
+                  ? checkPhysicalValue(basicInfo.brand, indicator.standardKey as PhysicalIndicatorKey, xNum)
+                  : null;
                 return (
                   <tr key={indicator.id} className="border-b border-border/30 hover:bg-surface/50 transition-colors">
                     {/* 指标名称 */}
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-2">
+                    <td className="px-3 py-3">
+                      <div className="flex flex-col">
                         <span className="font-medium text-foreground">{indicator.name}</span>
-                        <span className="text-xs text-muted-foreground">({indicator.nameEn})</span>
+                        <span className="text-[10px] text-muted-foreground">{indicator.nameEn}</span>
                       </div>
                     </td>
 
                     {/* 单位 */}
-                    <td className="px-4 py-4 text-center">
-                      <span className="text-sm text-muted-foreground">{indicator.unit}</span>
+                    <td className="px-3 py-3 text-center">
+                      <span className="text-xs text-muted-foreground">{indicator.unit}</span>
+                    </td>
+
+                    {/* 标准值/范围 */}
+                    <td className="px-3 py-3 text-center">
+                      <span className="text-xs text-cyan-300/90" title={formatStandardRange(std || null)}>
+                        {formatStandardValue(std || null)}
+                      </span>
                     </td>
 
                     {/* X - 平均值 */}
-                    <td className="px-4 py-4">
+                    <td className="px-3 py-3">
                       <input
                         type="number"
                         step="0.01"
                         value={data.x}
                         onChange={(e) => updateIndicatorData(indicator.id, 'x', e.target.value)}
                         placeholder="X"
-                        className="form-input text-center text-sm"
+                        className={`form-input text-center text-sm ${pass === '不合格' ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : pass === '合格' ? 'border-green-500/60 focus:border-green-500 focus:ring-green-500' : ''}`}
                       />
                     </td>
 
                     {/* SD - 标准差 */}
-                    <td className="px-4 py-4">
+                    <td className="px-3 py-3">
                       <input
                         type="number"
                         step="0.01"
@@ -616,7 +648,7 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
                     </td>
 
                     {/* MAX - 最大值 */}
-                    <td className="px-4 py-4">
+                    <td className="px-3 py-3">
                       <input
                         type="number"
                         step="0.01"
@@ -628,7 +660,7 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
                     </td>
 
                     {/* MIN - 最小值 */}
-                    <td className="px-4 py-4">
+                    <td className="px-3 py-3">
                       <input
                         type="number"
                         step="0.01"
@@ -637,6 +669,23 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
                         placeholder="MIN"
                         className="form-input text-center text-sm"
                       />
+                    </td>
+
+                    {/* 判定 */}
+                    <td className="px-3 py-3 text-center">
+                      {pass ? (
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                          pass === '合格'
+                            ? 'bg-green-500/15 text-green-400 border border-green-500/20'
+                            : pass === '不合格'
+                              ? 'bg-red-500/15 text-red-400 border border-red-500/20'
+                              : 'bg-slate-500/15 text-slate-400 border border-slate-500/20'
+                        }`}>
+                          {pass}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
                     </td>
                   </tr>
                 );

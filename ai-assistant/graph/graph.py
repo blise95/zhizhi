@@ -59,6 +59,8 @@ def build_zhizhi_graph(
             return "query_data"
         if qtype == "combined":
             return "retrieve"  # 先检索知识，再去查数据
+        if qtype == "physical_standard":
+            return "generate"  # 直接调用标准库生成答案
         return "fallback"  # out_of_scope
 
     workflow.add_conditional_edges(
@@ -67,6 +69,7 @@ def build_zhizhi_graph(
         {
             "retrieve": "retrieve",
             "query_data": "query_data",
+            "generate": "generate",
             "fallback": "fallback",
         },
     )

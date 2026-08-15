@@ -19,6 +19,14 @@ import {
   formatLocalDate,
   loadProcessQualityData,
 } from './analysisUtils';
+import {
+  PHYSICAL_INDICATOR_KEYS,
+  getIndicatorStandard,
+  resolveBrandName,
+  getAllBrands,
+  PHYSICAL_INDICATOR_LABELS,
+  PHYSICAL_INDICATOR_UNITS,
+} from '../services/cigarettePhysicalStandardService';
 
 export type PredictionTarget =
   | 'comprehensive'
@@ -195,13 +203,8 @@ export interface AIPredictionResult {
   suggestions: string[];
 }
 
-// 物测指标配置（与综合质量汇总分析保持一致）
-export const PHYSICAL_INDICATOR_CONFIG: Record<string, { name: string; unit: string; center: number; upper: number; lower: number }> = {
-  weight: { name: '烟支重量', unit: 'mg', center: 900, upper: 930, lower: 870 },
-  circumference: { name: '烟支圆周', unit: 'mm', center: 24.3, upper: 24.5, lower: 24.1 },
-  drawResistance: { name: '烟支吸阻', unit: 'mmH2O', center: 1100, upper: 1200, lower: 1000 },
-  ventilationLength: { name: '烟支长度', unit: 'mm', center: 84, upper: 85, lower: 83 },
-};
+// 物测指标标准统一从 cigarettePhysicalStandardService 读取
+// 不再写死任何指标中心值、上下限或单位
 
 const FIELD_CONFIG: { field: DefectType; label: string }[] = [
   { field: DefectType.BOX, label: '箱装' },
@@ -868,14 +871,54 @@ function parsePhysicalValue(value: string | number | undefined): number | null {
   return isNaN(num) ? null : num;
 }
 
+/** 为物测预测解析牌号：优先使用用户选择的牌号，否则从记录推断，最后回退到标准库第一个牌号 */
+function resolvePredictionBrand(physicalRecords: PhysicalTestRecord[], explicitBrand?: string): string | null {
+  if (explicitBrand) {
+    const resolved = resolveBrandName(explicitBrand);
+    if (resolved) return resolved;
+  }
+  // 从记录推断最常见牌号
+  const brandCounts = new Map<string, number>();
+  physicalRecords.forEach(r => {
+    if (!r.brand) return;
+    const resolved = resolveBrandName(r.brand);
+    if (!resolved) return;
+    brandCounts.set(resolved, (brandCounts.get(resolved) || 0) + 1);
+  });
+  if (brandCounts.size > 0) {
+    return Array.from(brandCounts.entries()).sort((a, b) => b[1] - a[1])[0][0];
+  }
+  // 回退到标准库第一个牌号（保证界面仍有标准线可展示）
+  const allBrands = getAllBrands();
+  return allBrands.length > 0 ? allBrands[0] : null;
+}
+
 export function predictPhysicalIndicators(
   physicalRecords: PhysicalTestRecord[],
-  forecastDays: number
+  forecastDays: number,
+  brand?: string
 ): PhysicalIndicatorPrediction[] {
   const endDate = new Date();
   const dailyBuckets = createDailyBuckets(endDate, 60);
+  const brandKey = resolvePredictionBrand(physicalRecords, brand);
 
-  return Object.entries(PHYSICAL_INDICATOR_CONFIG).map(([indicatorId, config]) => {
+  if (!brandKey) {
+    return [];
+  }
+
+  return PHYSICAL_INDICATOR_KEYS.map((indicatorId) => {
+    const std = getIndicatorStandard(brandKey, indicatorId);
+    // 无标准或标准不完整则跳过该指标
+    if (!std || std.standard.value == null || std.standard.min == null || std.standard.max == null) {
+      return null;
+    }
+
+    const center = std.standard.value;
+    const upper = std.standard.max;
+    const lower = std.standard.min;
+    const name = std.name || PHYSICAL_INDICATOR_LABELS[indicatorId];
+    const unit = std.unit || PHYSICAL_INDICATOR_UNITS[indicatorId];
+
     const points: ForecastPoint[] = [];
 
     // 历史实际值
@@ -886,7 +929,7 @@ export function predictPhysicalIndicators(
         .filter((v): v is number => v !== null);
       const avg = values.length > 0
         ? parseFloat((values.reduce((s, v) => s + v, 0) / values.length).toFixed(3))
-        : config.center;
+        : center;
       points.push({
         date: bucket.date,
         label: bucket.date.slice(5),
@@ -896,7 +939,7 @@ export function predictPhysicalIndicators(
     });
 
     // 预测未来
-    const actualValues = points.map(p => p.value || config.center);
+    const actualValues = points.map(p => p.value ?? center);
     const predicted = forecastSeries(actualValues, forecastDays);
     const futureDates = getFutureNDays(forecastDays);
 
@@ -909,39 +952,43 @@ export function predictPhysicalIndicators(
       });
     });
 
-    const currentValue = actualValues[actualValues.length - 1] ?? config.center;
+    const currentValue = actualValues[actualValues.length - 1] ?? center;
     const predictedValue = predicted[predicted.length - 1];
 
     const trend: '上升' | '下降' | '稳定' =
       predictedValue > currentValue * 1.02 ? '上升' :
       predictedValue < currentValue * 0.98 ? '下降' : '稳定';
 
-    const distanceToUpper = parseFloat(((config.upper - predictedValue) / (config.upper - config.center) * 100).toFixed(1));
-    const distanceToLower = parseFloat(((predictedValue - config.lower) / (config.center - config.lower) * 100).toFixed(1));
+    const distanceToUpper = upper > center
+      ? parseFloat(((upper - predictedValue) / (upper - center) * 100).toFixed(1))
+      : 100;
+    const distanceToLower = center > lower
+      ? parseFloat(((predictedValue - lower) / (center - lower) * 100).toFixed(1))
+      : 100;
 
     let riskLevel: RiskLevel = '低';
     let warning: string | undefined;
-    if (predictedValue > config.upper || predictedValue < config.lower) {
+    if (predictedValue > upper || predictedValue < lower) {
       riskLevel = '高';
-      warning = `${config.name}预测值已超出标准范围，存在质量风险。`;
+      warning = `${name}预测值已超出标准范围，存在质量风险。`;
     } else if (distanceToUpper < 20 || distanceToLower < 20) {
       riskLevel = '较高';
-      warning = `${config.name}预测值接近标准边界，需持续监控。`;
+      warning = `${name}预测值接近标准边界，需持续监控。`;
     } else if (trend === '上升' && distanceToUpper < 40) {
       riskLevel = '中';
-      warning = `${config.name}预测呈上升趋势，正向标准上限靠近。`;
+      warning = `${name}预测呈上升趋势，正向标准上限靠近。`;
     } else if (trend === '下降' && distanceToLower < 40) {
       riskLevel = '中';
-      warning = `${config.name}预测呈下降趋势，正向标准下限靠近。`;
+      warning = `${name}预测呈下降趋势，正向标准下限靠近。`;
     }
 
     return {
       indicatorId,
-      name: config.name,
-      unit: config.unit,
-      center: config.center,
-      upper: config.upper,
-      lower: config.lower,
+      name,
+      unit,
+      center,
+      upper,
+      lower,
       data: points,
       currentValue,
       predictedValue,
@@ -951,7 +998,7 @@ export function predictPhysicalIndicators(
       riskLevel,
       warning,
     };
-  });
+  }).filter((p): p is PhysicalIndicatorPrediction => p !== null);
 }
 
 // ==================== 异常组合识别 ====================
@@ -959,13 +1006,14 @@ export function predictPhysicalIndicators(
 export function detectAbnormalCombinations(
   records: ProcessQualityRecord[],
   physicalRecords: PhysicalTestRecord[],
-  forecastDays: number
+  forecastDays: number,
+  selectedBrand?: string
 ): AbnormalCombination[] {
   const combinations: AbnormalCombination[] = [];
   const machineRisks = predictMachineRisks(records, forecastDays);
   const brandRisks = predictBrandRisks(records);
   const defectRisks = predictFutureDefectRisks(records, forecastDays);
-  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays);
+  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays, selectedBrand);
 
   // 筛选高风险机台
   const highRiskMachines = machineRisks.filter(m => m.riskLevel === '高' || m.riskLevel === '较高').slice(0, 3);
@@ -974,13 +1022,13 @@ export function detectAbnormalCombinations(
   const physicalRisks = physicalPredictions.filter(p => p.riskLevel === '高' || p.riskLevel === '较高' || p.riskLevel === '中').slice(0, 3);
 
   highRiskMachines.forEach(machine => {
-    risingBrands.forEach(brand => {
+    risingBrands.forEach(brandRisk => {
       risingDefects.forEach(defect => {
         physicalRisks.forEach(physical => {
           combinations.push({
             riskLevel: machine.riskLevel === '高' || physical.riskLevel === '高' ? '高' : '较高',
-            combination: `${machine.machine}机台 + ${brand.brand} + ${physical.name}上升 + ${defect.fieldLabel}${defect.name}增加`,
-            description: `高风险组合：${machine.machine}机台、${brand.brand}、${physical.name}呈${physical.trend}趋势，同时${defect.fieldLabel}缺陷「${defect.name}」增加。`,
+            combination: `${machine.machine}机台 + ${brandRisk.brand} + ${physical.name}上升 + ${defect.fieldLabel}${defect.name}增加`,
+            description: `高风险组合：${machine.machine}机台、${brandRisk.brand}、${physical.name}呈${physical.trend}趋势，同时${defect.fieldLabel}缺陷「${defect.name}」增加。`,
             reason: '历史数据表明，当机台、牌号、物测指标与特定缺陷同时出现恶化趋势时，整体质量缺陷存在明显增加风险，建议提前检查。',
           });
         });
@@ -996,14 +1044,15 @@ export function detectAbnormalCombinations(
 export function generateRiskAlerts(
   records: ProcessQualityRecord[],
   physicalRecords: PhysicalTestRecord[],
-  forecastDays: number
+  forecastDays: number,
+  selectedBrand?: string
 ): RiskAlert[] {
   const alerts: RiskAlert[] = [];
   const qualityPrediction = predictQualityRate(records, forecastDays);
   const defectPrediction = predictDefectRate(records, forecastDays);
   const machineRisks = predictMachineRisks(records, forecastDays);
   const defectRisks = predictFutureDefectRisks(records, forecastDays);
-  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays);
+  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays, selectedBrand);
 
   if (qualityPrediction.warning) {
     alerts.push({
@@ -1068,7 +1117,8 @@ export function generateRiskAlerts(
 export function generatePredictionOverview(
   records: ProcessQualityRecord[],
   physicalRecords: PhysicalTestRecord[],
-  forecastDays: number
+  forecastDays: number,
+  selectedBrand?: string
 ): PredictionOverview {
   const metrics = calculateMetrics(records);
   const qualityPrediction = predictQualityRate(records, forecastDays);
@@ -1089,7 +1139,7 @@ export function generatePredictionOverview(
   else if (qualityPrediction.change > 1 || defectPrediction.change < -0.5) futureTrend = '改善';
 
   // 风险等级
-  const alerts = generateRiskAlerts(records, physicalRecords, forecastDays);
+  const alerts = generateRiskAlerts(records, physicalRecords, forecastDays, selectedBrand);
   const highCount = alerts.filter(a => a.level === '高').length;
   const higherCount = alerts.filter(a => a.level === '较高').length;
   const midCount = alerts.filter(a => a.level === '中').length;
@@ -1136,14 +1186,15 @@ export function generatePredictionOverview(
 export function generateReasons(
   records: ProcessQualityRecord[],
   physicalRecords: PhysicalTestRecord[],
-  forecastDays: number
+  forecastDays: number,
+  selectedBrand?: string
 ): string[] {
   const reasons: string[] = [];
   const metrics = calculateMetrics(records);
   const machineRisks = predictMachineRisks(records, forecastDays);
   const defectRisks = predictFutureDefectRisks(records, forecastDays);
   const brandRisks = predictBrandRisks(records);
-  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays);
+  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays, selectedBrand);
 
   reasons.push(`当前系统共有 ${metrics.totalSamples} 个历史样本、${metrics.totalDefects} 个缺陷，优质率 ${metrics.qualityRate}%，缺陷率 ${metrics.defectRate}%。`);
 
@@ -1175,12 +1226,13 @@ export function generateReasons(
 export function generateSuggestions(
   records: ProcessQualityRecord[],
   physicalRecords: PhysicalTestRecord[],
-  forecastDays: number
+  forecastDays: number,
+  selectedBrand?: string
 ): string[] {
   const suggestions: string[] = [];
   const machineRisks = predictMachineRisks(records, forecastDays);
   const defectRisks = predictFutureDefectRisks(records, forecastDays);
-  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays);
+  const physicalPredictions = predictPhysicalIndicators(physicalRecords, forecastDays, selectedBrand);
 
   const focusMachines = machineRisks.filter(m => m.riskLevel === '高' || m.riskLevel === '较高').slice(0, 2);
   if (focusMachines.length > 0) {
@@ -1251,8 +1303,9 @@ export function generateAIPredictionResult(
   const forecastDays = filters.forecastDays;
 
   try {
+    const selectedBrand = filters.brand;
     return {
-      overview: safePrediction(() => generatePredictionOverview(records, physicalRecords, forecastDays), DEFAULT_PREDICTION_RESULT.overview),
+      overview: safePrediction(() => generatePredictionOverview(records, physicalRecords, forecastDays, selectedBrand), DEFAULT_PREDICTION_RESULT.overview),
       qualityRatePrediction: safePrediction(() => predictQualityRate(records, forecastDays), DEFAULT_PREDICTION_RESULT.qualityRatePrediction),
       defectRatePrediction: safePrediction(() => predictDefectRate(records, forecastDays), DEFAULT_PREDICTION_RESULT.defectRatePrediction),
       comprehensiveTrend: safePrediction(() => calculateComprehensiveTrendPrediction(records, forecastDays), DEFAULT_PREDICTION_RESULT.comprehensiveTrend),
@@ -1260,11 +1313,11 @@ export function generateAIPredictionResult(
       machineRisks: safePrediction(() => predictMachineRisks(records, forecastDays), DEFAULT_PREDICTION_RESULT.machineRisks),
       brandRisks: safePrediction(() => predictBrandRisks(records), DEFAULT_PREDICTION_RESULT.brandRisks),
       productionPointRisks: safePrediction(() => predictProductionPointRisks(records), DEFAULT_PREDICTION_RESULT.productionPointRisks),
-      physicalPredictions: safePrediction(() => predictPhysicalIndicators(physicalRecords, forecastDays), DEFAULT_PREDICTION_RESULT.physicalPredictions),
-      abnormalCombinations: safePrediction(() => detectAbnormalCombinations(records, physicalRecords, forecastDays), DEFAULT_PREDICTION_RESULT.abnormalCombinations),
-      alerts: safePrediction(() => generateRiskAlerts(records, physicalRecords, forecastDays), DEFAULT_PREDICTION_RESULT.alerts),
-      reasons: safePrediction(() => generateReasons(records, physicalRecords, forecastDays), DEFAULT_PREDICTION_RESULT.reasons),
-      suggestions: safePrediction(() => generateSuggestions(records, physicalRecords, forecastDays), DEFAULT_PREDICTION_RESULT.suggestions),
+      physicalPredictions: safePrediction(() => predictPhysicalIndicators(physicalRecords, forecastDays, selectedBrand), DEFAULT_PREDICTION_RESULT.physicalPredictions),
+      abnormalCombinations: safePrediction(() => detectAbnormalCombinations(records, physicalRecords, forecastDays, selectedBrand), DEFAULT_PREDICTION_RESULT.abnormalCombinations),
+      alerts: safePrediction(() => generateRiskAlerts(records, physicalRecords, forecastDays, selectedBrand), DEFAULT_PREDICTION_RESULT.alerts),
+      reasons: safePrediction(() => generateReasons(records, physicalRecords, forecastDays, selectedBrand), DEFAULT_PREDICTION_RESULT.reasons),
+      suggestions: safePrediction(() => generateSuggestions(records, physicalRecords, forecastDays, selectedBrand), DEFAULT_PREDICTION_RESULT.suggestions),
     };
   } catch (e) {
     console.error('AI预测结果生成失败:', e);

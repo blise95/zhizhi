@@ -31,11 +31,9 @@ def main():
     chunks = create_chunks(docs, chunk_size=800, chunk_overlap=150)
     print(f"✅ 已切分为 {len(chunks)} 个知识片段")
 
-    # 如果目录已存在，先删除旧索引
-    import shutil
+    # 如果目录已存在，直接复用（Chroma 会按 collection_name 覆盖）
     if VECTOR_STORE_PATH.exists():
-        shutil.rmtree(VECTOR_STORE_PATH)
-        print("🗑️  已清理旧向量库")
+        print("📝  向量库目录已存在，将覆盖 collection 数据")
 
     vs = QualityVectorStore(VECTOR_STORE_PATH)
     vs.build(chunks)

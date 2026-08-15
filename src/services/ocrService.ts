@@ -275,6 +275,7 @@ export function parsePhysicalForm(text: string): ParsedPhysicalForm {
     { keys: ['长度', 'length'], field: 'length' },
     { keys: ['圆周', 'circumference'], field: 'circumference' },
     { keys: ['吸阻', 'drawResistance', 'draw resistance'], field: 'drawResistance' },
+    { keys: ['通风度', 'ventilation', 'ventilation rate'], field: 'ventilation' },
     { keys: ['硬度', 'hardness'], field: 'hardness' },
     { keys: ['总通风率', 'totalVentilation'], field: 'totalVentilation' },
     { keys: ['嘴通风率', 'filterVentilation'], field: 'filterVentilation' },
