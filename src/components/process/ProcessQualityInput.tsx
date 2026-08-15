@@ -12,9 +12,12 @@ import {
   Factory,
   Send,
   ArrowRight,
+  Camera,
 } from 'lucide-react';
 import { AppearanceDefectInput } from './AppearanceDefectInput';
 import { getCurrentUser } from '../auth/Login';
+import { ImageCapture } from '../common/ImageCapture';
+import type { ParsedQualityForm } from '@/services/ocrService';
 
 // 表单数据类型定义
 interface FormData {
@@ -120,6 +123,59 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
 
   // 错误信息状态
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+
+  // OCR 拍照识别面板
+  const [showOCR, setShowOCR] = useState(false);
+
+  // 处理 OCR 识别结果回填
+  const handleOCRResult = (data: ParsedQualityForm) => {
+    setFormData(prev => ({
+      ...prev,
+      date: data.date || prev.date,
+      shift: data.shift || prev.shift,
+      shiftNumber: data.shiftNumber || prev.shiftNumber,
+      machine: data.machine || prev.machine,
+      productionPoint: data.productionPoint || prev.productionPoint,
+      brand: data.brand || prev.brand,
+      recorder: data.recorder || prev.recorder,
+      sampleNumber: data.sampleNumber || prev.sampleNumber,
+      steelStamp: data.steelStamp || prev.steelStamp,
+      tobaccoBatch: data.tobaccoBatch || prev.tobaccoBatch,
+    }));
+
+    // 缺陷识别回填：按缺陷名称在 defectLibrary 中查找匹配项
+    if (data.defects && data.defects.length > 0) {
+      import('@/data/defectLibrary').then(({ ALL_DEFECT_CATEGORIES }) => {
+        const next: Record<string, DefectRecord[]> = { box: [], carton: [], pack: [], cigarette: [] };
+        data.defects?.forEach(item => {
+          for (const cat of ALL_DEFECT_CATEGORIES) {
+            for (const loc of cat.locations) {
+              const found = loc.defects.find(d => d.name.includes(item.name) || item.name.includes(d.name));
+              if (found) {
+                const categoryKey = cat.key;
+                next[categoryKey] = next[categoryKey] || [];
+                next[categoryKey].push({
+                  id: `ocr-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+                  location: loc.location,
+                  defectName: found.name,
+                  defectCode: found.code,
+                  category: found.category,
+                  quantity: item.quantity,
+                  scoreCategory: (found.scoreCategory as DefectRecord['scoreCategory']) || 'appearance',
+                });
+                return;
+              }
+            }
+          }
+        });
+        if (Object.values(next).some(arr => arr.length > 0)) {
+          setDefectData(next);
+        }
+      });
+    }
+
+    setShowOCR(false);
+  };
 
   // 重置确认对话框
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -475,6 +531,34 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
             清除记忆
           </button>
         </div>
+      )}
+
+      {/* OCR 拍照识别入口 */}
+      <div className="flex items-center justify-between rounded-xl border border-brand-blue/20 bg-brand-blue/5 px-4 py-3 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="rounded-md bg-brand-blue/15 p-1.5">
+            <Camera className="h-4 w-4 text-brand-blue" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-foreground">拍照智能识别录入</p>
+            <p className="text-xs text-muted-foreground">拍摄纸质记录表或质检单，自动识别并回填基础信息与缺陷数据</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setShowOCR(v => !v)}
+          className="rounded-lg bg-brand-blue px-3 py-1.5 text-xs font-medium text-white transition hover:bg-brand-blue/90"
+        >
+          {showOCR ? '收起识别' : '拍照识别'}
+        </button>
+      </div>
+
+      {showOCR && (
+        <ImageCapture
+          mode="quality"
+          title="卷包过程质量数据识别"
+          onCapture={handleOCRResult}
+          onCancel={() => setShowOCR(false)}
+        />
       )}
 
       {/* 基础信息模块 */}

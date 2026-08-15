@@ -15,7 +15,10 @@ import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
+  Camera,
 } from 'lucide-react';
+import { ImageCapture } from '../common/ImageCapture';
+import type { ParsedPhysicalForm } from '@/services/ocrService';
 
 // 导入类型定义
 import type {
@@ -102,6 +105,35 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showOCR, setShowOCR] = useState(false);
+
+  // OCR 识别结果回填
+  const handleOCRResult = (data: ParsedPhysicalForm) => {
+    setBasicInfo(prev => ({
+      ...prev,
+      date: data.date || prev.date,
+      shiftType: data.shift || prev.shiftType,
+      shiftNumber: data.shiftNumber || prev.shiftNumber,
+      machine: data.machine || prev.machine,
+      productionPoint: data.productionPoint || prev.productionPoint,
+      brand: data.brand || prev.brand,
+      recorder: data.recorder || prev.recorder,
+    }));
+
+    if (data.indicators) {
+      setIndicatorData(prev => {
+        const next = { ...prev };
+        Object.entries(data.indicators || {}).forEach(([key, value]) => {
+          if (next[key]) {
+            next[key] = { ...next[key], x: value.toString() };
+          }
+        });
+        return next;
+      });
+    }
+
+    setShowOCR(false);
+  };
 
   // 更新基础信息
   const updateBasicInfo = (field: string, value: string) => {
@@ -300,6 +332,34 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
         </div>
         <p className="text-body text-muted-foreground">过程质量管控 / 烟支物测指标数据录入</p>
       </div>
+
+      {/* OCR 拍照识别入口 */}
+      <div className="mb-6 flex items-center justify-between rounded-xl border border-brand-blue/20 bg-brand-blue/5 px-4 py-3 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="rounded-md bg-brand-blue/15 p-1.5">
+            <Camera className="h-4 w-4 text-brand-blue" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-foreground">拍照智能识别录入</p>
+            <p className="text-xs text-muted-foreground">拍摄物测记录表或检测设备屏幕，自动识别并回填基础信息与物测指标</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setShowOCR(v => !v)}
+          className="rounded-lg bg-brand-blue px-3 py-1.5 text-xs font-medium text-white transition hover:bg-brand-blue/90"
+        >
+          {showOCR ? '收起识别' : '拍照识别'}
+        </button>
+      </div>
+
+      {showOCR && (
+        <ImageCapture
+          mode="physical"
+          title="烟支物测指标数据识别"
+          onCapture={handleOCRResult}
+          onCancel={() => setShowOCR(false)}
+        />
+      )}
 
       {/* 基础信息模块 */}
       <section className="data-card mb-6 print:border-0 print:shadow-none">

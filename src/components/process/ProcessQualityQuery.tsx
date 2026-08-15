@@ -275,6 +275,11 @@ export function ProcessQualityQuery() {
 
   const totalPages = Math.ceil(filteredData.length / pageSize);
 
+  // 根据 recordId 查找原始记录（用于详情/编辑/删除）
+  const findRecordById = (id: string): ProcessQualityData | undefined => {
+    return allData.find(r => r.id === id);
+  };
+
   // 查看当天数据
   const viewTodayData = () => {
     const today = new Date().toISOString().split('T')[0];
