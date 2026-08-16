@@ -157,7 +157,7 @@ export function TobaccoInspectionInput() {
   };
 
   // 提交数据
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       showMessage('error', '请填写所有必填项');
       return;
