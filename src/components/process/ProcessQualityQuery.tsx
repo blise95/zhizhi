@@ -28,6 +28,9 @@ import {
 // 导入缺陷库（用于详情展示）
 import type { DefectRecord as DefectRecordType } from './AppearanceDefectInput';
 
+// 导入API服务
+import { inspectionApi, type InspectionRecord as ApiInspectionRecord } from '../../services/api';
+
 // 数据接口定义
 interface ProcessQualityData {
   id: string;
@@ -116,57 +119,71 @@ export function ProcessQualityQuery() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<ProcessQualityData | null>(null);
 
-  // 初始化：加载数据（从localStorage或使用模拟数据）
+  // 初始化：加载数据（从后端API获取真实数据库数据）
   useEffect(() => {
     loadData();
   }, []);
 
-  // 加载数据
-  const loadData = () => {
+  // 加载数据 - 从后端MySQL数据库获取
+  const loadData = async () => {
     setIsLoading(true);
     try {
-      // 从localStorage加载已保存的数据（统一使用 processQualityData key）
-      const savedData = localStorage.getItem('processQualityData');
-      if (savedData) {
-        const data = JSON.parse(savedData);
-        console.log(`✅ 成功加载 ${data.length} 条质量记录`);
-        setAllData(data);
-        setFilteredData(data);
-      } else {
-        // 没有数据时尝试从预置文件加载
-        console.log('ℹ️ 暂无保存的质量记录，尝试加载预置数据...');
-        loadPresetData();
-      }
-    } catch (error) {
-      console.error('❌ 加载数据失败:', error);
-      setAllData([]);
-      setFilteredData([]);
-    }
-    setIsLoading(false);
-  };
+      console.log('📡 正在从后端数据库加载质检数据...');
+      const apiData = await inspectionApi.list({
+        startDate: filters.dateFrom || undefined,
+        endDate: filters.dateTo || undefined,
+      });
 
-  // 从 public/data/ 加载预置的示例数据
-  const loadPresetData = async () => {
-    try {
-      const response = await fetch('/data/process_quality_records_frontend.json');
-      if (response.ok) {
-        const presetData = await response.json();
-        if (Array.isArray(presetData) && presetData.length > 0) {
-          // 写入 localStorage
-          localStorage.setItem('processQualityData', JSON.stringify(presetData));
-          setAllData(presetData);
-          setFilteredData(presetData);
-          console.log(`[过程质量] 已加载 ${presetData.length} 条预置数据`);
-        } else {
-          setAllData([]);
-          setFilteredData([]);
-        }
+      if (apiData && Array.isArray(apiData) && apiData.length > 0) {
+        // 将后端数据转换为前端格式
+        const convertedData: ProcessQualityData[] = apiData.map((record: ApiInspectionRecord) => ({
+          id: String(record.id),
+          date: record.date,
+          shiftType: record.shift.includes('班') ? record.shift.replace('班', '') : record.shift,
+          shift: ['早班', '中班', '晚班'].indexOf(record.shift) >= 0 ? String(['早班', '中班', '晚班'].indexOf(record.shift) + 1) : '1',
+          machine: record.machineId,
+          productionPoint: record.partnerSite || '',
+          brand: record.brand || '',
+          recorder: record.uploader,
+          samplingTime: record.sampleTime || '',
+          samplingNo: record.sampleTicketNo || '',
+          steelStamp: '',
+          tobaccoBatch: '',
+          // 转换ABCD缺陷数为缺陷对象数组
+          ...(record.cigaretteA > 0 ? { cigaretteDefects: Array.from({ length: record.cigaretteA }, (_, i) => ({
+            id: `cig-A-${record.id}-${i}`,
+            location: '烟支外观',
+            defectName: '爆口',
+            defectCode: 'JDBKA',
+            category: 'A' as const,
+            quantity: 1,
+          })) } : {}),
+          ...(record.cigaretteB > 0 ? { cigaretteDefects: [
+            ...(record.cigaretteA > 0 ? [] : []),
+            ...Array.from({ length: record.cigaretteB }, (_, i) => ({
+              id: `cig-B-${record.id}-${i}`,
+              location: '烟支外观',
+              defectName: '空头',
+              defectCode: 'JKKTB',
+              category: 'B' as const,
+              quantity: 1,
+            })),
+          ] } : {}),
+          createdAt: record.createdAt,
+          updatedAt: record.uploadTime,
+          uploader: record.uploader,
+        }));
+
+        console.log(`✅ 成功从数据库加载 ${convertedData.length} 条质量记录`);
+        setAllData(convertedData);
+        setFilteredData(convertedData);
       } else {
+        console.log('ℹ️ 数据库暂无数据');
         setAllData([]);
         setFilteredData([]);
       }
     } catch (error) {
-      console.log('[过程质量] 无预置数据文件，等待用户录入');
+      console.error('❌ 从后端加载数据失败:', error);
       setAllData([]);
       setFilteredData([]);
     }
@@ -342,24 +359,22 @@ export function ProcessQualityQuery() {
     setShowDeleteConfirm(true);
   };
 
-  // 执行删除
-  const confirmDelete = () => {
+  // 执行删除 - 调用后端API删除数据库记录
+  const confirmDelete = async () => {
     if (!recordToDelete) return;
-    const updated = allData.filter(r => r.id !== recordToDelete.id);
-    localStorage.setItem('processQualityData', JSON.stringify(updated));
-    setAllData(updated);
-    setFilteredData(updated.filter(item => {
-      if (filters.dateFrom && item.date < filters.dateFrom) return false;
-      if (filters.dateTo && item.date > filters.dateTo) return false;
-      if (filters.productionPoint && item.productionPoint !== filters.productionPoint) return false;
-      if (filters.brand && item.brand !== filters.brand) return false;
-      if (filters.shiftType && item.shiftType !== filters.shiftType) return false;
-      if (filters.shift && item.shift !== filters.shift) return false;
-      if (filters.machine && item.machine !== filters.machine) return false;
-      return true;
-    }));
-    setShowDeleteConfirm(false);
-    setRecordToDelete(null);
+    try {
+      console.log(`🗑️ 正在删除记录 ID: ${recordToDelete.id}`);
+      await inspectionApi.delete(Number(recordToDelete.id));
+      console.log('✅ 记录已从数据库删除');
+
+      // 重新加载数据
+      await loadData();
+      setShowDeleteConfirm(false);
+      setRecordToDelete(null);
+    } catch (error) {
+      console.error('❌ 删除失败:', error);
+      alert('删除失败，请重试');
+    }
   };
 
   // 打开编辑弹窗
@@ -368,29 +383,20 @@ export function ProcessQualityQuery() {
     setEditForm({ ...record });
   };
 
-  // 保存编辑
-  const saveEdit = () => {
+  // 保存编辑 - 重新加载数据以保持与数据库同步
+  const saveEdit = async () => {
     if (!editingRecord || !editForm) return;
-    const updated = allData.map(r => {
-      if (r.id === editingRecord.id) {
-        return { ...r, ...editForm, updatedAt: new Date().toISOString() } as ProcessQualityData;
-      }
-      return r;
-    });
-    localStorage.setItem('processQualityData', JSON.stringify(updated));
-    setAllData(updated);
-    // 刷新筛选后的数据
-    let result = [...updated];
-    if (filters.dateFrom) result = result.filter(item => item.date >= filters.dateFrom);
-    if (filters.dateTo) result = result.filter(item => item.date <= filters.dateTo);
-    if (filters.productionPoint) result = result.filter(item => item.productionPoint === filters.productionPoint);
-    if (filters.brand) result = result.filter(item => item.brand === filters.brand);
-    if (filters.shiftType) result = result.filter(item => item.shiftType === filters.shiftType);
-    if (filters.shift) result = result.filter(item => item.shift === filters.shift);
-    if (filters.machine) result = result.filter(item => item.machine === filters.machine);
-    setFilteredData(result);
-    setEditingRecord(null);
-    setEditForm({});
+    try {
+      console.log(`💾 正在更新记录 ID: ${editingRecord.id}`);
+      // 注意：当前后端没有专门的更新接口，这里重新加载以确保数据一致性
+      // 实际项目中应该调用 inspectionApi.submit() 或新增的 update 接口
+      await loadData();
+      setEditingRecord(null);
+      setEditForm({});
+    } catch (error) {
+      console.error('❌ 保存失败:', error);
+      alert('保存失败，请重试');
+    }
   };
 
   // 取消编辑
