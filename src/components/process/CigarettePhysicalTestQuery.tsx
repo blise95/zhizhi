@@ -182,8 +182,17 @@ export function CigarettePhysicalTestQuery() {
 
   const loadData = () => {
     try {
-      const records = JSON.parse(localStorage.getItem('physicalTestRecords') || '[]');
-      const validRecords = Array.isArray(records) ? records.filter(r =>
+      let records = JSON.parse(localStorage.getItem('physicalTestRecords') || '[]');
+
+      // 如果 localStorage 为空，尝试从预置数据文件加载
+      if (!Array.isArray(records) || records.length === 0) {
+        console.log('[物测查询] localStorage 为空，加载预置数据...');
+        // 预置数据将在下面异步加载
+        loadPresetData();
+        return;
+      }
+
+      const validRecords = records.filter(r =>
         r && r.id && r.date && (r.weight || r.circumference || r.drawResistance || r.ventilation || r.length)
       ).map(r => {
         // 兼容旧数据：将 ventilationLength 合并到 ventilation
@@ -191,10 +200,32 @@ export function CigarettePhysicalTestQuery() {
           return { ...r, ventilation: r.ventilationLength };
         }
         return r;
-      }) : [];
+      });
       setAllData(validRecords);
     } catch (error) {
       console.error('加载烟支物测数据失败:', error);
+      setAllData([]);
+    }
+  };
+
+  // 从 public/data/ 加载预置的示例数据
+  const loadPresetData = async () => {
+    try {
+      const response = await fetch('/data/physical_test_records_frontend.json');
+      if (response.ok) {
+        const presetData = await response.json();
+        if (Array.isArray(presetData) && presetData.length > 0) {
+          // 写入 localStorage 以便后续使用
+          localStorage.setItem('physicalTestRecords', JSON.stringify(presetData));
+          const validRecords = presetData.filter(r =>
+            r && r.id && r.date
+          );
+          setAllData(validRecords);
+          console.log(`[物测查询] 已加载 ${validRecords.length} 条预置数据`);
+        }
+      }
+    } catch (error) {
+      console.log('[物测查询] 无预置数据文件，等待用户录入');
       setAllData([]);
     }
   };

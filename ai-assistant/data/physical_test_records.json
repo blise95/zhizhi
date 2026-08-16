@@ -1,0 +1,3522 @@
+[
+  {
+    "id": "PT-20260811-001",
+    "testDate": "2026-08-11",
+    "testTime": "15:45:00",
+    "shift": "中班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "陈工",
+    "length": {
+      "value": 84.15,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.17,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 118.32,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 786.7,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 18.6,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-002",
+    "testDate": "2026-08-11",
+    "testTime": "22:30:00",
+    "shift": "夜班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "刘工",
+    "length": {
+      "value": 84.17,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.26,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 105.76,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 814.0,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 18.89,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-003",
+    "testDate": "2026-08-11",
+    "testTime": "10:45:00",
+    "shift": "早班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "李工",
+    "length": {
+      "value": 83.85,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.17,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 96.06,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 800.12,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 19.35,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-004",
+    "testDate": "2026-08-11",
+    "testTime": "21:15:00",
+    "shift": "夜班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "刘工",
+    "length": {
+      "value": 96.97,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.02,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 146.74,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 583.42,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 48.67,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-005",
+    "testDate": "2026-08-11",
+    "testTime": "16:15:00",
+    "shift": "中班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "周工",
+    "length": {
+      "value": 83.94,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.91,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 156.79,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 418.35,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 44.27,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-006",
+    "testDate": "2026-08-11",
+    "testTime": "09:30:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "李工",
+    "length": {
+      "value": 83.84,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.22,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 106.65,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 822.39,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 20.55,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-007",
+    "testDate": "2026-08-11",
+    "testTime": "08:15:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "刘工",
+    "length": {
+      "value": 84.0,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.34,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 98.92,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 794.53,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 13.23,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-008",
+    "testDate": "2026-08-11",
+    "testTime": "22:30:00",
+    "shift": "夜班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "陈工",
+    "length": {
+      "value": 83.74,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.24,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 102.0,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 756.53,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 26.13,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-009",
+    "testDate": "2026-08-11",
+    "testTime": "21:00:00",
+    "shift": "夜班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "周工",
+    "length": {
+      "value": 96.85,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.11,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 134.06,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 595.05,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 51.25,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260811-010",
+    "testDate": "2026-08-11",
+    "testTime": "21:15:00",
+    "shift": "夜班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "赵工",
+    "length": {
+      "value": 97.66,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.93,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 130.83,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 553.32,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 49.6,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260812-011",
+    "testDate": "2026-08-12",
+    "testTime": "21:45:00",
+    "shift": "夜班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "王工",
+    "length": {
+      "value": 83.73,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.02,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 121.53,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 753.27,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 19.33,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-012",
+    "testDate": "2026-08-12",
+    "testTime": "21:45:00",
+    "shift": "夜班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "周工",
+    "length": {
+      "value": 83.88,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.23,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 107.49,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 793.07,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 13.1,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-013",
+    "testDate": "2026-08-12",
+    "testTime": "20:00:00",
+    "shift": "夜班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "陈工",
+    "length": {
+      "value": 97.19,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.05,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 138.66,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 561.25,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 49.12,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-014",
+    "testDate": "2026-08-12",
+    "testTime": "20:15:00",
+    "shift": "夜班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "张工",
+    "length": {
+      "value": 96.84,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.01,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 137.51,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 626.14,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 50.44,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-015",
+    "testDate": "2026-08-12",
+    "testTime": "14:30:00",
+    "shift": "中班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "刘工",
+    "length": {
+      "value": 97.3,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.08,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 125.81,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 586.13,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 50.25,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-016",
+    "testDate": "2026-08-12",
+    "testTime": "14:45:00",
+    "shift": "中班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "陈工",
+    "length": {
+      "value": 83.84,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 17.0,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 152.94,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 425.39,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 47.77,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-017",
+    "testDate": "2026-08-12",
+    "testTime": "20:15:00",
+    "shift": "夜班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "王工",
+    "length": {
+      "value": 84.04,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.85,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 143.5,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 425.97,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 42.23,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-018",
+    "testDate": "2026-08-12",
+    "testTime": "21:00:00",
+    "shift": "夜班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "赵工",
+    "length": {
+      "value": 84.12,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.98,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 134.57,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 398.41,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 43.95,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260812-019",
+    "testDate": "2026-08-12",
+    "testTime": "16:30:00",
+    "shift": "中班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "刘工",
+    "length": {
+      "value": 83.28,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.49,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 128.32,
+      "unit": "pa",
+      "qualified": false,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 706.88,
+      "unit": "mg",
+      "qualified": false,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 29.17,
+      "unit": "%",
+      "qualified": false,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260812-020",
+    "testDate": "2026-08-12",
+    "testTime": "16:45:00",
+    "shift": "中班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "王工",
+    "length": {
+      "value": 84.12,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.43,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 107.03,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 802.63,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 27.25,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260812-021",
+    "testDate": "2026-08-12",
+    "testTime": "22:15:00",
+    "shift": "夜班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "李工",
+    "length": {
+      "value": 97.23,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.08,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 140.91,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 589.85,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 44.82,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-022",
+    "testDate": "2026-08-13",
+    "testTime": "22:45:00",
+    "shift": "夜班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "张工",
+    "length": {
+      "value": 83.86,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.14,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 94.1,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 830.42,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 13.69,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-023",
+    "testDate": "2026-08-13",
+    "testTime": "09:00:00",
+    "shift": "早班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "王工",
+    "length": {
+      "value": 83.89,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.17,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 110.65,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 798.19,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 17.23,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-024",
+    "testDate": "2026-08-13",
+    "testTime": "22:45:00",
+    "shift": "夜班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "陈工",
+    "length": {
+      "value": 84.17,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.39,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 95.18,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 800.97,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 17.76,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-025",
+    "testDate": "2026-08-13",
+    "testTime": "08:15:00",
+    "shift": "早班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "张工",
+    "length": {
+      "value": 97.01,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.01,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 128.99,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 582.86,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 43.68,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-026",
+    "testDate": "2026-08-13",
+    "testTime": "22:00:00",
+    "shift": "夜班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "张工",
+    "length": {
+      "value": 83.86,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 17.0,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 152.15,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 458.1,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 42.68,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-027",
+    "testDate": "2026-08-13",
+    "testTime": "20:15:00",
+    "shift": "夜班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "周工",
+    "length": {
+      "value": 84.03,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.94,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 145.21,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 435.19,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 44.6,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260813-028",
+    "testDate": "2026-08-13",
+    "testTime": "15:45:00",
+    "shift": "中班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "赵工",
+    "length": {
+      "value": 83.28,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 23.92,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 134.22,
+      "unit": "pa",
+      "qualified": false,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 912.09,
+      "unit": "mg",
+      "qualified": false,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 3.95,
+      "unit": "%",
+      "qualified": false,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260813-029",
+    "testDate": "2026-08-13",
+    "testTime": "16:45:00",
+    "shift": "中班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "周工",
+    "length": {
+      "value": 96.78,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.05,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 132.12,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 620.68,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 51.42,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-030",
+    "testDate": "2026-08-14",
+    "testTime": "15:30:00",
+    "shift": "中班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "周工",
+    "length": {
+      "value": 84.02,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.2,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 114.75,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 824.31,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 30.7,
+      "unit": "%",
+      "qualified": false,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260814-031",
+    "testDate": "2026-08-14",
+    "testTime": "14:45:00",
+    "shift": "中班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "陈工",
+    "length": {
+      "value": 97.0,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.87,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 125.52,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 610.93,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 49.8,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-032",
+    "testDate": "2026-08-14",
+    "testTime": "22:45:00",
+    "shift": "夜班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "李工",
+    "length": {
+      "value": 83.88,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.95,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 157.7,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 466.56,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 43.86,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-033",
+    "testDate": "2026-08-14",
+    "testTime": "10:45:00",
+    "shift": "早班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "刘工",
+    "length": {
+      "value": 84.04,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 17.08,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 147.2,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 411.51,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 44.56,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-034",
+    "testDate": "2026-08-14",
+    "testTime": "16:15:00",
+    "shift": "中班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "王工",
+    "length": {
+      "value": 84.24,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.28,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 106.21,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 799.09,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 20.68,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-035",
+    "testDate": "2026-08-14",
+    "testTime": "15:15:00",
+    "shift": "中班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "李工",
+    "length": {
+      "value": 83.76,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.0,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 113.93,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 815.1,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 14.38,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-036",
+    "testDate": "2026-08-14",
+    "testTime": "09:45:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "赵工",
+    "length": {
+      "value": 83.98,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.2,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 118.63,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 811.32,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 13.58,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-037",
+    "testDate": "2026-08-14",
+    "testTime": "16:00:00",
+    "shift": "中班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "李工",
+    "length": {
+      "value": 97.05,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.05,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 123.93,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 566.22,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 47.27,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-038",
+    "testDate": "2026-08-14",
+    "testTime": "21:00:00",
+    "shift": "夜班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "张工",
+    "length": {
+      "value": 96.88,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.03,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 133.11,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 624.59,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 47.08,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260814-039",
+    "testDate": "2026-08-14",
+    "testTime": "10:15:00",
+    "shift": "早班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "张工",
+    "length": {
+      "value": 96.95,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.02,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 132.48,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 593.48,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 53.72,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-040",
+    "testDate": "2026-08-15",
+    "testTime": "15:45:00",
+    "shift": "中班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "张工",
+    "length": {
+      "value": 84.29,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.21,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 104.84,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 788.93,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 13.99,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-041",
+    "testDate": "2026-08-15",
+    "testTime": "14:30:00",
+    "shift": "中班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "陈工",
+    "length": {
+      "value": 84.13,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.2,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 101.16,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 839.45,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 18.02,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-042",
+    "testDate": "2026-08-15",
+    "testTime": "15:15:00",
+    "shift": "中班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "赵工",
+    "length": {
+      "value": 83.93,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.11,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 97.54,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 801.9,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 15.1,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-043",
+    "testDate": "2026-08-15",
+    "testTime": "08:45:00",
+    "shift": "早班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "刘工",
+    "length": {
+      "value": 96.34,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.76,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 112.63,
+      "unit": "pa",
+      "qualified": false,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 485.36,
+      "unit": "mg",
+      "qualified": false,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 61.13,
+      "unit": "%",
+      "qualified": false,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260815-044",
+    "testDate": "2026-08-15",
+    "testTime": "10:15:00",
+    "shift": "早班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "陈工",
+    "length": {
+      "value": 96.96,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.01,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 140.95,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 612.59,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 46.09,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-045",
+    "testDate": "2026-08-15",
+    "testTime": "09:00:00",
+    "shift": "早班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "赵工",
+    "length": {
+      "value": 84.05,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 17.03,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 145.82,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 413.69,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 43.23,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-046",
+    "testDate": "2026-08-15",
+    "testTime": "08:45:00",
+    "shift": "早班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "王工",
+    "length": {
+      "value": 83.87,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.89,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 146.11,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 427.48,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 52.38,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-047",
+    "testDate": "2026-08-15",
+    "testTime": "16:15:00",
+    "shift": "中班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "李工",
+    "length": {
+      "value": 83.97,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.2,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 100.59,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 816.15,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 16.03,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-048",
+    "testDate": "2026-08-15",
+    "testTime": "08:00:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "周工",
+    "length": {
+      "value": 84.0,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.19,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 114.92,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 811.67,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 21.93,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-049",
+    "testDate": "2026-08-15",
+    "testTime": "10:15:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "张工",
+    "length": {
+      "value": 83.9,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.2,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 119.73,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 819.77,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 12.89,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-050",
+    "testDate": "2026-08-15",
+    "testTime": "08:15:00",
+    "shift": "早班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "王工",
+    "length": {
+      "value": 96.34,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.24,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 107.64,
+      "unit": "pa",
+      "qualified": false,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 676.45,
+      "unit": "mg",
+      "qualified": false,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 35.79,
+      "unit": "%",
+      "qualified": false,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260815-051",
+    "testDate": "2026-08-15",
+    "testTime": "08:30:00",
+    "shift": "早班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "周工",
+    "length": {
+      "value": 97.03,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.98,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 125.51,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 562.88,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 51.45,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260815-052",
+    "testDate": "2026-08-15",
+    "testTime": "10:30:00",
+    "shift": "早班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "刘工",
+    "length": {
+      "value": 96.79,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.13,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 130.0,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 615.71,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 47.11,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-053",
+    "testDate": "2026-08-16",
+    "testTime": "14:45:00",
+    "shift": "中班",
+    "machine": "1号机",
+    "brand": "摩登(硬)",
+    "inspector": "王工",
+    "length": {
+      "value": 84.6,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.13,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 106.62,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 821.35,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 21.79,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260816-054",
+    "testDate": "2026-08-16",
+    "testTime": "20:15:00",
+    "shift": "夜班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "张工",
+    "length": {
+      "value": 97.07,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.94,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 140.31,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 553.01,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 47.6,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-055",
+    "testDate": "2026-08-16",
+    "testTime": "21:45:00",
+    "shift": "夜班",
+    "machine": "2号机",
+    "brand": "摩登细支",
+    "inspector": "周工",
+    "length": {
+      "value": 96.99,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.95,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 130.74,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 611.01,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 49.51,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-056",
+    "testDate": "2026-08-16",
+    "testTime": "10:15:00",
+    "shift": "早班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "张工",
+    "length": {
+      "value": 84.03,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.8,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 138.1,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 419.71,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 46.44,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-057",
+    "testDate": "2026-08-16",
+    "testTime": "15:45:00",
+    "shift": "中班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "张工",
+    "length": {
+      "value": 83.64,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.92,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 148.62,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 426.35,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 37.84,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-058",
+    "testDate": "2026-08-16",
+    "testTime": "20:30:00",
+    "shift": "夜班",
+    "machine": "3号机",
+    "brand": "摩登超细支",
+    "inspector": "赵工",
+    "length": {
+      "value": 84.15,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 16.84,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        16.76,
+        17.16
+      ]
+    },
+    "drawResistance": {
+      "value": 142.16,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        130.0,
+        170.0
+      ]
+    },
+    "weight": {
+      "value": 431.21,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        380.0,
+        480.0
+      ]
+    },
+    "ventilation": {
+      "value": 46.4,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        35.0,
+        55.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-059",
+    "testDate": "2026-08-16",
+    "testTime": "21:15:00",
+    "shift": "夜班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "赵工",
+    "length": {
+      "value": 84.13,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.17,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 104.21,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 909.32,
+      "unit": "mg",
+      "qualified": false,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 13.13,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260816-060",
+    "testDate": "2026-08-16",
+    "testTime": "08:15:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "刘工",
+    "length": {
+      "value": 84.09,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.47,
+      "unit": "mm",
+      "qualified": false,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 99.83,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 809.29,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 18.86,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": false
+  },
+  {
+    "id": "PT-20260816-061",
+    "testDate": "2026-08-16",
+    "testTime": "10:00:00",
+    "shift": "早班",
+    "machine": "4号机",
+    "brand": "摩登(硬)",
+    "inspector": "张工",
+    "length": {
+      "value": 83.94,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        83.5,
+        84.5
+      ]
+    },
+    "circumference": {
+      "value": 24.11,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        24.0,
+        24.4
+      ]
+    },
+    "drawResistance": {
+      "value": 105.68,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        85.0,
+        125.0
+      ]
+    },
+    "weight": {
+      "value": 828.93,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        740.0,
+        880.0
+      ]
+    },
+    "ventilation": {
+      "value": 17.67,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        8.0,
+        28.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-062",
+    "testDate": "2026-08-16",
+    "testTime": "09:30:00",
+    "shift": "早班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "李工",
+    "length": {
+      "value": 96.76,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 18.99,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 129.51,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 599.62,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 51.69,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-063",
+    "testDate": "2026-08-16",
+    "testTime": "22:00:00",
+    "shift": "夜班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "周工",
+    "length": {
+      "value": 96.98,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.11,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 141.37,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 583.46,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 52.03,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  },
+  {
+    "id": "PT-20260816-064",
+    "testDate": "2026-08-16",
+    "testTime": "21:30:00",
+    "shift": "夜班",
+    "machine": "5号机",
+    "brand": "摩登细支",
+    "inspector": "王工",
+    "length": {
+      "value": 97.13,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        96.5,
+        97.5
+      ]
+    },
+    "circumference": {
+      "value": 19.02,
+      "unit": "mm",
+      "qualified": true,
+      "standardRange": [
+        18.81,
+        19.21
+      ]
+    },
+    "drawResistance": {
+      "value": 128.73,
+      "unit": "pa",
+      "qualified": true,
+      "standardRange": [
+        115.0,
+        155.0
+      ]
+    },
+    "weight": {
+      "value": 616.07,
+      "unit": "mg",
+      "qualified": true,
+      "standardRange": [
+        520.0,
+        660.0
+      ]
+    },
+    "ventilation": {
+      "value": 50.21,
+      "unit": "%",
+      "qualified": true,
+      "standardRange": [
+        39.0,
+        59.0
+      ]
+    },
+    "overallQualified": true
+  }
+]

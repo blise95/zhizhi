@@ -110,10 +110,34 @@ def ask(req: AskRequest):
 
     try:
         assistant = get_assistant()
+
+        # 数据加载策略：前端传入 > 本地文件 > 空
+        process_records = req.context.process_records
+        physical_records = req.context.physical_records
+
+        # 如果前端没有传数据，尝试从本地文件自动加载
+        if not process_records:
+            _data_dir = config.BASE_DIR / "data"
+            _pq_file = _data_dir / "process_quality_records.json"
+            if _pq_file.exists():
+                import json
+                with open(_pq_file, "r", encoding="utf-8") as f:
+                    _raw = json.load(f)
+                    process_records = _raw if isinstance(_raw, list) else _raw.get("records", [])
+
+        if not physical_records:
+            _data_dir = config.BASE_DIR / "data"
+            _pt_file = _data_dir / "physical_test_records.json"
+            if _pt_file.exists():
+                import json
+                with open(_pt_file, "r", encoding="utf-8") as f:
+                    _raw = json.load(f)
+                    physical_records = _raw if isinstance(_raw, list) else _raw.get("records", [])
+
         result = assistant.ask(
             req.question.strip(),
-            process_records=req.context.process_records,
-            physical_records=req.context.physical_records,
+            process_records=process_records,
+            physical_records=physical_records,
         )
 
         # 后台记录分析日志
@@ -122,8 +146,8 @@ def ask(req: AskRequest):
             question_type=result.get("question_type"),
             scenario=result.get("scenario"),
             answer=result.get("answer", ""),
-            process_records_count=len(req.context.process_records),
-            physical_records_count=len(req.context.physical_records),
+            process_records_count=len(process_records),
+            physical_records_count=len(physical_records),
             business_results=result.get("business_results"),
             analysis_log=result.get("analysis_log"),
         )

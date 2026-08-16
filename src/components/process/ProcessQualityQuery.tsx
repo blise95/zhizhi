@@ -133,13 +133,40 @@ export function ProcessQualityQuery() {
         setAllData(data);
         setFilteredData(data);
       } else {
-        // 没有数据时显示空状态
-        console.log('ℹ️ 暂无保存的质量记录');
+        // 没有数据时尝试从预置文件加载
+        console.log('ℹ️ 暂无保存的质量记录，尝试加载预置数据...');
+        loadPresetData();
+      }
+    } catch (error) {
+      console.error('❌ 加载数据失败:', error);
+      setAllData([]);
+      setFilteredData([]);
+    }
+    setIsLoading(false);
+  };
+
+  // 从 public/data/ 加载预置的示例数据
+  const loadPresetData = async () => {
+    try {
+      const response = await fetch('/data/process_quality_records_frontend.json');
+      if (response.ok) {
+        const presetData = await response.json();
+        if (Array.isArray(presetData) && presetData.length > 0) {
+          // 写入 localStorage
+          localStorage.setItem('processQualityData', JSON.stringify(presetData));
+          setAllData(presetData);
+          setFilteredData(presetData);
+          console.log(`[过程质量] 已加载 ${presetData.length} 条预置数据`);
+        } else {
+          setAllData([]);
+          setFilteredData([]);
+        }
+      } else {
         setAllData([]);
         setFilteredData([]);
       }
     } catch (error) {
-      console.error('❌ 加载数据失败:', error);
+      console.log('[过程质量] 无预置数据文件，等待用户录入');
       setAllData([]);
       setFilteredData([]);
     }
