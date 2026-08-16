@@ -1,5 +1,11 @@
 """
-智质通 LangGraph 节点实现
+智合 LangGraph 节点实现
+
+核心原则：
+1. 系统真实数据优先于 AI 通用知识；
+2. 系统正式标准优先于 AI 推测；
+3. 数据不足时明确告知，禁止编造；
+4. 前台回答自然、专业，不暴露技术来源。
 """
 import json
 import re
@@ -12,26 +18,26 @@ from langchain_ollama import ChatOllama
 import config
 from core.retriever import QualityRetriever
 from core.business_data import BusinessDataProvider
+from core import quality_analytics as qa
 
 
 class MockLLM:
-    """本地演示 LLM：无需外部模型，直接基于检索结果生成结构化回答"""
+    """本地演示 LLM：无需外部模型，直接基于检索结果与系统数据生成结构化回答"""
 
     def invoke(self, messages: List[Any]) -> AIMessage:
-        # 提取系统提示和用户问题中的关键信息
         user_content = ""
         for m in messages:
             if isinstance(m, HumanMessage):
                 user_content = m.content
                 break
 
-        # 解析提示中的知识片段、业务数据和问题
         question = self._extract_field(user_content, "用户问题：", "\n问题类型：")
-        qtype = self._extract_field(user_content, "问题类型：", "\n\n=== 知识库检索结果 ===")
+        qtype = self._extract_field(user_content, "问题类型：", "\n问题场景：")
+        scenario = self._extract_field(user_content, "问题场景：", "\n\n=== 知识库检索结果 ===")
         knowledge_block = self._extract_field(user_content, "=== 知识库检索结果 ===", "\n\n=== 系统业务数据 ===")
         business_block = self._extract_field(user_content, "=== 系统业务数据 ===", "\n\n请根据以上信息生成专业回答。")
 
-        answer = self._compose_answer(question, qtype, knowledge_block, business_block)
+        answer = self._compose_answer(question, qtype, scenario, knowledge_block, business_block)
         return AIMessage(content=answer)
 
     def _extract_field(self, text: str, start: str, end: str) -> str:
@@ -41,15 +47,7 @@ class MockLLM:
         e = text.find(end, s)
         return text[s:e if e > s else len(text)].strip()
 
-    def _compose_answer(self, question: str, qtype: str, knowledge_block: str, business_block: str) -> str:
-        # 解析知识片段
-        knowledge_items = []
-        for line in knowledge_block.split("\n"):
-            line = line.strip()
-            if line.startswith("[知识片段"):
-                knowledge_items.append(line)
-
-        # 解析业务数据
+    def _compose_answer(self, question: str, qtype: str, scenario: str, knowledge_block: str, business_block: str) -> str:
         business = {}
         try:
             if business_block and business_block not in ["无业务数据。", "", "null"]:
@@ -57,22 +55,31 @@ class MockLLM:
         except Exception:
             business = {}
 
-        # 按问题类型生成回答
+        # 有明确场景的，优先按场景回答
+        if scenario and scenario != "combined":
+            answer = business.get("scenario_answer", "")
+            if answer:
+                return answer
+
+        # 按问题类型回答
         if qtype == "knowledge":
             return self._knowledge_answer(question, knowledge_block)
         if qtype == "business":
             return self._business_answer(question, business)
+        if qtype == "physical_standard":
+            return business.get("scenario_answer", qa.answer_physical_standard_question(question))
         if qtype == "combined":
             k = self._knowledge_answer(question, knowledge_block)
             b = self._business_answer(question, business)
-            return f"【结论】\n{k}\n\n【数据分析】\n{b}\n\n【分析结果】\n以上是基于当前知识库与系统数据的综合分析。"
+            if k.startswith("根据当前知识库") and not k.startswith("根据当前知识库中的两个质量文档，暂未找到"):
+                return f"{k}\n\n{b}"
+            return b or k
         return "该问题不在智合的回答范围内。智合只回答与卷烟质量管理、质量评级、缺陷判定及当前系统质量数据相关的问题。"
 
     def _knowledge_answer(self, question: str, knowledge_block: str) -> str:
         if not knowledge_block or knowledge_block == "无相关知识片段。":
-            return "根据当前知识库中的两个质量文档，暂未找到该问题的充分依据，因此无法基于现有资料给出专业结论。"
+            return "根据当前质量文档资料，暂未找到该问题的充分依据，暂时无法基于现有资料给出专业结论。"
 
-        # 按 [知识片段] 分割，提取每个片段的文本内容
         pattern = r'\n?\[知识片段\d+\]\s*来源：《[^》]+》第[^\n]+\n'
         segments = re.split(pattern, knowledge_block)
         contents = []
@@ -82,22 +89,24 @@ class MockLLM:
                 contents.append(seg)
 
         if not contents:
-            return "根据当前知识库中的两个质量文档，暂未找到该问题的充分依据，因此无法基于现有资料给出专业结论。"
+            return "根据当前质量文档资料，暂未找到该问题的充分依据，暂时无法基于现有资料给出专业结论。"
 
-        # 取前 5 个片段去重摘要
         summary = "\n\n".join(f"{i + 1}. {c[:400]}" for i, c in enumerate(contents[:5]))
         return (
-            "【结论】\n"
-            "根据《卷烟外在质量分级及评级规定》和《卷烟外在质量缺陷判定》两个文档的检索结果，分析如下：\n\n"
+            "根据质量文档的检索结果，分析如下：\n\n"
             f"{summary}\n\n"
-            "【专业依据】\n"
-            "以上内容来自质量文档中的缺陷判定与评级规则，回答严格依据文档原文。"
+            "以上内容依据文档中的缺陷判定与评级规则整理。"
         )
 
     def _business_answer(self, question: str, business: Dict[str, Any]) -> str:
+        answer = business.get("scenario_answer", "")
+        if answer:
+            return answer
+
         total = business.get("total_batches", 0)
         if total == 0:
-            return "当前筛选条件下没有找到业务记录。"
+            return "当前筛选条件下没有找到业务记录，暂时无法基于系统数据进行判断。"
+
         defects = business.get("total_defects", 0)
         rate = business.get("defect_rate", 0)
         machines = business.get("machines", [])
@@ -146,30 +155,42 @@ def get_llm():
 def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
     """问题分类节点"""
     question = state["question"]
-
-    # 先通过关键词判断是否为烟支物测标准问题
     q = question.lower()
+
+    # 先通过关键词判断是否为烟支物测标准/偏离问题
     physical_keywords = [
         "烟支", "物测", "长度", "圆周", "吸阻", "重量", "通风度",
         "physical", "cigarette", "ventilation", "circumference", "draw resistance"
     ]
     standard_keywords = ["标准", "规格", "范围", "上限", "下限", "合格", "超标", "偏差", "多少"]
+    deviation_keywords = ["偏离", "超标", "不合格", "合格吗", "偏离标准", "哪个物测指标"]
+
     has_physical = any(k in q for k in physical_keywords)
     has_standard = any(k in q for k in standard_keywords)
-    if has_physical and has_standard:
-        return {"question_type": "physical_standard"}
+    has_deviation = any(k in q for k in deviation_keywords)
 
+    if has_physical:
+        # 偏离/合格判定优先于单纯标准查询（需要结合实际检测数据）
+        if has_deviation:
+            return {"question_type": "combined", "scenario": "physical_deviation"}
+        if has_standard:
+            return {"question_type": "physical_standard", "scenario": "physical_standard"}
+
+    # 具体场景识别
+    scenario = qa.detect_scenario(question)
+
+    # 系统提示分类
     system_prompt = """你是智合AI助手的问题分类器。请判断用户问题属于以下哪一类，只输出 JSON：
 {
   "type": "knowledge" | "business" | "combined" | "physical_standard" | "out_of_scope",
   "reason": "简短理由"
 }
 分类说明：
-- knowledge：问题只涉及质量知识、标准、缺陷判定、评级规则等专业文档内容。
-- business：问题涉及当前系统中的检验批次、合格率、优质率、缺陷统计、机台/品牌对比等数据。
-- combined：问题需要结合文档知识和系统数据才能回答，如“本月优质率为什么下降”。
-- physical_standard：问题涉及烟支物测指标标准（长度、圆周、吸阻、重量、通风度）、标准范围、合格判定等。
-- out_of_scope：问题与质量管控系统、两个质量文档、烟支物测标准完全无关。
+- knowledge：只涉及质量知识、标准定义、缺陷判定规则、评级规定等专业文档内容。例如"烟支吸阻是什么"。
+- business：涉及当前系统中的真实质量数据，例如"今天质量怎么样""哪个机台需要关注""最近哪个牌号质量下降"。
+- combined：需要结合文档知识和系统数据才能回答，例如"本月优质率为什么下降""为什么质量变差"。
+- physical_standard：询问烟支物测指标的标准值、范围、合格判定，例如"某牌号重量标准是多少"。
+- out_of_scope：与质量管控系统、质量标准、烟支物测完全无关。
 """
     messages = [
         SystemMessage(content=system_prompt),
@@ -178,27 +199,26 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
     try:
         resp = get_llm().invoke(messages)
         content = resp.content.strip()
-        # 尝试提取 JSON
         if "```json" in content:
             content = content.split("```json")[1].split("```")[0].strip()
         elif "```" in content:
             content = content.split("```")[1].split("```")[0].strip()
         result = json.loads(content)
-        return {"question_type": result.get("type", "combined")}
+        qtype = result.get("type", "combined")
+        return {"question_type": qtype, "scenario": scenario}
     except Exception:
         # 兜底：根据关键词判断
-        q = question.lower()
-        data_keywords = ["率", "多少", "哪个机台", "哪个品牌", "趋势", "排名", "批次", "本月", "本周", "今天"]
-        knowledge_keywords = ["什么", "属于", "等级", "扣分", "判定", "标准", "规则", "依据"]
+        data_keywords = ["率", "多少", "哪个机台", "哪个品牌", "哪个牌号", "趋势", "排名", "批次", "本月", "本周", "今天", "最近", "重点关注", "下降"]
+        knowledge_keywords = ["是什么", "属于", "等级", "扣分", "判定", "规则", "依据", "定义"]
         has_data = any(k in q for k in data_keywords)
         has_knowledge = any(k in q for k in knowledge_keywords)
         if has_data and has_knowledge:
-            return {"question_type": "combined"}
+            return {"question_type": "combined", "scenario": scenario}
         elif has_data:
-            return {"question_type": "business"}
+            return {"question_type": "business", "scenario": scenario}
         elif has_knowledge:
-            return {"question_type": "knowledge"}
-        return {"question_type": "out_of_scope"}
+            return {"question_type": "knowledge", "scenario": "knowledge"}
+        return {"question_type": "out_of_scope", "scenario": "out_of_scope"}
 
 
 def retrieve_knowledge(state: Dict[str, Any], retriever: QualityRetriever) -> Dict[str, Any]:
@@ -208,99 +228,12 @@ def retrieve_knowledge(state: Dict[str, Any], retriever: QualityRetriever) -> Di
     return {"knowledge_results": results}
 
 
-def _extract_date_range(question: str) -> tuple:
-    """从问题中提取日期范围，返回 (date_from, date_to) 或 (None, None)"""
-    q = question
-    today_match = re.search(r"今天|今日", q)
-    week_match = re.search(r"本周|这周|最近一周", q)
-    month_match = re.search(r"本月|这个月", q)
-    last_month_match = re.search(r"上月|上个月", q)
-
-    provider = BusinessDataProvider()
-    if today_match:
-        return provider.get_date_range("today")
-    if week_match:
-        return provider.get_date_range("week")
-    if month_match:
-        return provider.get_date_range("month")
-    if last_month_match:
-        return provider.get_date_range("last_month")
-
-    # 默认本月
-    return provider.get_date_range("month")
-
-
-def query_business_data(state: Dict[str, Any], provider: BusinessDataProvider) -> Dict[str, Any]:
-    """业务数据查询节点"""
-    question = state["question"]
-    date_from, date_to = _extract_date_range(question)
-
-    records = provider.get_records()
-    filtered = provider.filter_by_date(records, date_from, date_to)
-
-    # 提取机台/品牌过滤
-    machine_match = re.search(r"(\d+#?机|#[机台])", question)
-    brand_match = re.search(r"([\u4e00-\u9fa5]{2,6})(?:牌|品牌)", question)
-
-    if machine_match:
-        machine = machine_match.group(1).replace("机", "").replace("台", "").replace("#", "")
-        # 支持 1# 格式
-        filtered = [r for r in filtered if machine in str(r.get("machine", ""))]
-
-    if brand_match:
-        brand = brand_match.group(1)
-        filtered = [r for r in filtered if brand in str(r.get("brand", ""))]
-
-    agg = provider.aggregate_basic(filtered)
-    top_defects = provider.top_defects(filtered, top_n=5)
-    machine_cmp = provider.machine_comparison(filtered)
-
-    return {
-        "business_results": {
-            "date_from": date_from,
-            "date_to": date_to,
-            "total_batches": agg["total_batches"],
-            "total_defects": agg["total_defects"],
-            "defect_batches": agg["defect_batches"],
-            "defect_rate": agg["defect_rate"],
-            "machines": agg["machines"],
-            "brands": agg["brands"],
-            "top_defects": top_defects,
-            "machine_comparison": machine_cmp,
-        },
-        "business_query_params": {"date_from": date_from, "date_to": date_to},
-    }
-
-
-def check_sufficiency(state: Dict[str, Any]) -> Dict[str, Any]:
-    """判断检索/数据是否充分"""
-    qtype = state.get("question_type", "combined")
-    knowledge = state.get("knowledge_results", [])
-    business = state.get("business_results", {})
-
-    if qtype == "knowledge":
-        sufficient = len(knowledge) > 0
-    elif qtype == "business":
-        sufficient = business.get("total_batches", 0) > 0
-    elif qtype == "combined":
-        sufficient = len(knowledge) > 0 and business.get("total_batches", 0) > 0
-    elif qtype == "physical_standard":
-        sufficient = True
-    else:
-        sufficient = False
-
-    return {"is_sufficient": sufficient}
-
-
-def _extract_brand(question: str) -> Optional[str]:
-    """从问题中提取牌号（中文名或内部 value）"""
-    from core.physical_standard import get_all_brands
-    brands = get_all_brands()
-    # 优先匹配完整中文名
-    for b in brands:
+def _extract_brand_from_question(question: str) -> Optional[str]:
+    """从问题中提取牌号"""
+    for b in qa.get_all_brands():
         if b in question:
             return b
-    # 再匹配内部 value 关键字
+    # 内部 value 别名
     value_map = {
         "modern-eu": "摩登（中东-EU）",
         "normal-red-djibouti": "摩登（普通红吉布提）",
@@ -320,133 +253,145 @@ def _extract_brand(question: str) -> Optional[str]:
     return None
 
 
-def _extract_physical_indicator(question: str) -> Optional[str]:
-    """从问题中提取物测指标 key"""
-    from core.physical_standard import normalize_indicator_key
-    indicators = ["长度", "圆周", "烟支圆周", "吸阻", "重量", "通风度"]
-    for ind in indicators:
-        if ind in question:
-            return normalize_indicator_key(ind)
-    return None
+def query_business_data(state: Dict[str, Any], provider: BusinessDataProvider) -> Dict[str, Any]:
+    """业务数据查询节点：使用系统真实数据与标准库进行分析"""
+    question = state["question"]
+    scenario = state.get("scenario", "combined")
 
+    # 优先使用前端传入的系统真实数据
+    process_records = state.get("process_records", []) or []
+    physical_records = state.get("physical_records", []) or []
 
-def _answer_physical_standard(question: str) -> Dict[str, Any]:
-    """回答烟支物测标准相关问题"""
-    from core.physical_standard import (
-        get_all_brands,
-        get_brand_standards,
-        get_indicator_standard,
-        check_value,
-        calc_deviation,
-        format_standard,
-        format_range,
-    )
+    # 如果没有传入，回退到 provider 加载
+    if not process_records:
+        process_records = provider.get_records()
 
-    brand = _extract_brand(question)
-    indicator = _extract_physical_indicator(question)
+    date_from, date_to = qa.extract_date_range(question)
+    filtered_process = qa.filter_by_date_range(process_records, date_from, date_to)
 
-    # 没有指定牌号，返回全部牌号列表
-    if not brand:
-        return {
-            "answer": (
-                "请提供需要查询的牌号。当前标准库包含以下牌号：\n"
-                + "、".join(get_all_brands())
-                + "\n\n您可以问：\"摩登（细支）的重量标准是多少？\""
-            ),
-            "sources": [],
-            "reasoning": "用户未指定牌号，返回标准库牌号列表。",
-        }
+    # 提取牌号过滤（用于牌号趋势、物测分析）
+    brand = _extract_brand_from_question(question)
+    if brand:
+        filtered_process = [r for r in filtered_process if brand in str(r.get("brand", ""))]
 
-    brand_std = get_brand_standards(brand)
-    if not brand_std:
-        return {
-            "answer": f"未找到牌号 {brand} 的物测标准。",
-            "sources": [],
-            "reasoning": "标准库中无该牌号。",
-        }
+    # 基础汇总
+    summary = qa.summarize_process_quality(filtered_process)
+    top_defs = qa.top_defects(filtered_process, 5)
+    machine_cmp = qa.machine_comparison(filtered_process)
+    brand_cmp = qa.brand_comparison(filtered_process)
 
-    # 没有指定指标，返回该牌号全部标准
-    if not indicator:
-        lines = [f"牌号 {brand} 的烟支物测标准如下："]
-        for ind_key, ind_std in brand_std.get("indicators", {}).items():
-            lines.append(f"- {ind_std.get('name', ind_key)}：{format_standard(ind_std)}（范围：{format_range(ind_std)}）")
-        return {
-            "answer": "\n".join(lines),
-            "sources": [{"doc_name": "烟支物测指标标准.xlsx"}],
-            "reasoning": "返回指定牌号全部物测指标标准。",
-        }
-
-    std = get_indicator_standard(brand, indicator)
-    if not std:
-        return {
-            "answer": f"未找到牌号 {brand} 的 {indicator} 标准。",
-            "sources": [],
-            "reasoning": "标准库中无该指标。",
-        }
-
-    # 尝试提取数值进行合格判定
-    value_match = re.search(r"([-+]?\d*\.?\d+)", question)
-    if value_match:
-        value = float(value_match.group(1))
-        result = check_value(brand, indicator, value)
-        dev = calc_deviation(brand, indicator, value)
-        dev_text = f"，偏差 {dev}{std.get('unit', '')}" if dev is not None else ""
-        return {
-            "answer": (
-                f"牌号 {brand} 的 {std.get('name', indicator)} 标准为 {format_standard(std)}（范围：{format_range(std)}）。\n"
-                f"检测值 {value}{std.get('unit', '')} 判定结果：{result}{dev_text}。"
-            ),
-            "sources": [{"doc_name": "烟支物测指标标准.xlsx"}],
-            "reasoning": "根据标准库进行合格判定。",
-        }
+    # 按场景生成分析结果
+    scenario_answer = ""
+    if scenario == "today_quality":
+        scenario_answer = qa.answer_today_quality(filtered_process)
+    elif scenario == "machine_focus":
+        scenario_answer = qa.answer_machine_focus(filtered_process)
+    elif scenario == "machine_best":
+        scenario_answer = qa.answer_machine_ranking(filtered_process, best=True)
+    elif scenario == "machine_worst":
+        scenario_answer = qa.answer_machine_ranking(filtered_process, best=False)
+    elif scenario == "brand_trend":
+        scenario_answer = qa.answer_brand_trend(filtered_process, brand)
+    elif scenario == "physical_deviation":
+        scenario_answer = qa.answer_physical_deviation(physical_records, brand)
+    elif scenario == "physical_standard":
+        scenario_answer = qa.answer_physical_standard_question(question)
+    elif scenario == "quality_decline":
+        scenario_answer = qa.answer_quality_decline(filtered_process, physical_records)
 
     return {
-        "answer": (
-            f"牌号 {brand} 的 {std.get('name', indicator)} 标准为 {format_standard(std)}，\n"
-            f"标准范围：{format_range(std)}。"
-        ),
-        "sources": [{"doc_name": "烟支物测指标标准.xlsx"}],
-        "reasoning": "返回指定牌号指定指标的标准。",
+        "business_results": {
+            "date_from": date_from,
+            "date_to": date_to,
+            "total_batches": summary["total_batches"],
+            "total_defects": summary["total_defects"],
+            "defect_batches": summary["defect_batches"],
+            "defect_rate": summary["defect_rate"],
+            "machines": summary["machines"],
+            "brands": summary["brands"],
+            "production_points": summary.get("production_points", []),
+            "top_defects": top_defs,
+            "machine_comparison": machine_cmp,
+            "brand_comparison": brand_cmp,
+            "scenario": scenario,
+            "scenario_answer": scenario_answer,
+            "extracted_brand": brand,
+            "physical_summary": qa.summarize_physical_test(physical_records),
+        },
+        "business_query_params": {"date_from": date_from, "date_to": date_to},
     }
+
+
+def check_sufficiency(state: Dict[str, Any]) -> Dict[str, Any]:
+    """判断检索/数据是否充分"""
+    qtype = state.get("question_type", "combined")
+    scenario = state.get("scenario", "combined")
+    knowledge = state.get("knowledge_results", [])
+    business = state.get("business_results", {})
+
+    # 物测标准问题不需要业务数据
+    if qtype == "physical_standard" or scenario == "physical_standard":
+        return {"is_sufficient": True}
+
+    # 知识问题只看知识库
+    if qtype == "knowledge":
+        return {"is_sufficient": len(knowledge) > 0}
+
+    # 业务问题必须有数据
+    has_data = business.get("total_batches", 0) > 0 or business.get("physical_summary", {}).get("total_records", 0) > 0
+
+    if qtype == "business":
+        return {"is_sufficient": has_data}
+
+    if qtype == "combined":
+        return {"is_sufficient": has_data or len(knowledge) > 0}
+
+    return {"is_sufficient": False}
 
 
 def generate_answer(state: Dict[str, Any]) -> Dict[str, Any]:
     """生成答案节点"""
     question = state["question"]
     qtype = state.get("question_type", "combined")
-
-    # 烟支物测标准问题直接调用标准库
-    if qtype == "physical_standard":
-        return _answer_physical_standard(question)
-
-    knowledge = state.get("knowledge_results", [])
+    scenario = state.get("scenario", "combined")
     business = state.get("business_results", {})
+    knowledge = state.get("knowledge_results", [])
 
-    # 构建知识上下文
+    # 如果有按场景生成的答案，优先使用
+    scenario_answer = business.get("scenario_answer", "")
+    if scenario_answer:
+        return {
+            "answer": scenario_answer,
+            "sources": [],
+            "reasoning": f"问题类型：{qtype}，场景：{scenario}；基于系统真实质量数据与标准库生成回答。",
+            "analysis_log": {
+                "question": question,
+                "question_type": qtype,
+                "scenario": scenario,
+                "used_data": business,
+                "knowledge_count": len(knowledge),
+            },
+        }
+
+    # 构建知识上下文（仅用于 LLM，不展示给用户）
     knowledge_text = "\n\n".join(
         f"[知识片段{i+1}] 来源：《{r['metadata'].get('doc_name', '未知文档')}》第{r['metadata'].get('page_number', '?')}页\n{r['text']}"
         for i, r in enumerate(knowledge)
     ) if knowledge else "无相关知识片段。"
 
-    # 构建业务数据上下文
     business_text = json.dumps(business, ensure_ascii=False, indent=2) if business else "无业务数据。"
 
     system_prompt = """你是智合，质量管控系统中的专业质量助手。
-你的回答必须严格基于以下两类来源：
-1. 用户提供的两个质量文档（知识库）；
-2. 当前质量管控系统中的真实业务数据。
-如果依据不足，必须明确告知无法回答，禁止编造。
-
-推荐回答结构：
-【结论】直接回答
-【数据分析】引用系统数据（如适用）
-【专业依据】引用文档规则（如适用）
-【分析结果】综合判断
-【知识来源】列出文档名称、章节、页码
+请严格遵循以下原则：
+1. 优先使用系统中的真实质量数据和正式质量标准；
+2. 数据不足时明确告知，禁止编造数据或标准；
+3. 回答自然、专业，不要在答案中显示"知识来源""数据来源""RAG检索"等技术信息；
+4. 可引用具体数字，但不要暴露内部处理过程。
 """
 
     prompt = f"""用户问题：{question}
 问题类型：{qtype}
+问题场景：{scenario}
 
 === 知识库检索结果 ===
 {knowledge_text}
@@ -454,7 +399,7 @@ def generate_answer(state: Dict[str, Any]) -> Dict[str, Any]:
 === 系统业务数据 ===
 {business_text}
 
-请根据以上信息生成专业回答。"""
+请根据以上信息生成专业、自然的回答。如果数据不足，请明确说明。"""
 
     try:
         resp = get_llm().invoke([
@@ -465,32 +410,60 @@ def generate_answer(state: Dict[str, Any]) -> Dict[str, Any]:
     except Exception as e:
         answer = f"调用模型生成回答时出错：{e}"
 
-    sources = [
-        {
-            "doc_name": r["metadata"].get("doc_name", "未知文档"),
-            "page_number": r["metadata"].get("page_number"),
-            "section_title": r["metadata"].get("section_title", ""),
-            "text": r["text"][:300],
-        }
-        for r in knowledge
-    ]
+    # 清理可能暴露来源的文本（兜底）
+    answer = _sanitize_answer(answer)
 
     return {
         "answer": answer,
-        "sources": sources,
-        "reasoning": f"问题类型：{qtype}；检索到{len(knowledge)}条知识，{business.get('total_batches', 0)}条业务记录。",
+        "sources": [],
+        "reasoning": f"问题类型：{qtype}，场景：{scenario}；检索到{len(knowledge)}条知识，{business.get('total_batches', 0)}条业务记录。",
+        "analysis_log": {
+            "question": question,
+            "question_type": qtype,
+            "scenario": scenario,
+            "used_data": business,
+            "knowledge_count": len(knowledge),
+        },
     }
+
+
+def _sanitize_answer(answer: str) -> str:
+    """移除答案中可能暴露技术来源的文本"""
+    forbidden_phrases = [
+        "基于知识库", "根据知识库", "来源：", "数据来源：", "参考文档", "RAG检索",
+        "调用标准库", "数据库查询结果", "知识库匹配结果", "【知识来源】",
+        "【数据来源】", "【引用】", "引用：", "知识来源：", "来自：", "检索结果：",
+    ]
+    lines = []
+    for line in answer.split("\n"):
+        skip = any(p in line for p in forbidden_phrases)
+        if not skip:
+            lines.append(line)
+    return "\n".join(lines).strip()
 
 
 def fallback_answer(state: Dict[str, Any]) -> Dict[str, Any]:
     """无法回答时的兜底节点"""
     qtype = state.get("question_type", "combined")
-    if qtype == "out_of_scope":
+    scenario = state.get("scenario", "combined")
+
+    if qtype == "out_of_scope" or scenario == "out_of_scope":
         answer = "该问题不在智合的回答范围内。智合只回答与卷烟质量管理、质量评级、缺陷判定及当前系统质量数据相关的问题。"
+    elif scenario in ["today_quality", "machine_focus", "machine_best", "machine_worst", "brand_trend", "quality_decline"]:
+        answer = "当前系统中暂无相关质量记录，暂时无法基于系统数据进行判断。请在系统中录入过程质量或烟支物测数据后再提问。"
+    elif scenario in ["physical_deviation", "physical_standard"]:
+        answer = "当前系统暂未配置该牌号的对应标准或没有相关检测数据，暂时无法进行标准符合性判断。"
     else:
-        answer = "根据当前知识库中的两个质量文档及系统数据，暂未找到该问题的充分依据，因此无法基于现有资料给出专业结论。"
+        answer = "根据当前质量文档及系统数据，暂未找到该问题的充分依据，暂时无法给出准确结论。"
+
     return {
         "answer": answer,
         "sources": [],
         "reasoning": "知识库检索或系统数据不足，触发兜底回答。",
+        "analysis_log": {
+            "question": state.get("question", ""),
+            "question_type": qtype,
+            "scenario": scenario,
+            "fallback": True,
+        },
     }

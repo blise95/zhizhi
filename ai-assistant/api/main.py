@@ -5,19 +5,20 @@
 """
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import config
 from core.vectorstore import QualityVectorStore
 from core.retriever import QualityRetriever
 from core.business_data import BusinessDataProvider
+from core.ai_logger import log_ask
 from core.physical_standard import (
     get_metadata as get_physical_metadata,
     get_all_brands as get_physical_brands,
@@ -34,7 +35,7 @@ from graph.graph import ZhiZhiAssistant
 app = FastAPI(
     title="智合 AI 问答模块",
     description="质量管控系统中的专业质量知识问答与质量数据分析助手",
-    version="1.0.0",
+    version="2.0.0",
 )
 
 # 允许前端跨域访问
@@ -64,16 +65,24 @@ def get_assistant() -> ZhiZhiAssistant:
     return _assistant
 
 
+class AskContext(BaseModel):
+    """前端传入的系统真实数据上下文"""
+    process_records: List[Dict[str, Any]] = Field(default_factory=list)
+    physical_records: List[Dict[str, Any]] = Field(default_factory=list)
+
+
 class AskRequest(BaseModel):
     question: str
+    context: AskContext = Field(default_factory=AskContext)
 
 
 class AskResponse(BaseModel):
     question: str
     question_type: str
+    scenario: str = ""
     answer: str
-    sources: list
-    reasoning: str
+    sources: list = Field(default_factory=list)  # 前台不展示来源
+    reasoning: str = ""
     business_results: Optional[dict] = None
 
 
@@ -85,7 +94,7 @@ class PhysicalCheckRequest(BaseModel):
 
 @app.get("/")
 def root():
-    return {"message": "智合 AI 问答模块已启动", "version": "1.0.0"}
+    return {"message": "智合 AI 问答模块已启动", "version": "2.0.0"}
 
 
 @app.get("/health")
@@ -98,11 +107,44 @@ def health():
 def ask(req: AskRequest):
     if not req.question or not req.question.strip():
         raise HTTPException(status_code=400, detail="问题不能为空")
+
     try:
         assistant = get_assistant()
-        result = assistant.ask(req.question.strip())
-        return AskResponse(**result)
+        result = assistant.ask(
+            req.question.strip(),
+            process_records=req.context.process_records,
+            physical_records=req.context.physical_records,
+        )
+
+        # 后台记录分析日志
+        log_ask(
+            question=req.question.strip(),
+            question_type=result.get("question_type"),
+            scenario=result.get("scenario"),
+            answer=result.get("answer", ""),
+            process_records_count=len(req.context.process_records),
+            physical_records_count=len(req.context.physical_records),
+            business_results=result.get("business_results"),
+            analysis_log=result.get("analysis_log"),
+        )
+
+        return AskResponse(
+            question=result["question"],
+            question_type=result.get("question_type", ""),
+            scenario=result.get("scenario", ""),
+            answer=result["answer"],
+            sources=[],  # 前台不展示来源
+            reasoning=result.get("reasoning", ""),
+            business_results=result.get("business_results"),
+        )
     except Exception as e:
+        log_ask(
+            question=req.question.strip(),
+            question_type=None,
+            scenario=None,
+            answer="",
+            error=str(e),
+        )
         raise HTTPException(status_code=500, detail=str(e))
 
 

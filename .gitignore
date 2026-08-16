@@ -70,6 +70,7 @@ target/
 ai-assistant/venv/
 ai-assistant/venv2/
 ai-assistant/data/vector_store/
+ai-assistant/data/ai_logs/
 ai-assistant/**/__pycache__/
 ai-assistant/**/*.pyc
 

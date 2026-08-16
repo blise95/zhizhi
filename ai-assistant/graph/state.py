@@ -9,7 +9,14 @@ class ZhiZhiState(TypedDict, total=False):
     question: str
 
     # 问题分类
-    question_type: str  # knowledge / business / combined / out_of_scope
+    question_type: str  # knowledge / business / combined / physical_standard / out_of_scope
+
+    # 具体场景
+    scenario: str  # today_quality / machine_focus / machine_best / machine_worst / brand_trend / physical_deviation / physical_standard / quality_decline / combined / knowledge
+
+    # 前端传入的系统真实数据
+    process_records: List[Dict[str, Any]]
+    physical_records: List[Dict[str, Any]]
 
     # 知识库检索结果
     knowledge_results: List[Dict[str, Any]]
@@ -25,3 +32,6 @@ class ZhiZhiState(TypedDict, total=False):
     answer: str
     sources: List[Dict[str, Any]]
     reasoning: str
+
+    # 后台分析日志用
+    analysis_log: Dict[str, Any]

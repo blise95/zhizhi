@@ -1,5 +1,5 @@
 """
-智质通 LangGraph 工作流编排
+智合 LangGraph 工作流编排
 
 工作流：
   classify_question
@@ -14,8 +14,14 @@ retrieve query_data  fallback
        |
        v
   generate / fallback
+
+说明：
+- 前端在调用 /ask 时传入 context（process_records / physical_records），
+  query_data 节点优先使用这些系统真实数据；
+- combined 类型先检索知识，再查数据，最后综合分析；
+- 最终答案不暴露技术来源。
 """
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 
 from langgraph.graph import StateGraph, END
 
@@ -32,11 +38,50 @@ from core.retriever import QualityRetriever
 from core.business_data import BusinessDataProvider
 
 
+class ZhiZhiAssistant:
+    """智合助手封装"""
+
+    def __init__(self, retriever: QualityRetriever, data_provider: BusinessDataProvider):
+        self.retriever = retriever
+        self.data_provider = data_provider
+        self.graph = build_zhizhi_graph(retriever, data_provider)
+
+    def ask(
+        self,
+        question: str,
+        process_records: Optional[List[Dict[str, Any]]] = None,
+        physical_records: Optional[List[Dict[str, Any]]] = None,
+    ) -> Dict[str, Any]:
+        """提问入口
+
+        Args:
+            question: 用户问题
+            process_records: 前端传入的过程质量记录（来自 localStorage）
+            physical_records: 前端传入的烟支物测记录（来自 localStorage）
+        """
+        state: Dict[str, Any] = {
+            "question": question,
+            "process_records": process_records or [],
+            "physical_records": physical_records or [],
+        }
+        final_state = self.graph.invoke(state)
+        return {
+            "question": question,
+            "question_type": final_state.get("question_type"),
+            "scenario": final_state.get("scenario"),
+            "answer": final_state.get("answer", ""),
+            "sources": [],  # 前台不展示来源
+            "reasoning": final_state.get("reasoning", ""),
+            "business_results": final_state.get("business_results", {}),
+            "analysis_log": final_state.get("analysis_log", {}),
+        }
+
+
 def build_zhizhi_graph(
     retriever: QualityRetriever,
     data_provider: BusinessDataProvider,
 ) -> StateGraph:
-    """构建智质通问答工作流"""
+    """构建智合问答工作流"""
 
     workflow = StateGraph(ZhiZhiState)
 
@@ -60,7 +105,7 @@ def build_zhizhi_graph(
         if qtype == "combined":
             return "retrieve"  # 先检索知识，再去查数据
         if qtype == "physical_standard":
-            return "generate"  # 直接调用标准库生成答案
+            return "query_data"  # 通过标准库回答
         return "fallback"  # out_of_scope
 
     workflow.add_conditional_edges(
@@ -69,7 +114,6 @@ def build_zhizhi_graph(
         {
             "retrieve": "retrieve",
             "query_data": "query_data",
-            "generate": "generate",
             "fallback": "fallback",
         },
     )
@@ -105,28 +149,6 @@ def build_zhizhi_graph(
     workflow.add_edge("fallback", END)
 
     return workflow.compile()
-
-
-class ZhiZhiAssistant:
-    """智质通助手封装"""
-
-    def __init__(self, retriever: QualityRetriever, data_provider: BusinessDataProvider):
-        self.retriever = retriever
-        self.data_provider = data_provider
-        self.graph = build_zhizhi_graph(retriever, data_provider)
-
-    def ask(self, question: str) -> Dict[str, Any]:
-        """提问入口"""
-        state = {"question": question}
-        final_state = self.graph.invoke(state)
-        return {
-            "question": question,
-            "question_type": final_state.get("question_type"),
-            "answer": final_state.get("answer", ""),
-            "sources": final_state.get("sources", []),
-            "reasoning": final_state.get("reasoning", ""),
-            "business_results": final_state.get("business_results", {}),
-        }
 
 
 if __name__ == "__main__":

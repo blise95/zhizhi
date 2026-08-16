@@ -27,6 +27,8 @@ const SUGGESTIONS = [
   { label: '哪个机台需要重点关注？', icon: Server },
   { label: '帮我分析近期质量趋势', icon: TrendingUp },
   { label: '当前主要缺陷是什么？', icon: Activity },
+  { label: '摩登（细支）的物测指标合格吗？', icon: TrendingUp },
+  { label: '最近质量为什么下降？', icon: AlertCircle },
 ];
 
 /**
@@ -358,10 +360,34 @@ export function ZhiZhiFloatingChat() {
       setLoading(true);
 
       try {
+        // 从系统 localStorage 读取真实质量数据，作为上下文传给智合后端
+        let processRecords: unknown[] = [];
+        let physicalRecords: unknown[] = [];
+        try {
+          const processRaw = localStorage.getItem('processQualityData');
+          if (processRaw) {
+            const parsed = JSON.parse(processRaw);
+            processRecords = Array.isArray(parsed) ? parsed : (parsed?.records || []);
+          }
+          const physicalRaw = localStorage.getItem('physicalTestRecords');
+          if (physicalRaw) {
+            const parsed = JSON.parse(physicalRaw);
+            physicalRecords = Array.isArray(parsed) ? parsed : (parsed?.records || []);
+          }
+        } catch {
+          // 读取失败不影响提问
+        }
+
         const res = await fetch(`${API_BASE_URL}/ask`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question }),
+          body: JSON.stringify({
+            question,
+            context: {
+              process_records: processRecords,
+              physical_records: physicalRecords,
+            },
+          }),
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({ detail: '请求失败' }));
@@ -372,8 +398,9 @@ export function ZhiZhiFloatingChat() {
           id: `a-${Date.now()}`,
           role: 'assistant',
           content: data.answer || '暂无回答',
-          sources: data.sources || [],
-          reasoning: data.reasoning || '',
+          // 前台不展示来源/引用等技术信息
+          sources: [],
+          reasoning: '',
         };
         setMessages((prev) => [...prev, assistantMessage]);
       } catch (err: unknown) {
@@ -526,7 +553,7 @@ export function ZhiZhiFloatingChat() {
                 <ZhiHeCoreAvatar size="lg" className="mb-4" />
                 <h2 className="text-lg font-bold text-foreground mb-1">您好，我是智合</h2>
                 <p className="text-xs text-cyan-300/90 mb-1.5 tracking-wider">聚智协同，质领合作</p>
-                <p className="text-[11px] text-slate-400 mb-5">您的合作生产 AI 质量智能体</p>
+                <p className="text-[11px] text-slate-400 mb-5">您的 AI 质量智能助手</p>
 
                 <div className="w-full space-y-2">
                   <p className="text-[10px] text-slate-500 mb-2 flex items-center justify-center gap-1.5">
@@ -577,17 +604,6 @@ export function ZhiZhiFloatingChat() {
                         </div>
                       )}
 
-                      {msg.sources && msg.sources.length > 0 && (
-                        <div className="mt-2 pt-1.5 border-t border-white/10 text-[9px] text-slate-400">
-                          <p className="font-medium mb-0.5 text-slate-500">知识来源</p>
-                          {msg.sources.map((s, idx) => (
-                            <div key={idx} className="truncate">
-                              《{s.doc_name}》{s.page_number ? `第${s.page_number}页` : ''}
-                              {s.section_title ? ` · ${s.section_title}` : ''}
-                            </div>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </div>
                 ))}

@@ -42,13 +42,24 @@ def load_from_api(url: str) -> List[Dict[str, Any]]:
 
 
 class BusinessDataProvider:
-    """业务数据提供者"""
+    """业务数据提供者
 
-    def __init__(self, data_source: Optional[Path] = None, api_url: Optional[str] = None):
+    支持三种数据来源：
+    1. 外部传入 records（前端 localStorage 数据通过 /ask context 传入）；
+    2. 本地 JSON 文件；
+    3. 业务 API。
+    """
+
+    def __init__(
+        self,
+        data_source: Optional[Path] = None,
+        api_url: Optional[str] = None,
+        records: Optional[List[Dict[str, Any]]] = None,
+    ):
         self.data_source = data_source
         self.api_url = api_url or config.BUSINESS_API_URL
-        self._records: List[Dict[str, Any]] = []
-        self._loaded = False
+        self._records: List[Dict[str, Any]] = records if records is not None else []
+        self._loaded = records is not None
 
     def load(self) -> List[Dict[str, Any]]:
         """加载业务数据"""
@@ -72,6 +83,11 @@ class BusinessDataProvider:
 
         self._loaded = True
         return self._records
+
+    def set_records(self, records: List[Dict[str, Any]]) -> None:
+        """外部传入记录（如前端 context）"""
+        self._records = records if records is not None else []
+        self._loaded = True
 
     def get_records(self) -> List[Dict[str, Any]]:
         return self.load()
