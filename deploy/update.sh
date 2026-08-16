@@ -37,19 +37,27 @@ if [ "$SKIP_PULL" != "--no-sync" ]; then
 fi
 
 cd "${ZHIZHI_SRC}"
+log "准备构建工具链..."
 setup_path
 
 command -v node >/dev/null || die "未找到 node，请先跑 deploy/install.sh"
 command -v javac >/dev/null || die "未找到 JDK，请安装 java-1.8.0-openjdk-devel"
 command -v mvn >/dev/null || die "未找到 mvn（已尝试解压 apache-maven-3.9.6-bin.zip）"
 
-log "node=$(node -v)  npm=$(npm -v)  mvn=$(mvn -v | head -1)  java=$(java -version 2>&1 | head -1)"
+log "node=$(node -v)  npm=$(npm -v)"
+log "mvn=$(mvn -v 2>/dev/null | sed -n '1p')"
+log "java=$(java -version 2>&1 | sed -n '1p')"
 
-log "安装前端依赖（npm ci）"
+# 国内机器访问 npmjs/maven 官方源经常像卡住，默认走镜像
+export npm_config_registry="${NPM_REGISTRY:-https://registry.npmmirror.com}"
+MVN_SETTINGS="${ZHIZHI_SRC}/deploy/maven-settings.xml"
+log "npm 源: ${npm_config_registry}"
+
+log "安装前端依赖 npm ci（首次 5Mbps 可能要 10～20 分钟，会持续有输出）"
 if [ -f package-lock.json ]; then
-  npm ci
+  npm ci --no-audit --no-fund
 else
-  npm install
+  npm install --no-audit --no-fund
 fi
 
 log "构建 React（base=/zhiliang/）"
@@ -57,8 +65,12 @@ export VITE_ZHIHE_API_URL="${VITE_ZHIHE_API_URL:-/zhihe}"
 npm run build:prod
 [ -f dist/index.html ] || die "前端构建失败：没有 dist/index.html"
 
-log "Maven 打包（-Pprod，跳过测试）"
-mvn -q -DskipTests -Pprod package -Dmaven.repo.local="${ZHIZHI_M2}"
+log "Maven 打包（不要用 -q，才能看到下载进度）"
+if [ -f "$MVN_SETTINGS" ]; then
+  mvn -DskipTests -Pprod package -Dmaven.repo.local="${ZHIZHI_M2}" -s "$MVN_SETTINGS"
+else
+  mvn -DskipTests -Pprod package -Dmaven.repo.local="${ZHIZHI_M2}"
+fi
 SRC_JAR="${ZHIZHI_SRC}/target/${ZHIZHI_ARTIFACT}"
 [ -f "$SRC_JAR" ] || die "未找到 $SRC_JAR"
 

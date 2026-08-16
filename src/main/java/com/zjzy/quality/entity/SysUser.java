@@ -17,8 +17,8 @@ public class SysUser {
     private String username;
 
     @JsonIgnore
-    @Column(name = "password_hash", nullable = false, length = 100)
-    private String passwordHash;
+    @Column(name = "password", nullable = false, length = 100)
+    private String password;
 
     @Column(name = "display_name", length = 50)
     private String displayName;
@@ -38,8 +38,8 @@ public class SysUser {
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
     public String getDisplayName() { return displayName; }
     public void setDisplayName(String displayName) { this.displayName = displayName; }

@@ -131,12 +131,12 @@ CREATE TABLE IF NOT EXISTS warning_log (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='预警日志表';
 
 -- ----------------------------
--- 5. 系统用户（网页登录，密码为 BCrypt）
+-- 5. 系统用户（网页登录，密码明文）
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS sys_user (
     id              BIGINT          NOT NULL AUTO_INCREMENT,
     username        VARCHAR(50)     NOT NULL,
-    password_hash   VARCHAR(100)    NOT NULL,
+    password        VARCHAR(100)    NOT NULL,
     display_name    VARCHAR(50)     NOT NULL DEFAULT '',
     role            VARCHAR(20)     NOT NULL DEFAULT '用户',
     enabled         TINYINT         NOT NULL DEFAULT 1,
