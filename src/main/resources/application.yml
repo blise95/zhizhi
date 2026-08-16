@@ -31,7 +31,6 @@ spring:
       encoding: utf-8
       mode: always
       schema-locations: classpath:schema.sql
-      data-locations: classpath:data-init.sql
       continue-on-error: true
 
   # 静态资源映射

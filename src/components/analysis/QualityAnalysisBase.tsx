@@ -137,7 +137,12 @@ export function QualityAnalysisBase({ defectType }: QualityAnalysisBaseProps) {
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
 
   useEffect(() => {
-    setAllRecords(loadProcessQualityData());
+    const load = async () => {
+      setAllRecords(await loadProcessQualityData());
+    };
+    load();
+    window.addEventListener('quality-data-updated', load);
+    return () => window.removeEventListener('quality-data-updated', load);
   }, []);
 
   const filteredRecords = useMemo(() => {

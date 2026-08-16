@@ -350,14 +350,13 @@ const QualityDashboard: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 加载数据并监听变化
   useEffect(() => {
-    const load = () => {
-      setAllRecords(loadProcessQualityData());
+    const load = async () => {
+      setAllRecords(await loadProcessQualityData());
     };
     load();
-    window.addEventListener('storage', load);
-    return () => window.removeEventListener('storage', load);
+    window.addEventListener('quality-data-updated', load);
+    return () => window.removeEventListener('quality-data-updated', load);
   }, []);
 
   const timeRange = useMemo<TimeRange>(() => {

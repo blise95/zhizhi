@@ -42,6 +42,7 @@ public class InspectionRecord {
     private String sampleTicketNo;
 
     // 烟支内在物测指标（1:N 拆分为子表）
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "inspection", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PhysicalMeasurement> physicalMeasurements = new ArrayList<>();
 
@@ -94,9 +95,7 @@ public class InspectionRecord {
     @Column(name = "upload_time", length = 20)
     private String uploadTime;
 
-    /** 缺陷明细（1:N） */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "inspection", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "inspection", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DefectDetail> defectDetails = new ArrayList<>();
 
     // ==================== 辅助方法 ====================

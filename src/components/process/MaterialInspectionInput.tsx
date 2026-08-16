@@ -21,6 +21,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { getCurrentUser } from '../auth/Login';
+import { RECORD_TYPE, createTypedRecord } from '@/services/qualityData';
 
 // 类型定义
 interface MaterialInspectionData {
@@ -182,47 +183,44 @@ export function MaterialInspectionInput() {
   };
 
   // 提交数据
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
 
-    // 保存到localStorage
-    const records = JSON.parse(localStorage.getItem('materialInspectionRecords') || '[]');
     const currentUser = getCurrentUser();
     const now = new Date().toISOString();
     const record = {
       ...formData,
-      id: Date.now(),
       createdAt: now,
       updatedAt: now,
       uploader: currentUser?.displayName || currentUser?.username || '未知用户',
     };
-    records.push(record);
-    localStorage.setItem('materialInspectionRecords', JSON.stringify(records));
 
-    // 显示提交成功弹窗
-    const recordCount = records.length;
-    setSubmitMessage(`已成功保存第 ${recordCount} 条记录`);
-    setShowSuccess(true);
-
-    // 重置表单
-    setFormData({
-      inspectionDate: getTodayDate(),
-      productionPoint: '',
-      materialType: '',
-      materialCode: '',
-      batchNumber: '',
-      supplier: '',
-      inspector: '',
-      colorDifference: '',
-      printing: '',
-      cutting: '',
-      fontComplete: '',
-      overallResult: '',
-      images: [],
-    });
-    setErrors({});
+    try {
+      await createTypedRecord(RECORD_TYPE.MATERIAL, record as unknown as Record<string, unknown>, record.uploader);
+      setSubmitMessage('记录已保存到数据库');
+      setShowSuccess(true);
+      setFormData({
+        inspectionDate: getTodayDate(),
+        productionPoint: '',
+        materialType: '',
+        materialCode: '',
+        batchNumber: '',
+        supplier: '',
+        inspector: '',
+        colorDifference: '',
+        printing: '',
+        cutting: '',
+        fontComplete: '',
+        overallResult: '',
+        images: [],
+      });
+      setErrors({});
+      window.dispatchEvent(new Event('quality-data-updated'));
+    } catch (error) {
+      alert('保存失败：' + (error instanceof Error ? error.message : String(error)));
+    }
   };
 
   // 重置表单

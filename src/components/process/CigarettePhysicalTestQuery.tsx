@@ -38,6 +38,12 @@ import {
   Scatter,
   ResponsiveContainer,
 } from 'recharts';
+import {
+  RECORD_TYPE,
+  listTypedRecords,
+  updateTypedRecord,
+  deleteTypedRecord,
+} from '@/services/qualityData';
 
 // 导入类型定义
 import type {
@@ -169,63 +175,25 @@ export function CigarettePhysicalTestQuery() {
   // 加载数据
   useEffect(() => {
     loadData();
-
-    // 监听storage事件，当有新数据提交时自动刷新
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'physicalTestRecords') {
-        loadData();
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    const refresh = () => { loadData(); };
+    window.addEventListener('quality-data-updated', refresh);
+    return () => window.removeEventListener('quality-data-updated', refresh);
   }, []);
 
-  const loadData = () => {
+  const loadData = async () => {
     try {
-      let records = JSON.parse(localStorage.getItem('physicalTestRecords') || '[]');
-
-      // 如果 localStorage 为空，尝试从预置数据文件加载
-      if (!Array.isArray(records) || records.length === 0) {
-        console.log('[物测查询] localStorage 为空，加载预置数据...');
-        // 预置数据将在下面异步加载
-        loadPresetData();
-        return;
-      }
-
+      const records = await listTypedRecords<PhysicalTestRecord>(RECORD_TYPE.PHYSICAL);
       const validRecords = records.filter(r =>
         r && r.id && r.date && (r.weight || r.circumference || r.drawResistance || r.ventilation || r.length)
       ).map(r => {
-        // 兼容旧数据：将 ventilationLength 合并到 ventilation
-        if (r.ventilationLength && !r.ventilation) {
-          return { ...r, ventilation: r.ventilationLength };
+        if ((r as PhysicalTestRecord & { ventilationLength?: IndicatorData }).ventilationLength && !r.ventilation) {
+          return { ...r, ventilation: (r as PhysicalTestRecord & { ventilationLength?: IndicatorData }).ventilationLength };
         }
         return r;
       });
       setAllData(validRecords);
     } catch (error) {
       console.error('加载烟支物测数据失败:', error);
-      setAllData([]);
-    }
-  };
-
-  // 从 public/data/ 加载预置的示例数据
-  const loadPresetData = async () => {
-    try {
-      const response = await fetch('/data/physical_test_records_frontend.json');
-      if (response.ok) {
-        const presetData = await response.json();
-        if (Array.isArray(presetData) && presetData.length > 0) {
-          // 写入 localStorage 以便后续使用
-          localStorage.setItem('physicalTestRecords', JSON.stringify(presetData));
-          const validRecords = presetData.filter(r =>
-            r && r.id && r.date
-          );
-          setAllData(validRecords);
-          console.log(`[物测查询] 已加载 ${validRecords.length} 条预置数据`);
-        }
-      }
-    } catch (error) {
-      console.log('[物测查询] 无预置数据文件，等待用户录入');
       setAllData([]);
     }
   };
@@ -419,11 +387,15 @@ export function CigarettePhysicalTestQuery() {
   };
 
   // 执行删除
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!recordToDelete) return;
-    const updated = allData.filter(r => r.id !== recordToDelete.id);
-    localStorage.setItem('physicalTestRecords', JSON.stringify(updated));
-    setAllData(updated);
+    try {
+      await deleteTypedRecord(Number(recordToDelete.id));
+      setAllData(allData.filter(r => r.id !== recordToDelete.id));
+    } catch (e) {
+      console.error(e);
+      alert('删除失败，请检查网络或后端服务');
+    }
     setShowDeleteConfirm(false);
     setRecordToDelete(null);
   };
@@ -435,22 +407,22 @@ export function CigarettePhysicalTestQuery() {
   };
 
   // 保存编辑
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editingRecord || !editForm) return;
-    const updated = allData.map(r => {
-      if (r.id === editingRecord.id) {
-        return {
-          ...r,
-          ...editForm,
-          updatedAt: new Date().toISOString(),
-        } as PhysicalTestRecord;
-      }
-      return r;
-    });
-    localStorage.setItem('physicalTestRecords', JSON.stringify(updated));
-    setAllData(updated);
-    setEditingRecord(null);
-    setEditForm({});
+    const merged = {
+      ...editingRecord,
+      ...editForm,
+      updatedAt: new Date().toISOString(),
+    } as PhysicalTestRecord;
+    try {
+      await updateTypedRecord(Number(editingRecord.id), merged as unknown as Record<string, unknown>);
+      setAllData(allData.map(r => (r.id === editingRecord.id ? merged : r)));
+      setEditingRecord(null);
+      setEditForm({});
+    } catch (e) {
+      console.error(e);
+      alert('保存失败，请检查网络或后端服务');
+    }
   };
 
   // 取消编辑/删除

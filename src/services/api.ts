@@ -112,6 +112,15 @@ export interface InspectionRecord {
   uploader: string;
   uploadTime: string;
   createdAt: string;
+  defectDetails?: Array<{
+    id?: number;
+    module: string;
+    bodyPart: string;
+    code: string;
+    name: string;
+    grade: string;
+    count: number;
+  }>;
 }
 
 export const inspectionApi = {
@@ -144,6 +153,13 @@ export const inspectionApi = {
     });
   },
 
+  update: (id: number, record: Partial<InspectionRecord>): Promise<{ success: boolean; message: string }> => {
+    return apiFetch(`/inspection/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(record),
+    });
+  },
+
   // 删除记录
   delete: (id: number): Promise<{ success: boolean; message: string }> => {
     return apiFetch(`/inspection/${id}`, {
@@ -165,11 +181,22 @@ export interface DefectDetail {
 }
 
 export const defectApi = {
-  // 根据质检记录ID获取缺陷明细
   getByInspectionId: async (inspectionId: number): Promise<DefectDetail[]> => {
-    // 注意：后端可能没有单独的缺陷明细接口，这里先预留
-    // 实际可以通过 inspection/list 返回的数据关联查询
-    return [];
+    const records = await inspectionApi.list();
+    const found = records.find((r) => r.id === inspectionId);
+    if (!found?.defectDetails) {
+      return [];
+    }
+    return found.defectDetails.map((d) => ({
+      id: d.id || 0,
+      inspectionId,
+      module: d.module,
+      bodyPart: d.bodyPart,
+      code: d.code,
+      name: d.name,
+      grade: d.grade,
+      count: d.count,
+    }));
   },
 };
 
@@ -188,8 +215,43 @@ export interface WarningLog {
 
 export const warningApi = {
   list: (): Promise<WarningLog[]> => {
-    return apiFetch<WarningLog[]>('/warning/list');
+    return apiFetch<WarningLog[]>('/warning/logs');
   },
+};
+
+export const RECORD_TYPE = {
+  PHYSICAL: 'physicalTest',
+  MATERIAL: 'materialInspection',
+  TOBACCO: 'tobaccoInspection',
+} as const;
+
+export interface AppRecordRow {
+  id: number;
+  recordType: string;
+  payload: Record<string, unknown>;
+  uploader?: string;
+  createdAt?: string;
+}
+
+export const recordApi = {
+  list: (type: string) => apiFetch<AppRecordRow[]>(`/records?type=${encodeURIComponent(type)}`),
+
+  create: (type: string, payload: unknown, uploader?: string) =>
+    apiFetch<{ success: boolean; id: number; data: AppRecordRow }>('/records', {
+      method: 'POST',
+      body: JSON.stringify({ recordType: type, payload, uploader }),
+    }),
+
+  update: (id: number, payload: unknown) =>
+    apiFetch<{ success: boolean; data: AppRecordRow }>(`/records/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ payload }),
+    }),
+
+  delete: (id: number) =>
+    apiFetch<{ success: boolean }>(`/records/${id}`, {
+      method: 'DELETE',
+    }),
 };
 
 // ==================== 图表数据接口 ====================
@@ -223,4 +285,5 @@ export default {
   defect: defectApi,
   warning: warningApi,
   chart: chartApi,
+  record: recordApi,
 };

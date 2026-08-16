@@ -62,21 +62,17 @@ if systemctl is-active --quiet firewalld; then
   firewall-cmd --reload || true
 fi
 
-cat > /usr/local/bin/zhizhi-update <<EOF
-#!/bin/bash
-exec bash "${ZHIZHI_SRC}/deploy/update.sh" "\$@"
-EOF
-chmod +x /usr/local/bin/zhizhi-update
-chmod +x "${ZHIZHI_SRC}/deploy/update.sh" \
-         "${ZHIZHI_SRC}/deploy/healthcheck.sh" \
-         "${ZHIZHI_SRC}/deploy/backup-mysql.sh" \
-         "${ZHIZHI_SRC}/deploy/centos7/"*.sh
+install_cli
+chmod +x "${ZHIZHI_SRC}/deploy/"*.sh "${ZHIZHI_SRC}/deploy/centos7/"*.sh
 
 log "首次构建并启动"
 bash "${ZHIZHI_SRC}/deploy/update.sh" --no-sync
 systemctl start zhizhi-api
 
 log "======== 安装完成 ========"
-log "以后每次发版只需一行："
-log "  zhizhi-update"
+log "以后发版："
+log "  zhizhi-sync                 # 只拉 GitHub"
+log "  zhizhi-frontend             # 只发前端"
+log "  zhizhi-backend              # 只发后端"
+log "  zhizhi-update               # 上面三步一起做"
 log "访问： http://服务器IP/zhiliang/"

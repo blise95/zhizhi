@@ -33,7 +33,7 @@ public class WarningController {
      * 查询全部预警日志（仅A/B/C类）
      * GET /api/warning/logs
      */
-    @GetMapping("/logs")
+    @GetMapping({"/logs", "/list"})
     public List<WarningLog> logs() {
         return warningService.getAllWarnings();
     }

@@ -156,3 +156,13 @@ CREATE TABLE IF NOT EXISTS sys_user_session (
     INDEX idx_user (user_id),
     INDEX idx_expire (expire_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='登录会话';
+
+CREATE TABLE IF NOT EXISTS app_record (
+    id              BIGINT          NOT NULL AUTO_INCREMENT,
+    record_type     VARCHAR(50)     NOT NULL,
+    payload         MEDIUMTEXT      NOT NULL,
+    uploader        VARCHAR(50)     NULL,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_type (record_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='通用业务记录（物测/材料/烟丝等）';

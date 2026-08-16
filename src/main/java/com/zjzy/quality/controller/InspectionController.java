@@ -46,6 +46,15 @@ public class InspectionController {
     }
 
     /**
+     * 更新质检记录基础信息
+     * PUT /api/inspection/{id}
+     */
+    @PutMapping("/{id}")
+    public Map<String, Object> update(@PathVariable Long id, @RequestBody InspectionRecord record) {
+        return inspectionService.updateHeader(id, record);
+    }
+
+    /**
      * 删除质检记录
      * DELETE /api/inspection/{id}
      */

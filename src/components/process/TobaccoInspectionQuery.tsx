@@ -20,10 +20,16 @@ import {
   User,
   Clock,
 } from 'lucide-react';
+import {
+  RECORD_TYPE,
+  listTypedRecords,
+  updateTypedRecord,
+  deleteTypedRecord,
+} from '@/services/qualityData';
 
 // 类型定义
 interface TobaccoInspectionRecord {
-  id: string;
+  id: number | string;
   inspectionDate: string;
   productionPoint: string;
   tobaccoBrand: string;
@@ -73,9 +79,11 @@ export function TobaccoInspectionQuery() {
 
   const pageSize = 10;
 
-  // 初始化：加载模拟数据或从localStorage读取
   useEffect(() => {
     loadData();
+    const refresh = () => { loadData(); };
+    window.addEventListener('quality-data-updated', refresh);
+    return () => window.removeEventListener('quality-data-updated', refresh);
   }, []);
 
   // 筛选逻辑
@@ -102,57 +110,14 @@ export function TobaccoInspectionQuery() {
     setCurrentPage(1);
   }, [filters, allData]);
 
-  // 加载数据
-  const loadData = () => {
-    const savedData = localStorage.getItem('tobaccoInspectionRecords');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setAllData(parsed);
-        return;
-      } catch (e) {
-        console.error('解析数据失败:', e);
-      }
+  const loadData = async () => {
+    try {
+      const records = await listTypedRecords<TobaccoInspectionRecord>(RECORD_TYPE.TOBACCO);
+      setAllData(records);
+    } catch (e) {
+      console.error('加载烟丝检验数据失败:', e);
+      setAllData([]);
     }
-
-    // 如果没有数据，生成模拟数据
-    const mockData = generateMockData();
-    setAllData(mockData);
-    localStorage.setItem('tobaccoInspectionRecords', JSON.stringify(mockData));
-  };
-
-  // 生成模拟数据
-  const generateMockData = (): TobaccoInspectionRecord[] => {
-    const data: TobaccoInspectionRecord[] = [];
-    const today = new Date();
-
-    for (let i = 0; i < 15; i++) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - Math.floor(i / 3));
-
-      const moistureValue = parseFloat((11.5 + Math.random() * 2).toFixed(1));
-      const fillingValue = parseFloat((5.0 + Math.random() * 1.2).toFixed(2));
-
-      const moistureResult = moistureValue >= 11.9 && moistureValue <= 12.9 ? '合格' : '不合格';
-      const fillingResult = fillingValue >= 5.5 ? '合格' : '不合格';
-      const overallResult = moistureResult === '合格' && fillingResult === '合格' ? '检验合格' : '检验不合格';
-
-      data.push({
-        id: `TOB-${String(i + 1).padStart(4, '0')}`,
-        inspectionDate: date.toISOString().split('T')[0],
-        productionPoint: PRODUCTION_POINTS[i % 2],
-        tobaccoBrand: TOBACCO_BRANDS[i % 3],
-        batchNumber: `YS${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}-${String(i + 1).padStart(3, '0')}`,
-        moistureValue,
-        moistureResult,
-        fillingValue,
-        fillingResult,
-        overallResult,
-        createdAt: date.toISOString(),
-      });
-    }
-
-    return data.sort((a, b) => new Date(b.inspectionDate).getTime() - new Date(a.inspectionDate).getTime());
   };
 
   // 分页数据
@@ -210,11 +175,15 @@ export function TobaccoInspectionQuery() {
   };
 
   // 执行删除
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!recordToDelete) return;
-    const updated = allData.filter(r => r.id !== recordToDelete.id);
-    localStorage.setItem('tobaccoInspectionRecords', JSON.stringify(updated));
-    setAllData(updated);
+    try {
+      await deleteTypedRecord(Number(recordToDelete.id));
+      setAllData(allData.filter(r => r.id !== recordToDelete.id));
+    } catch (e) {
+      console.error(e);
+      alert('删除失败，请检查网络或后端服务');
+    }
     setShowDeleteConfirm(false);
     setRecordToDelete(null);
   };
@@ -226,18 +195,18 @@ export function TobaccoInspectionQuery() {
   };
 
   // 保存编辑
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editingRecord || !editForm) return;
-    const updated = allData.map(r => {
-      if (r.id === editingRecord.id) {
-        return { ...r, ...editForm, updatedAt: new Date().toISOString() } as TobaccoInspectionRecord;
-      }
-      return r;
-    });
-    localStorage.setItem('tobaccoInspectionRecords', JSON.stringify(updated));
-    setAllData(updated);
-    setEditingRecord(null);
-    setEditForm({});
+    const merged = { ...editingRecord, ...editForm, updatedAt: new Date().toISOString() } as TobaccoInspectionRecord;
+    try {
+      await updateTypedRecord(Number(editingRecord.id), merged as unknown as Record<string, unknown>);
+      setAllData(allData.map(r => (r.id === editingRecord.id ? merged : r)));
+      setEditingRecord(null);
+      setEditForm({});
+    } catch (e) {
+      console.error(e);
+      alert('保存失败，请检查网络或后端服务');
+    }
   };
 
   // 取消编辑

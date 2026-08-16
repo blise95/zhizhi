@@ -56,7 +56,7 @@ export function ImageCapture({ mode, onCapture, onCancel, title }: ImageCaptureP
   const [ocrResult, setOcrResult] = useState<OCRResult | null>(null);
   const [parsed, setParsed] = useState<ParsedQualityForm | ParsedPhysicalForm | null>(null);
   const [loading, setLoading] = useState(false);
-  const [engine, setEngine] = useState<OCROptions['engine']>('mock');
+  const [engine, setEngine] = useState<OCROptions['engine']>('tesseract');
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -158,12 +158,10 @@ export function ImageCapture({ mode, onCapture, onCancel, title }: ImageCaptureP
           onChange={e => setEngine(e.target.value as OCROptions['engine'])}
           className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 outline-none focus:border-brand-blue"
         >
-          <option value="mock">演示模式（mock）</option>
           <option value="tesseract">浏览器离线 OCR（tesseract.js）</option>
           <option value="cloud">云端精准 OCR（需配置）</option>
         </select>
         <span className="text-xs text-slate-500">
-          {engine === 'mock' && '返回模拟数据，用于界面演示'}
           {engine === 'tesseract' && '本地识别，无需网络，中文表格效果一般'}
           {engine === 'cloud' && '推荐：识别最精准，需配置云端 API'}
         </span>

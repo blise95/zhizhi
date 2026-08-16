@@ -3,13 +3,14 @@
 目标机：CentOS 7.6 / 4 vCPU / 8GB / 40GB / 5Mbps  
 仓库：https://github.com/blise95/zhizhi.git
 
-日常发版**只需要一行**：
+日常发版（root）：
 
 ```bash
-zhizhi-update
+zhizhi-sync        # 只拉 GitHub 最新代码（reset --hard，不构建）
+zhizhi-frontend    # 只发前端（Nginx 静态资源，不重启 Java）
+zhizhi-backend     # 只打 JAR 并重启 Java（不跑 npm）
+zhizhi-update      # 上面三步一起做
 ```
-
-它会：`git pull` → 构建 React → `mvn -Pprod package` → 替换 JAR → 重启 → 健康检查。
 
 ---
 

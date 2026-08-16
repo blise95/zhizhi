@@ -136,6 +136,29 @@ public class InspectionService {
     }
 
     /**
+     * 更新质检记录基础信息（不改缺陷明细）
+     */
+    @Transactional
+    public Map<String, Object> updateHeader(Long id, InspectionRecord incoming) {
+        InspectionRecord existing = inspectionRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("记录不存在"));
+        if (incoming.getDate() != null) existing.setDate(incoming.getDate());
+        if (incoming.getShift() != null) existing.setShift(incoming.getShift());
+        if (incoming.getMachineId() != null) existing.setMachineId(incoming.getMachineId());
+        if (incoming.getTeam() != null) existing.setTeam(incoming.getTeam());
+        if (incoming.getPartnerSite() != null) existing.setPartnerSite(incoming.getPartnerSite());
+        if (incoming.getBrand() != null) existing.setBrand(incoming.getBrand());
+        if (incoming.getSampleTime() != null) existing.setSampleTime(incoming.getSampleTime());
+        if (incoming.getSampleTicketNo() != null) existing.setSampleTicketNo(incoming.getSampleTicketNo());
+        if (incoming.getUploader() != null) existing.setUploader(incoming.getUploader());
+        inspectionRepo.save(existing);
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", "记录已更新");
+        return result;
+    }
+
+    /**
      * 删除质检记录（级联删除缺陷明细）
      */
     @Transactional

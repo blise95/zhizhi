@@ -29,7 +29,8 @@ import {
 import type { DefectRecord as DefectRecordType } from './AppearanceDefectInput';
 
 // 导入API服务
-import { inspectionApi, type InspectionRecord as ApiInspectionRecord } from '../../services/api';
+import { inspectionApi } from '../../services/api';
+import { inspectionToProcessRecord } from '@/services/qualityData';
 
 // 数据接口定义
 interface ProcessQualityData {
@@ -119,9 +120,11 @@ export function ProcessQualityQuery() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<ProcessQualityData | null>(null);
 
-  // 初始化：加载数据（从后端API获取真实数据库数据）
   useEffect(() => {
     loadData();
+    const refresh = () => { loadData(); };
+    window.addEventListener('quality-data-updated', refresh);
+    return () => window.removeEventListener('quality-data-updated', refresh);
   }, []);
 
   // 加载数据 - 从后端MySQL数据库获取
@@ -135,44 +138,30 @@ export function ProcessQualityQuery() {
       });
 
       if (apiData && Array.isArray(apiData) && apiData.length > 0) {
-        // 将后端数据转换为前端格式
-        const convertedData: ProcessQualityData[] = apiData.map((record: ApiInspectionRecord) => ({
-          id: String(record.id),
-          date: record.date,
-          shiftType: record.shift.includes('班') ? record.shift.replace('班', '') : record.shift,
-          shift: ['早班', '中班', '晚班'].indexOf(record.shift) >= 0 ? String(['早班', '中班', '晚班'].indexOf(record.shift) + 1) : '1',
-          machine: record.machineId,
-          productionPoint: record.partnerSite || '',
-          brand: record.brand || '',
-          recorder: record.uploader,
-          samplingTime: record.sampleTime || '',
-          samplingNo: record.sampleTicketNo || '',
-          steelStamp: '',
-          tobaccoBatch: '',
-          // 转换ABCD缺陷数为缺陷对象数组
-          ...(record.cigaretteA > 0 ? { cigaretteDefects: Array.from({ length: record.cigaretteA }, (_, i) => ({
-            id: `cig-A-${record.id}-${i}`,
-            location: '烟支外观',
-            defectName: '爆口',
-            defectCode: 'JDBKA',
-            category: 'A' as const,
-            quantity: 1,
-          })) } : {}),
-          ...(record.cigaretteB > 0 ? { cigaretteDefects: [
-            ...(record.cigaretteA > 0 ? [] : []),
-            ...Array.from({ length: record.cigaretteB }, (_, i) => ({
-              id: `cig-B-${record.id}-${i}`,
-              location: '烟支外观',
-              defectName: '空头',
-              defectCode: 'JKKTB',
-              category: 'B' as const,
-              quantity: 1,
-            })),
-          ] } : {}),
-          createdAt: record.createdAt,
-          updatedAt: record.uploadTime,
-          uploader: record.uploader,
-        }));
+        const convertedData: ProcessQualityData[] = apiData.map((record) => {
+          const mapped = inspectionToProcessRecord(record);
+          return {
+            id: mapped.id,
+            date: mapped.inspectionDate,
+            shiftType: mapped.shiftGroup,
+            shift: mapped.shift,
+            machine: mapped.machine,
+            productionPoint: mapped.productionPoint,
+            brand: mapped.brand,
+            recorder: mapped.inspector,
+            samplingTime: record.sampleTime || '',
+            samplingNo: record.sampleTicketNo || '',
+            steelStamp: '',
+            tobaccoBatch: mapped.batchNumber || '',
+            boxDefects: mapped.boxDefects as DefectRecordType[] | undefined,
+            cartonDefects: mapped.cartonDefects as DefectRecordType[] | undefined,
+            packDefects: mapped.packDefects as DefectRecordType[] | undefined,
+            cigaretteDefects: mapped.cigaretteDefects as DefectRecordType[] | undefined,
+            createdAt: mapped.createdAt,
+            updatedAt: record.uploadTime,
+            uploader: record.uploader,
+          };
+        });
 
         console.log(`✅ 成功从数据库加载 ${convertedData.length} 条质量记录`);
         setAllData(convertedData);
@@ -188,78 +177,6 @@ export function ProcessQualityQuery() {
       setFilteredData([]);
     }
     setIsLoading(false);
-  };
-
-  // 监听storage变化（当其他页面提交数据时自动刷新）
-  useEffect(() => {
-    const handleStorageChange = () => {
-      console.log('🔄 检测到数据更新，重新加载...');
-      loadData();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  // 生成模拟数据（用于演示）
-  const generateMockData = (): ProcessQualityData[] => {
-    const mockData: ProcessQualityData[] = [];
-    const today = new Date();
-
-    for (let i = 0; i < 25; i++) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - Math.floor(i / 3));
-
-      mockData.push({
-        id: `REC-${Date.now()}-${i}`,
-        date: date.toISOString().split('T')[0],
-        shiftType: SHIFT_TYPES[i % 2],
-        shift: SHIFTS[i % 2],
-        machine: MACHINES[i % MACHINES.length],
-        productionPoint: PRODUCTION_POINTS[i % 2],
-        brand: BRANDS[i % BRANDS.length],
-        recorder: `质量员${String.fromCharCode(65 + (i % 5))}`,
-        samplingTime: `${String(8 + (i % 12)).padStart(2, '0')}:${String(i * 5 % 60).padStart(2, '0')}`,
-        samplingNo: `S${String(date.getFullYear()).slice(2)}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}-${String(i + 1).padStart(3, '0')}`,
-        steelStamp: `ST-${date.toISOString().split('T')[0].replace(/-/g, '')}-${i + 1}`,
-        tobaccoBatch: `TB-2026-${String(i + 1).padStart(4, '0')}`,
-        // 随机添加一些缺陷数据
-        ...(i % 3 === 0 ? {
-          boxDefects: [{
-            id: `def-${i}-1`,
-            location: '纸箱',
-            defectName: '纸箱污',
-            defectCode: 'XXWZC',
-            category: 'C',
-            quantity: 1,
-          }],
-        } : {}),
-        ...(i % 4 === 0 ? {
-          cigaretteDefects: [
-            {
-              id: `def-${i}-2`,
-              location: '烟支外观',
-              defectName: '空头',
-              defectCode: 'JKKT',
-              category: 'B',
-              quantity: 2,
-            },
-            {
-              id: `def-${i}-3`,
-              location: '烟支外观',
-              defectName: '爆口',
-              defectCode: 'JKBK',
-              category: 'A',
-              quantity: 1,
-            },
-          ],
-        } : {}),
-        createdAt: date.toISOString(),
-        updatedAt: date.toISOString(),
-      });
-    }
-
-    return mockData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   };
 
   // 应用筛选条件
@@ -383,13 +300,20 @@ export function ProcessQualityQuery() {
     setEditForm({ ...record });
   };
 
-  // 保存编辑 - 重新加载数据以保持与数据库同步
   const saveEdit = async () => {
     if (!editingRecord || !editForm) return;
     try {
-      console.log(`💾 正在更新记录 ID: ${editingRecord.id}`);
-      // 注意：当前后端没有专门的更新接口，这里重新加载以确保数据一致性
-      // 实际项目中应该调用 inspectionApi.submit() 或新增的 update 接口
+      await inspectionApi.update(Number(editingRecord.id), {
+        date: editForm.date,
+        shift: editForm.shiftType,
+        team: editForm.shift,
+        machineId: editForm.machine,
+        partnerSite: editForm.productionPoint,
+        brand: editForm.brand,
+        sampleTime: editForm.samplingTime,
+        sampleTicketNo: editForm.samplingNo || editForm.tobaccoBatch,
+        uploader: editForm.recorder,
+      });
       await loadData();
       setEditingRecord(null);
       setEditForm({});

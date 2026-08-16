@@ -135,7 +135,7 @@ export function createOCRProvider(options: OCROptions): OCRProvider {
       if (!options.cloud) throw new Error('使用 cloud OCR 必须提供 cloud 配置');
       return new CloudOCR(options.cloud);
     default:
-      return new MockOCR();
+      return new TesseractOCR(options.lang);
   }
 }
 

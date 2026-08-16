@@ -39,6 +39,7 @@ import {
   createEmptyIndicatorData,
 } from '@/data/physicalTestTypes';
 import { getCurrentUser } from '../auth/Login';
+import { RECORD_TYPE, createTypedRecord } from '@/services/qualityData';
 
 // 下拉选项配置（与录入页面保持一致）
 const OPTIONS = {
@@ -194,7 +195,7 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
   };
 
   // 提交数据
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) return;
 
     const currentUser = getCurrentUser();
@@ -213,18 +214,15 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
       uploader: currentUser?.displayName || currentUser?.username || '未知用户',
     };
 
-    // 保存到localStorage
-    const existingRecords = JSON.parse(localStorage.getItem('physicalTestRecords') || '[]');
-    existingRecords.push(record);
-    localStorage.setItem('physicalTestRecords', JSON.stringify(existingRecords));
-
-    // 显示提交成功弹窗
-    const recordCount = existingRecords.length;
-    setSubmitMessage(`已成功保存第 ${recordCount} 条记录`);
-    setShowSuccess(true);
-
-    // 自动重置表单
-    handleReset();
+    try {
+      await createTypedRecord(RECORD_TYPE.PHYSICAL, record as unknown as Record<string, unknown>, record.uploader);
+      setSubmitMessage('记录已保存到数据库');
+      setShowSuccess(true);
+      handleReset();
+      window.dispatchEvent(new Event('quality-data-updated'));
+    } catch (error) {
+      alert('保存失败：' + (error instanceof Error ? error.message : String(error)));
+    }
   };
 
   // 重置表单

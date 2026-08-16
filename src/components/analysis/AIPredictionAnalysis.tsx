@@ -180,8 +180,17 @@ function AIPredictionAnalysisContent() {
   const [allPhysicalRecords, setAllPhysicalRecords] = useState<any[]>([]);
 
   useEffect(() => {
-    setAllRecords(loadProcessQualityData());
-    setAllPhysicalRecords(loadPhysicalTestRecords());
+    const load = async () => {
+      const [processRows, physicalRows] = await Promise.all([
+        loadProcessQualityData(),
+        loadPhysicalTestRecords(),
+      ]);
+      setAllRecords(processRows);
+      setAllPhysicalRecords(physicalRows);
+    };
+    load();
+    window.addEventListener('quality-data-updated', load);
+    return () => window.removeEventListener('quality-data-updated', load);
   }, []);
 
   const filteredRecords = useMemo(() => {

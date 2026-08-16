@@ -19,11 +19,15 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, Object> body) {
+    public Map<String, Object> login(@RequestBody(required = false) Map<String, Object> body) {
+        if (body == null) {
+            body = new LinkedHashMap<String, Object>();
+        }
         String username = body.get("username") == null ? "" : String.valueOf(body.get("username"));
         String password = body.get("password") == null ? "" : String.valueOf(body.get("password"));
-        boolean rememberMe = Boolean.TRUE.equals(body.get("rememberMe"))
-                || "true".equalsIgnoreCase(String.valueOf(body.get("rememberMe")));
+        Object rememberRaw = body.get("rememberMe");
+        boolean rememberMe = Boolean.TRUE.equals(rememberRaw)
+                || "true".equalsIgnoreCase(String.valueOf(rememberRaw));
         return authService.login(username, password, rememberMe);
     }
 

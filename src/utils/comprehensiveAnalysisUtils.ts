@@ -240,46 +240,19 @@ export function getAvailablePeriodOptions(type: PeriodType, year: number): { val
 
 // ==================== 数据加载 ====================
 
-export function loadPhysicalTestRecords(): PhysicalTestRecord[] {
+export async function loadPhysicalTestRecords(): Promise<PhysicalTestRecord[]> {
+  const { listTypedRecords, RECORD_TYPE } = await import('../services/qualityData');
   try {
-    const data = localStorage.getItem('physicalTestRecords');
-    if (data) {
-      return JSON.parse(data);
-    }
-    return [];
+    return await listTypedRecords<PhysicalTestRecord>(RECORD_TYPE.PHYSICAL);
   } catch (e) {
     console.error('加载烟支物测数据失败:', e);
     return [];
   }
 }
 
-export function loadProcessQualityData(): ProcessQualityRecord[] {
-  try {
-    const data = localStorage.getItem('processQualityData');
-    if (data) {
-      const records = JSON.parse(data);
-      return records.map((record: any) => ({
-        id: record.id,
-        inspectionDate: record.date || record.inspectionDate,
-        productionPoint: record.productionPoint,
-        brand: record.brand,
-        machine: record.machine,
-        shiftGroup: record.shiftType || record.shiftGroup,
-        shift: record.shift,
-        inspector: record.recorder || record.inspector,
-        batchNumber: record.tobaccoBatch || record.batchNumber,
-        boxDefects: record.boxDefects || [],
-        cartonDefects: record.cartonDefects || [],
-        packDefects: record.packDefects || [],
-        cigaretteDefects: record.cigaretteDefects || [],
-        createdAt: record.createdAt || new Date().toISOString(),
-      }));
-    }
-    return [];
-  } catch (e) {
-    console.error('加载过程质量数据失败:', e);
-    return [];
-  }
+export async function loadProcessQualityData(): Promise<ProcessQualityRecord[]> {
+  const { loadProcessQualityData: load } = await import('./analysisUtils');
+  return load();
 }
 
 export function filterRecordsByConditions(

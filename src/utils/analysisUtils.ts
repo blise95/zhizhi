@@ -184,35 +184,14 @@ export function getCurrentMonthRange(): { from: string; to: string } {
 }
 
 /**
- * 从 localStorage 加载过程质量数据
- * 统一使用 processQualityData key（与录入、查询页面保持一致）
+ * 从后端 MySQL 加载过程质量数据
  */
-export function loadProcessQualityData(): ProcessQualityRecord[] {
+export async function loadProcessQualityData(): Promise<ProcessQualityRecord[]> {
+  const { fetchProcessQualityRecords } = await import('../services/qualityData');
   try {
-    const data = localStorage.getItem('processQualityData');
-    if (data) {
-      const records = JSON.parse(data);
-      console.log(`✅ 分析中心加载了 ${records.length} 条质量记录`);
-
-      return records.map((record: any) => ({
-        id: record.id,
-        inspectionDate: record.date || record.inspectionDate,
-        productionPoint: record.productionPoint,
-        brand: record.brand,
-        machine: record.machine,
-        shiftGroup: record.shiftType || record.shiftGroup,
-        shift: record.shift,
-        inspector: record.recorder || record.inspector,
-        batchNumber: record.tobaccoBatch || record.batchNumber,
-        boxDefects: record.boxDefects || [],
-        cartonDefects: record.cartonDefects || [],
-        packDefects: record.packDefects || [],
-        cigaretteDefects: record.cigaretteDefects || [],
-        createdAt: record.createdAt || new Date().toISOString(),
-      }));
-    }
-    console.log('ℹ️ 暂无质量数据');
-    return [];
+    const records = await fetchProcessQualityRecords();
+    console.log(`✅ 分析中心加载了 ${records.length} 条质量记录`);
+    return records;
   } catch (e) {
     console.error('❌ 加载过程质量数据失败:', e);
     return [];

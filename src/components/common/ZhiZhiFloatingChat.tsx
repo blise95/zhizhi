@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, User, Sparkles, Activity, Server, AlertCircle, TrendingUp, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { fetchProcessQualityRecords, listTypedRecords, RECORD_TYPE } from '@/services/qualityData';
 
 interface ChatMessage {
   id: string;
@@ -362,20 +363,15 @@ export function ZhiZhiFloatingChat() {
       setLoading(true);
 
       try {
-        // 从系统 localStorage 读取真实质量数据，作为上下文传给智合后端
         let processRecords: unknown[] = [];
         let physicalRecords: unknown[] = [];
         try {
-          const processRaw = localStorage.getItem('processQualityData');
-          if (processRaw) {
-            const parsed = JSON.parse(processRaw);
-            processRecords = Array.isArray(parsed) ? parsed : (parsed?.records || []);
-          }
-          const physicalRaw = localStorage.getItem('physicalTestRecords');
-          if (physicalRaw) {
-            const parsed = JSON.parse(physicalRaw);
-            physicalRecords = Array.isArray(parsed) ? parsed : (parsed?.records || []);
-          }
+          const [processRows, physicalRows] = await Promise.all([
+            fetchProcessQualityRecords(),
+            listTypedRecords(RECORD_TYPE.PHYSICAL),
+          ]);
+          processRecords = processRows;
+          physicalRecords = physicalRows;
         } catch {
           // 读取失败不影响提问
         }

@@ -12,13 +12,13 @@ import { rateRecords } from '../lib/qualityEngine';
 import {
   type ProcessQualityRecord,
   type DefectRecord,
-  type PhysicalTestRecord,
   DefectType,
   getDefectFieldByType,
   DEFECT_RATE_BASE,
   formatLocalDate,
   loadProcessQualityData,
 } from './analysisUtils';
+import type { PhysicalTestRecord } from '../data/physicalTestTypes';
 import {
   PHYSICAL_INDICATOR_KEYS,
   getIndicatorStandard,
@@ -259,13 +259,10 @@ export function filterPhysicalRecordsByConditions(
 
 export { loadProcessQualityData };
 
-export function loadPhysicalTestRecords(): PhysicalTestRecord[] {
+export async function loadPhysicalTestRecords(): Promise<PhysicalTestRecord[]> {
+  const { listTypedRecords, RECORD_TYPE } = await import('../services/qualityData');
   try {
-    const data = localStorage.getItem('physicalTestRecords');
-    if (data) {
-      return JSON.parse(data);
-    }
-    return [];
+    return await listTypedRecords<PhysicalTestRecord>(RECORD_TYPE.PHYSICAL);
   } catch (e) {
     console.error('加载烟支物测数据失败:', e);
     return [];

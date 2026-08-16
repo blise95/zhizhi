@@ -26,8 +26,9 @@ public class SysUser {
     @Column(length = 20)
     private String role;
 
-    @Column(nullable = false)
-    private Boolean enabled = true;
+    /** MySQL TINYINT，用 Integer 避免 Connector/J 把 1 转 Boolean 失败导致登录 500 */
+    @Column(name = "enabled", nullable = false)
+    private Integer enabled = 1;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -47,8 +48,12 @@ public class SysUser {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 
-    public Boolean getEnabled() { return enabled; }
-    public void setEnabled(Boolean enabled) { this.enabled = enabled; }
+    public Integer getEnabled() { return enabled; }
+    public void setEnabled(Integer enabled) { this.enabled = enabled; }
+
+    public boolean isEnabled() {
+        return enabled == null || enabled != 0;
+    }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

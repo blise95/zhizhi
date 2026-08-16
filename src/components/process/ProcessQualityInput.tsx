@@ -18,6 +18,8 @@ import { AppearanceDefectInput } from './AppearanceDefectInput';
 import { getCurrentUser } from '../auth/Login';
 import { ImageCapture } from '../common/ImageCapture';
 import type { ParsedQualityForm } from '@/services/ocrService';
+import { inspectionApi } from '@/services/api';
+import { buildInspectionSubmit } from '@/services/qualityData';
 
 // 表单数据类型定义
 interface FormData {
@@ -257,9 +259,6 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
     setDefectData(data);
   };
 
-  // 统一的数据存储key（与查询页面保持一致）
-  const STORAGE_KEY = 'processQualityData';
-
   // 上一条记录记忆key（用于连续录入自动带出）
   const HISTORY_KEY = 'processQualityLastRecord';
 
@@ -308,86 +307,37 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
   };
 
   // 正式提交处理
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
       try {
         const currentUser = getCurrentUser();
-        const now = new Date().toISOString();
+        const shiftLabel = OPTIONS.shift.find(s => s.value === formData.shift)?.label || formData.shift;
+        const machineLabel = OPTIONS.machine.find(m => m.value === formData.machine)?.label || formData.machine;
+        const productionPoint = OPTIONS.productionPoint.find(p => p.value === formData.productionPoint)?.label || formData.productionPoint;
+        const brand = OPTIONS.brand.find(b => b.value === formData.brand)?.label || formData.brand;
 
-        // 构建基础质量记录
-        const qualityRecord: any = {
-          id: `REC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        const payload = buildInspectionSubmit({
           date: formData.date,
-          shiftType: OPTIONS.shift.find(s => s.value === formData.shift)?.label || formData.shift,
-          shift: formData.shiftNumber,
-          machine: OPTIONS.machine.find(m => m.value === formData.machine)?.label || formData.machine,
-          productionPoint: OPTIONS.productionPoint.find(p => p.value === formData.productionPoint)?.label || formData.productionPoint,
-          brand: OPTIONS.brand.find(b => b.value === formData.brand)?.label || formData.brand,
-          recorder: formData.recorder,
-          samplingTime: formData.samplingTime || '',
-          samplingNo: formData.sampleNumber || '',
-          steelStamp: formData.steelStamp || '',
-          tobaccoBatch: formData.tobaccoBatch || '',
-          createdAt: now,
-          updatedAt: now,
+          shiftLabel,
+          shiftNumber: formData.shiftNumber,
+          machine: machineLabel,
+          productionPoint,
+          brand,
+          sampleTime: formData.samplingTime || '',
+          sampleTicketNo: formData.sampleNumber || '',
           uploader: currentUser?.displayName || currentUser?.username || '未知用户',
-        };
+          boxDefects: defectData.box,
+          cartonDefects: defectData.carton,
+          packDefects: defectData.pack,
+          cigaretteDefects: defectData.cigarette,
+        });
 
-        // 添加缺陷数据（如果有）
-        if (defectData.box && defectData.box.length > 0) {
-          qualityRecord.boxDefects = defectData.box.map(d => ({
-            id: `def-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-            location: d.location,
-            defectName: d.defectName,
-            defectCode: d.defectCode || '',
-            category: d.category,
-            quantity: d.quantity,
-            scoreCategory: d.scoreCategory,
-          }));
+        const result = await inspectionApi.submit(payload);
+        if (!result.success) {
+          throw new Error(result.message || '提交失败');
         }
 
-        if (defectData.carton && defectData.carton.length > 0) {
-          qualityRecord.cartonDefects = defectData.carton.map(d => ({
-            id: `def-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-            location: d.location,
-            defectName: d.defectName,
-            defectCode: d.defectCode || '',
-            category: d.category,
-            quantity: d.quantity,
-            scoreCategory: d.scoreCategory,
-          }));
-        }
-
-        if (defectData.pack && defectData.pack.length > 0) {
-          qualityRecord.packDefects = defectData.pack.map(d => ({
-            id: `def-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-            location: d.location,
-            defectName: d.defectName,
-            defectCode: d.defectCode || '',
-            category: d.category,
-            quantity: d.quantity,
-            scoreCategory: d.scoreCategory,
-          }));
-        }
-
-        if (defectData.cigarette && defectData.cigarette.length > 0) {
-          qualityRecord.cigaretteDefects = defectData.cigarette.map(d => ({
-            id: `def-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-            location: d.location,
-            defectName: d.defectName,
-            defectCode: d.defectCode || '',
-            category: d.category,
-            quantity: d.quantity,
-            scoreCategory: d.scoreCategory,
-          }));
-        }
-
-        // 保存到 localStorage（使用统一的key）
-        const existingRecords = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        existingRecords.push(qualityRecord);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(existingRecords));
-
-        // 保存当前数据作为该机台下一次录入的记忆（用户修改后的最新内容）
+        // 机台记忆仅作表单方便，不是业务数据源
         const historyRaw = localStorage.getItem(HISTORY_KEY);
         const history: MachineHistory = historyRaw ? JSON.parse(historyRaw) : {};
         const currentMachine = formData.machine || 'unknown';
@@ -400,18 +350,14 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
         localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
         setHasHistory(true);
 
-        console.log('✅ 数据提交成功：', qualityRecord);
-        console.log(`📊 当前共 ${existingRecords.length} 条记录`);
-        setSubmitMessage(`第 ${existingRecords.length} 条记录保存成功！请继续录入下一条`);
+        setSubmitMessage(result.message || '记录保存成功！请继续录入下一条');
         setShowSuccess(true);
 
-        // 3秒后自动隐藏提示
         setTimeout(() => {
           setShowSuccess(false);
           setSubmitMessage('');
         }, 3000);
 
-        // 连续录入：不清空全部表单，只清空必须重新填写的字段
         setFormData(prev => ({
           ...prev,
           samplingTime: '',
@@ -419,17 +365,15 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
         }));
         setErrors({});
 
-        // 自动聚焦到取样时间，方便用户继续录入
         setTimeout(() => {
           samplingTimeRef.current?.focus();
         }, 100);
 
-        // 触发浏览器事件通知其他组件数据已更新
-        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('quality-data-updated'));
 
       } catch (error) {
         console.error('❌ 数据提交失败：', error);
-        alert('数据提交失败，请重试！\n错误信息：' + error.message);
+        alert('数据提交失败，请重试！\n错误信息：' + (error instanceof Error ? error.message : String(error)));
       }
     }
   };

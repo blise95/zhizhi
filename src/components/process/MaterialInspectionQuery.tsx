@@ -23,6 +23,12 @@ import {
   User,
   Clock,
 } from 'lucide-react';
+import {
+  RECORD_TYPE,
+  listTypedRecords,
+  updateTypedRecord,
+  deleteTypedRecord,
+} from '@/services/qualityData';
 
 // 类型定义
 interface MaterialInspectionRecord {
@@ -105,15 +111,21 @@ export function MaterialInspectionQuery() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<MaterialInspectionRecord | null>(null);
 
-  // 初始化：加载数据
   useEffect(() => {
     loadData();
+    const refresh = () => { loadData(); };
+    window.addEventListener('quality-data-updated', refresh);
+    return () => window.removeEventListener('quality-data-updated', refresh);
   }, []);
 
-  // 加载数据
-  const loadData = () => {
-    const records = JSON.parse(localStorage.getItem('materialInspectionRecords') || '[]');
-    setAllData(records);
+  const loadData = async () => {
+    try {
+      const records = await listTypedRecords<MaterialInspectionRecord>(RECORD_TYPE.MATERIAL);
+      setAllData(records);
+    } catch (e) {
+      console.error('加载材料检验数据失败:', e);
+      setAllData([]);
+    }
   };
 
   // 筛选数据
@@ -250,11 +262,15 @@ export function MaterialInspectionQuery() {
   };
 
   // 执行删除
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!recordToDelete) return;
-    const updated = allData.filter(r => r.id !== recordToDelete.id);
-    localStorage.setItem('materialInspectionRecords', JSON.stringify(updated));
-    setAllData(updated);
+    try {
+      await deleteTypedRecord(Number(recordToDelete.id));
+      setAllData(allData.filter(r => r.id !== recordToDelete.id));
+    } catch (e) {
+      console.error(e);
+      alert('删除失败，请检查网络或后端服务');
+    }
     setShowDeleteConfirm(false);
     setRecordToDelete(null);
   };
@@ -266,18 +282,18 @@ export function MaterialInspectionQuery() {
   };
 
   // 保存编辑
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editingRecord || !editForm) return;
-    const updated = allData.map(r => {
-      if (r.id === editingRecord.id) {
-        return { ...r, ...editForm, updatedAt: new Date().toISOString() } as MaterialInspectionRecord;
-      }
-      return r;
-    });
-    localStorage.setItem('materialInspectionRecords', JSON.stringify(updated));
-    setAllData(updated);
-    setEditingRecord(null);
-    setEditForm({});
+    const merged = { ...editingRecord, ...editForm, updatedAt: new Date().toISOString() } as MaterialInspectionRecord;
+    try {
+      await updateTypedRecord(Number(editingRecord.id), merged as unknown as Record<string, unknown>);
+      setAllData(allData.map(r => (r.id === editingRecord.id ? merged : r)));
+      setEditingRecord(null);
+      setEditForm({});
+    } catch (e) {
+      console.error(e);
+      alert('保存失败，请检查网络或后端服务');
+    }
   };
 
   // 取消编辑

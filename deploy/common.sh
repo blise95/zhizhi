@@ -9,6 +9,7 @@ ZHIZHI_BACKUP="${ZHIZHI_BACKUP:-${ZHIZHI_HOME}/backup}"
 ZHIZHI_NODE="${ZHIZHI_NODE:-${ZHIZHI_HOME}/node}"
 ZHIZHI_MAVEN="${ZHIZHI_MAVEN:-${ZHIZHI_HOME}/apache-maven-3.9.6}"
 ZHIZHI_M2="${ZHIZHI_M2:-${ZHIZHI_HOME}/.m2}"
+ZHIZHI_WEB="${ZHIZHI_WEB:-${ZHIZHI_HOME}/web}"
 
 ZHIZHI_REPO="${ZHIZHI_REPO:-https://github.com/blise95/zhizhi.git}"
 ZHIZHI_BRANCH="${ZHIZHI_BRANCH:-main}"
@@ -28,7 +29,36 @@ require_root() {
 }
 
 ensure_dirs() {
-  mkdir -p "$ZHIZHI_APP" "$ZHIZHI_CONF" "$ZHIZHI_LOGS" "$ZHIZHI_BACKUP" "$ZHIZHI_M2"
+  mkdir -p "$ZHIZHI_APP" "$ZHIZHI_CONF" "$ZHIZHI_LOGS" "$ZHIZHI_BACKUP" "$ZHIZHI_M2" "$ZHIZHI_WEB"
+}
+
+install_cli() {
+  # 不要用软链接：脚本会 source 同目录 common.sh，软链接会去 /usr/local/bin 找
+  cat > /usr/local/bin/zhizhi-sync <<EOF
+#!/bin/bash
+exec bash "${ZHIZHI_SRC}/deploy/sync.sh" "\$@"
+EOF
+  cat > /usr/local/bin/zhizhi-frontend <<EOF
+#!/bin/bash
+exec bash "${ZHIZHI_SRC}/deploy/deploy-frontend.sh" "\$@"
+EOF
+  cat > /usr/local/bin/zhizhi-backend <<EOF
+#!/bin/bash
+exec bash "${ZHIZHI_SRC}/deploy/deploy-backend.sh" "\$@"
+EOF
+  cat > /usr/local/bin/zhizhi-update <<EOF
+#!/bin/bash
+exec bash "${ZHIZHI_SRC}/deploy/update.sh" "\$@"
+EOF
+  chmod +x /usr/local/bin/zhizhi-sync /usr/local/bin/zhizhi-frontend \
+           /usr/local/bin/zhizhi-backend /usr/local/bin/zhizhi-update
+}
+
+setup_git_ssh() {
+  if [ -f "${ZHIZHI_CONF}/deploy_key" ]; then
+    chmod 600 "${ZHIZHI_CONF}/deploy_key"
+    export GIT_SSH_COMMAND="ssh -i ${ZHIZHI_CONF}/deploy_key -o StrictHostKeyChecking=accept-new"
+  fi
 }
 
 ensure_maven() {
