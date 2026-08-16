@@ -4,20 +4,46 @@
  */
 
 const API_BASE = '/zhiliang/api';
+const AUTH_KEY = 'zhiquality_auth';
 
-// 通用fetch封装
+export function getAuthToken(): string | null {
+  try {
+    const authStr = localStorage.getItem(AUTH_KEY);
+    if (!authStr) return null;
+    const auth = JSON.parse(authStr);
+    return auth.token || null;
+  } catch {
+    return null;
+  }
+}
+
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  const token = getAuthToken();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options?.headers as Record<string, string> | undefined),
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   try {
     const response = await fetch(`${API_BASE}${url}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
       ...options,
+      headers,
     });
 
+    if (response.status === 401 && !url.startsWith('/auth/login') && !url.startsWith('/auth/logout')) {
+      localStorage.removeItem(AUTH_KEY);
+      if (!window.location.search.includes('login')) {
+        window.location.reload();
+      }
+      throw new Error('未登录或登录已过期');
+    }
+
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      const errBody = await response.json().catch(() => ({}));
+      throw new Error(errBody.message || `API Error: ${response.status} ${response.statusText}`);
     }
 
     return await response.json();
@@ -26,6 +52,34 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
     throw error;
   }
 }
+
+export interface AuthUser {
+  username: string;
+  displayName: string;
+  role: string;
+  token?: string;
+}
+
+export const authApi = {
+  login: (username: string, password: string, rememberMe?: boolean) =>
+    apiFetch<{
+      success: boolean;
+      message?: string;
+      token?: string;
+      username?: string;
+      displayName?: string;
+      role?: string;
+    }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password, rememberMe: !!rememberMe }),
+    }),
+
+  me: () => apiFetch<{ success: boolean; username: string; displayName: string; role: string }>('/auth/me'),
+
+  logout: () =>
+    apiFetch<{ success: boolean }>('/auth/logout', { method: 'POST' }).catch(() => ({ success: true })),
+};
+
 
 // ==================== 质检记录接口 ====================
 export interface InspectionRecord {
@@ -164,6 +218,7 @@ export const chartApi = {
 
 // 导出默认对象
 export default {
+  auth: authApi,
   inspection: inspectionApi,
   defect: defectApi,
   warning: warningApi,

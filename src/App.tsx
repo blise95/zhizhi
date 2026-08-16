@@ -18,6 +18,7 @@ import { ComprehensiveQualityAnalysis } from './components/analysis/Comprehensiv
 import { AIPredictionAnalysis } from './components/analysis/AIPredictionAnalysis';
 import { ZhiZhiFloatingChat } from './components/common/ZhiZhiFloatingChat';
 import Login, { getCurrentUser, logout } from './components/auth/Login';
+import { authApi } from './services/api';
 
 function App() {
   const [activeMenu, setActiveMenu] = useState(() => {
@@ -36,19 +37,36 @@ function App() {
     localStorage.setItem('zhiquality_active_menu', activeMenu);
   }, [activeMenu]);
 
-  // 检查登录状态
+  // 检查登录状态（以服务端会话为准）
   useEffect(() => {
-    // 仅当 URL 带有 ?login 参数时强制回到登录页（便于开发预览登录特效）
     const params = new URLSearchParams(window.location.search);
     if (params.has('login')) {
-      localStorage.removeItem('zhiquality_auth');
+      logout();
+      setIsAuthenticated(false);
+      setCurrentUser(null);
+      return;
     }
 
-    const user = getCurrentUser();
-    if (user) {
-      setIsAuthenticated(true);
-      setCurrentUser(user);
+    const cached = getCurrentUser();
+    if (!cached?.token) {
+      return;
     }
+
+    authApi
+      .me()
+      .then((profile) => {
+        setIsAuthenticated(true);
+        setCurrentUser({
+          username: profile.username,
+          displayName: profile.displayName,
+          role: profile.role,
+        });
+      })
+      .catch(() => {
+        logout();
+        setIsAuthenticated(false);
+        setCurrentUser(null);
+      });
   }, []);
 
   // 登录成功回调

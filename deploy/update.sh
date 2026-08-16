@@ -38,8 +38,8 @@ cd "${ZHIZHI_SRC}"
 setup_path
 
 command -v node >/dev/null || die "未找到 node，请先跑 deploy/install.sh"
-command -v mvn >/dev/null || die "未找到 mvn，仓库内 apache-maven-3.9.6 是否完整？"
 command -v javac >/dev/null || die "未找到 JDK，请安装 java-1.8.0-openjdk-devel"
+command -v mvn >/dev/null || die "未找到 mvn（已尝试解压 apache-maven-3.9.6-bin.zip）"
 
 log "node=$(node -v)  npm=$(npm -v)  mvn=$(mvn -v | head -1)  java=$(java -version 2>&1 | head -1)"
 

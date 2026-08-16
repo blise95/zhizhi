@@ -41,7 +41,8 @@ if ! nginx -t; then
   nginx -t
 fi
 systemctl enable nginx
-systemctl reload nginx || systemctl restart nginx
+systemctl start nginx || systemctl restart nginx
+systemctl is-active --quiet nginx || log "WARN: nginx 未处于 active，请稍后 systemctl status nginx"
 
 log "安装 systemd 服务"
 cp -f "${ZHIZHI_SRC}/deploy/systemd/zhizhi-api.service" /etc/systemd/system/zhizhi-api.service

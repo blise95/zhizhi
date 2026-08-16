@@ -65,7 +65,8 @@ systemctl start mysqld >/dev/null 2>&1 || systemctl start mariadb >/dev/null 2>&
 MYSQL_CLI="$(detect_mysql_cli)" || die "mysql 客户端不可用"
 
 if [ ! -f "$ENV_FILE" ]; then
-  DB_PASS="$(openssl rand -base64 12 | tr -d '/+=' | cut -c1-16)"
+  # MySQL 8 validate_password=MEDIUM：大小写+数字+特殊字符；避免 # 以免 env 被截断
+  DB_PASS="Aa1!$(openssl rand -base64 12 | tr -d '/+=#' | cut -c1-12)"
   cat > "$ENV_FILE" <<EOF
 SPRING_PROFILES_ACTIVE=prod
 ZHIZHI_DB_URL=jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false

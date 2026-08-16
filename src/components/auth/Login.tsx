@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { authApi } from '@/services/api';
+
+const AUTH_KEY = 'zhiquality_auth';
 
 // ====== 登录相关工具函数 ======
 
-export function getCurrentUser(): { username: string; displayName: string; role: string } | null {
+export function getCurrentUser(): { username: string; displayName: string; role: string; token?: string } | null {
   try {
-    const authStr = localStorage.getItem('zhiquality_auth');
+    const authStr = localStorage.getItem(AUTH_KEY);
     if (!authStr) return null;
     const auth = JSON.parse(authStr);
+    if (!auth.token || !auth.username) return null;
     return {
       username: auth.username || '',
-      displayName: auth.username || '',
+      displayName: auth.displayName || auth.username || '',
       role: auth.role || '用户',
+      token: auth.token,
     };
   } catch {
     return null;
@@ -18,7 +23,16 @@ export function getCurrentUser(): { username: string; displayName: string; role:
 }
 
 export function logout() {
-  localStorage.removeItem('zhiquality_auth');
+  try {
+    const authStr = localStorage.getItem(AUTH_KEY);
+    const hasToken = !!(authStr && JSON.parse(authStr).token);
+    localStorage.removeItem(AUTH_KEY);
+    if (hasToken) {
+      authApi.logout().catch(() => undefined);
+    }
+  } catch {
+    localStorage.removeItem(AUTH_KEY);
+  }
 }
 
 // ====== 登录页面组件 - 全球数字化智能制造平台入口 ======
@@ -38,7 +52,7 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // ========== 登录处理 ==========
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -48,38 +62,34 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess?: () => void 
     }
 
     setIsLoading(true);
+    try {
+      const result = await authApi.login(username, password, rememberMe);
+      if (!result.success || !result.token) {
+        setError(result.message || '用户名或密码错误');
+        setIsLoading(false);
+        return;
+      }
 
-    setTimeout(() => {
-      const usersStr = localStorage.getItem('zhiquality_users');
-      const users = usersStr ? JSON.parse(usersStr) : [
-        { username: 'chenyu', password: 'chenyu312', role: '管理员' }
-      ];
-
-      const user = users.find(
-        (u: { username: string; password: string }) =>
-          u.username === username && u.password === password
+      localStorage.setItem(
+        AUTH_KEY,
+        JSON.stringify({
+          token: result.token,
+          username: result.username,
+          displayName: result.displayName || result.username,
+          role: result.role || '用户',
+          loginTime: new Date().toISOString(),
+        })
       );
 
-      if (user) {
-        localStorage.setItem(
-          'zhiquality_auth',
-          JSON.stringify({
-            username: user.username,
-            role: user.role,
-            loginTime: new Date().toISOString(),
-          })
-        );
-
-        if (onLoginSuccess) {
-          onLoginSuccess();
-        } else {
-          window.location.reload();
-        }
+      if (onLoginSuccess) {
+        onLoginSuccess();
       } else {
-        setError('用户名或密码错误');
-        setIsLoading(false);
+        window.location.reload();
       }
-    }, 800);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '登录失败，请检查网络或后端服务');
+      setIsLoading(false);
+    }
   };
 
   // ========== 完整Canvas动画系统 ==========

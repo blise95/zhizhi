@@ -69,6 +69,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- 仅使用密码加密，不启用完整 Spring Security 过滤器 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+
         <!-- 测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

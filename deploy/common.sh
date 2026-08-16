@@ -30,14 +30,35 @@ ensure_dirs() {
   mkdir -p "$ZHIZHI_APP" "$ZHIZHI_CONF" "$ZHIZHI_LOGS" "$ZHIZHI_BACKUP" "$ZHIZHI_M2"
 }
 
+ensure_maven() {
+  local mvn_home="${ZHIZHI_SRC}/apache-maven-3.9.6"
+  local mvn_bin="${mvn_home}/bin/mvn"
+  local zip="${ZHIZHI_SRC}/apache-maven-3.9.6-bin.zip"
+  local core_jar
+  core_jar="$(ls "${mvn_home}"/lib/maven-core-*.jar 2>/dev/null | head -1 || true)"
+
+  # 仓库 .gitignore 忽略了 *.jar，clone 下来的 Maven 只有脚本没有核心包
+  if [ -z "$core_jar" ]; then
+    [ -f "$zip" ] || die "缺少 ${zip}，无法解压 Maven"
+    log "解压 apache-maven-3.9.6-bin.zip"
+    command -v unzip >/dev/null || yum --disablerepo=epel install -y unzip
+    unzip -o -q "$zip" -d "${ZHIZHI_SRC}"
+  fi
+
+  [ -f "$mvn_bin" ] || die "未找到 $mvn_bin"
+  chmod +x "$mvn_bin" "${mvn_home}/bin/mvnDebug" 2>/dev/null || true
+  export PATH="${mvn_home}/bin:${PATH}"
+}
+
 setup_path() {
-  export JAVA_HOME="${JAVA_HOME:-$(dirname "$(dirname "$(readlink -f "$(command -v javac)" 2>/dev/null)" 2>/dev/null)" 2>/dev/null)}"
+  local javac_bin
+  javac_bin="$(command -v javac 2>/dev/null || true)"
+  if [ -n "$javac_bin" ]; then
+    export JAVA_HOME="${JAVA_HOME:-$(dirname "$(dirname "$(readlink -f "$javac_bin")")")}"
+  fi
   if [ -x "${ZHIZHI_NODE}/bin/node" ]; then
     export PATH="${ZHIZHI_NODE}/bin:${PATH}"
   fi
-  if [ -x "${ZHIZHI_SRC}/apache-maven-3.9.6/bin/mvn" ]; then
-    chmod +x "${ZHIZHI_SRC}/apache-maven-3.9.6/bin/mvn" "${ZHIZHI_SRC}/apache-maven-3.9.6/bin/mvnDebug" 2>/dev/null || true
-    export PATH="${ZHIZHI_SRC}/apache-maven-3.9.6/bin:${PATH}"
-  fi
+  ensure_maven
   export MAVEN_OPTS="${MAVEN_OPTS:--Xms128m -Xmx512m}"
 }
