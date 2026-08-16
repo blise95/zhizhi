@@ -280,24 +280,29 @@ def query_business_data(state: Dict[str, Any], provider: BusinessDataProvider) -
     machine_cmp = qa.machine_comparison(filtered_process)
     brand_cmp = qa.brand_comparison(filtered_process)
 
-    # 按场景生成分析结果
+    # 按场景生成分析结果（使用智能答案引擎）
     scenario_answer = ""
-    if scenario == "today_quality":
-        scenario_answer = qa.answer_today_quality(filtered_process)
-    elif scenario == "machine_focus":
-        scenario_answer = qa.answer_machine_focus(filtered_process)
-    elif scenario == "machine_best":
-        scenario_answer = qa.answer_machine_ranking(filtered_process, best=True)
-    elif scenario == "machine_worst":
-        scenario_answer = qa.answer_machine_ranking(filtered_process, best=False)
-    elif scenario == "brand_trend":
-        scenario_answer = qa.answer_brand_trend(filtered_process, brand)
-    elif scenario == "physical_deviation":
-        scenario_answer = qa.answer_physical_deviation(physical_records, brand)
-    elif scenario == "physical_standard":
-        scenario_answer = qa.answer_physical_standard_question(question)
-    elif scenario == "quality_decline":
-        scenario_answer = qa.answer_quality_decline(filtered_process, physical_records)
+    try:
+        # 优先使用 smart_answer（基于结构化解析的智能答案）
+        scenario_answer = qa.smart_answer(question, filtered_process, physical_records)
+    except Exception:
+        # 回退到旧版按场景分发
+        if scenario == "today_quality":
+            scenario_answer = qa.answer_today_quality(filtered_process)
+        elif scenario == "machine_focus":
+            scenario_answer = qa.answer_machine_focus(filtered_process)
+        elif scenario == "machine_best":
+            scenario_answer = qa.answer_machine_ranking(filtered_process, best=True)
+        elif scenario == "machine_worst":
+            scenario_answer = qa.answer_machine_ranking(filtered_process, best=False)
+        elif scenario == "brand_trend":
+            scenario_answer = qa.answer_brand_trend(filtered_process, brand)
+        elif scenario == "physical_deviation":
+            scenario_answer = qa.answer_physical_deviation(physical_records, brand)
+        elif scenario == "physical_standard":
+            scenario_answer = qa.answer_physical_standard_question(question)
+        elif scenario == "quality_decline":
+            scenario_answer = qa.answer_quality_decline(filtered_process, physical_records)
 
     return {
         "business_results": {

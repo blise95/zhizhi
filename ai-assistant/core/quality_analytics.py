@@ -67,7 +67,17 @@ def filter_by_date_range(
 
 
 def extract_date_range(question: str) -> Tuple[Optional[str], Optional[str]]:
-    """从问题中提取日期范围"""
+    """从问题中提取日期范围（优先使用智能解析引擎）"""
+    try:
+        from core.question_parser import parse_question
+        parsed = parse_question(question)
+        return parsed.date_from, parsed.date_to
+    except Exception:
+        return _extract_date_range_fallback(question)
+
+
+def _extract_date_range_fallback(question: str) -> Tuple[Optional[str], Optional[str]]:
+    """兜底日期范围提取"""
     today = datetime.now().date()
     q = question.lower()
 
@@ -745,49 +755,529 @@ def answer_quality_decline(
     return "\n".join(lines)
 
 
-# -------------------- 问题场景映射 --------------------
+# -------------------- 问题场景映射（智能解析） --------------------
 
 def detect_scenario(question: str) -> str:
-    """识别用户问题的具体场景"""
+    """
+    识别用户问题的具体场景（基于智能解析引擎）
+
+    支持能力：
+    - 同义词/同义表达识别（"质量怎么样"/"质量如何"/"质量状况" 均可）
+    - 语序/位置无关匹配
+    - 多意图识别与优先级排序
+    - 实体自动提取（牌号、机台、班别、指标）
+    """
+    try:
+        from core.question_parser import parse_question
+        parsed = parse_question(question)
+        return parsed.primary_intent
+    except Exception:
+        # 兜底：如果解析引擎不可用，使用基础关键词匹配
+        return _detect_scenario_fallback(question)
+
+
+def _detect_scenario_fallback(question: str) -> str:
+    """兜底场景检测（仅当解析引擎不可用时使用）"""
     q = question.lower()
 
-    # 今日质量
-    if any(k in q for k in ["今天质量", "今日质量", "今天怎么样", "今日怎么样", "今天质量怎么样"]):
+    # 今日质量（多种表达方式）
+    today_patterns = ["今天", "今日", "当天", "本日"]
+    quality_patterns = ["质量", "情况", "状况", "表现", "状态", "水平", "怎么样", "如何", "咋样", "怎样"]
+    has_today = any(t in q for t in today_patterns)
+    has_quality = any(p in q for p in quality_patterns)
+    if has_today and has_quality:
         return "today_quality"
 
-    # 哪个机台需要重点关注
-    if any(k in q for k in ["重点关注", "需要关注", "哪个机台", "哪台机", "机台质量"]):
+    # 机台关注
+    if any(k in q for k in ["重点关注", "需要关注", "哪个机台", "哪台机", "机台质量", "有问题", "异常"]):
         return "machine_focus"
 
-    # 哪个机台质量最好
-    if any(k in q for k in ["质量最好", "最好的机台", "最佳机台"]):
+    # 机台最好/最差
+    if any(k in q for k in ["质量最好", "最好的机台", "最佳机台", "最优"]):
         return "machine_best"
-
-    # 哪个机台质量最差
-    if any(k in q for k in ["质量最差", "最差的机台"]):
+    if any(k in q for k in ["质量最差", "最差的机台", "最坏"]):
         return "machine_worst"
 
-    # 质量下降原因（优先于牌号趋势）
-    if any(k in q for k in ["为什么下降", "质量为什么", "下降原因", "为什么变差", "质量下降"]):
+    # 质量下降原因
+    if any(k in q for k in ["为什么下降", "质量为什么", "下降原因", "为什么变差", "质量下降", "变差了", "恶化"]):
         return "quality_decline"
 
-    # 牌号趋势 / 牌号质量
-    if any(k in q for k in ["牌号", "品牌", "摩登", "质量有没有下降", "趋势", "下降"]):
-        if any(k in q for k in ["下降", "趋势", "怎么样", "如何"]):
+    # 牌号趋势
+    if any(k in q for k in ["牌号", "品牌", "趋势", "下降", "变化"]):
+        if any(k in q for k in ["趋势", "下降", "变化", "怎么样", "如何"]):
             return "brand_trend"
 
     # 物测偏离
-    if any(k in q for k in ["偏离", "超标", "不合格", "合格吗", "偏离标准", "哪个物测指标"]):
-        if any(k in q for k in ["物测", "烟支", "长度", "圆周", "吸阻", "重量", "通风度"]):
-            return "physical_deviation"
+    physical_kws = ["物测", "烟支", "长度", "圆周", "吸阻", "重量", "通风度"]
+    deviation_kws = ["偏离", "超标", "不合格", "合格吗", "偏离标准", "哪个物测指标", "合不合格", "达不达标"]
+    if any(k in q for k in deviation_kws) and any(k in q for k in physical_kws):
+        return "physical_deviation"
 
     # 物测标准
-    if any(k in q for k in ["标准", "规格", "范围", "上限", "下限", "多少"]):
-        if any(k in q for k in ["物测", "烟支", "长度", "圆周", "吸阻", "重量", "通风度"]):
-            return "physical_standard"
+    standard_kws = ["标准", "规格", "范围", "上限", "下限", "多少", "要求"]
+    if any(k in q for k in standard_kws) and any(k in q for k in physical_kws):
+        return "physical_standard"
 
     # 综合分析（默认）
     return "combined"
+
+
+def get_parsed_question(question: str) -> Any:
+    """获取问题的完整解析结果（供答案生成使用）"""
+    try:
+        from core.question_parser import parse_question
+        return parse_question(question)
+    except Exception:
+        return None
+
+
+# -------------------- 智能答案生成（基于结构化解析） --------------------
+
+def smart_answer(
+    question: str,
+    process_records: List[Dict[str, Any]],
+    physical_records: List[Dict[str, Any]],
+) -> str:
+    """
+    基于智能解析结果生成精准答案
+
+    与旧版 answer_* 函数的区别：
+    - 自动利用解析出的结构化信息（时间、指标、实体、方向）
+    - 支持同义表达的统一处理
+    - 答案内容根据用户具体问法动态调整
+    """
+    parsed = get_parsed_question(question)
+    if not parsed:
+        # 解析引擎不可用时回退到场景匹配
+        scenario = detect_scenario(question)
+        return _answer_by_scenario(scenario, question, process_records, physical_records)
+
+    scenario = parsed.primary_intent
+
+    # 根据场景 + 结构化信息生成答案
+    if scenario == "today_quality":
+        return _smart_answer_today(parsed, process_records)
+    elif scenario == "machine_focus":
+        return _smart_answer_machine_focus(parsed, process_records)
+    elif scenario in ["machine_best", "machine_worst"]:
+        best = scenario == "machine_best"
+        return _smart_answer_machine_ranking(parsed, process_records, best=best)
+    elif scenario == "brand_trend":
+        return _smart_answer_brand_trend(parsed, process_records)
+    elif scenario == "quality_decline":
+        return answer_quality_decline(process_records, physical_records)
+    elif scenario == "physical_deviation":
+        return _smart_answer_physical_deviation(parsed, physical_records)
+    elif scenario == "physical_standard":
+        return _smart_answer_physical_standard(parsed, question)
+    elif scenario == "defect_detail":
+        return _smart_answer_defect_detail(parsed, process_records)
+    elif scenario == "rate_query":
+        return _smart_answer_rate(parsed, process_records)
+    else:
+        # combined：综合分析
+        return _smart_answer_combined(parsed, process_records, physical_records)
+
+
+def _answer_by_scenario(
+    scenario: str,
+    question: str,
+    process_records: List[Dict[str, Any]],
+    physical_records: List[Dict[str, Any]],
+) -> str:
+    """按场景分发到对应答案函数（兜底路径）"""
+    if scenario == "today_quality":
+        return answer_today_quality(process_records)
+    elif scenario == "machine_focus":
+        return answer_machine_focus(process_records)
+    elif scenario == "machine_best":
+        return answer_machine_ranking(process_records, best=True)
+    elif scenario == "machine_worst":
+        return answer_machine_ranking(process_records, best=False)
+    elif scenario == "brand_trend":
+        brand = None
+        for b in get_all_brands():
+            if b in question:
+                brand = b
+                break
+        return answer_brand_trend(process_records, brand)
+    elif scenario == "quality_decline":
+        return answer_quality_decline(process_records, physical_records)
+    elif scenario == "physical_deviation":
+        brand = None
+        for b in get_all_brands():
+            if b in question:
+                brand = b
+                break
+        return answer_physical_deviation(physical_records, brand)
+    elif scenario == "physical_standard":
+        return answer_physical_standard_question(question)
+    else:
+        summary = summarize_process_quality(process_records)
+        if summary["total_batches"] == 0:
+            return "当前筛选条件下没有找到业务记录，暂时无法基于系统数据进行判断。"
+        top = top_defects(process_records, 3)
+        top_text = "、".join(f"{d['name']}({d['count']}次)" for d in top) if top else "暂无"
+        return (
+            f"当前统计周期内共有 {summary['total_batches']} 批检验记录，"
+            f"累计缺陷 {summary['total_defects']} 个，缺陷率 {summary['defect_rate']:.2f}%。\n"
+            f"涉及机台：{', '.join(summary['machines']) if summary['machines'] else '无'}；"
+            f"涉及牌号：{', '.join(summary['brands']) if summary['brands'] else '无'}。\n"
+            f"主要缺陷：{top_text}。"
+        )
+
+
+# ---------- 各场景智能答案实现 ----------
+
+def _smart_answer_today(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """智能今日质量回答（适配不同表达方式）"""
+    summary = summarize_process_quality(process_records)
+    if summary["total_batches"] == 0:
+        # 根据用户用词调整回复
+        time_word = "今天"
+        for te in parsed.time_expressions:
+            if te in ["今天", "今日", "当天", "本日"]:
+                time_word = te
+                break
+        return f"{time_word}系统暂未录入质量检验记录，无法评估{time_word}质量状况。"
+
+    top = top_defects(process_records, 3)
+    top_text = "、".join(f"{d['name']}({d['count']}次)" for d in top) if top else "暂无"
+
+    status = "正常"
+    if summary["defect_rate"] > 20:
+        status = "异常"
+    elif summary["defect_rate"] > 10:
+        status = "需关注"
+    elif summary["defect_rate"] > 5:
+        status = "稳定"
+    else:
+        status = "良好"
+
+    # 检查用户是否问了特定指标
+    ind_answers = []
+    if "qualified_rate" in parsed.indicators:
+        qualified = round((1 - summary["defect_rate"] / 100) * 100, 2) if summary["total_batches"] > 0 else 0
+        ind_answers.append(f"合格率约 {qualified:.1f}%")
+    if "defect_count" in parsed.indicators:
+        ind_answers.append(f"缺陷总数 {summary['total_defects']} 个")
+    if "defect_rate" in parsed.indicators:
+        ind_answers.append(f"缺陷率 {summary['defect_rate']:.2f}%")
+
+    base = (
+        f"今日系统共录入 {summary['total_batches']} 批过程质量检验记录，"
+        f"涉及机台 {', '.join(summary['machines']) if summary['machines'] else '无'}，"
+        f"牌号 {', '.join(summary['brands']) if summary['brands'] else '无'}。\n"
+        f"缺陷批次 {summary['defect_batches']} 批，缺陷率 {summary['defect_rate']:.2f}%，整体状态：{status}。"
+    )
+    if ind_answers:
+        base += f"\n{'；'.join(ind_answers)}。"
+    base += f"\n主要缺陷：{top_text}。"
+
+    return base
+
+
+def _smart_answer_machine_focus(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """智能机台关注回答"""
+    focus = find_focus_machines(process_records, 3)
+    if not focus:
+        return "当前系统中没有足够的过程质量记录，无法判断哪个机台需要重点关注。"
+
+    lines = ["根据系统数据，以下机台需要重点关注："]
+    for i, m in enumerate(focus, 1):
+        lines.append(
+            f"{i}. {m['machine']}机台：检验 {m['batch_count']} 批，缺陷 {m['defect_count']} 个，缺陷率 {m['defect_rate']:.2f}%。"
+        )
+
+    first = focus[0]
+    first_records = [r for r in process_records if r.get("machine") == first["machine"]]
+    top = top_defects(first_records, 3)
+    if top:
+        lines.append(
+            f"其中 {first['machine']}机台的主要问题为：" + "、".join(f"{d['name']}({d['count']}次)" for d in top) + "。"
+        )
+
+    return "\n".join(lines)
+
+
+def _smart_answer_machine_ranking(parsed, process_records: List[Dict[str, Any]], best: bool = True) -> str:
+    """智能机台排名回答"""
+    if best:
+        ranked = find_best_machines(process_records, 3)
+        prefix = "质量最好"
+    else:
+        ranked = find_focus_machines(process_records, 3)
+        prefix = "质量最差"
+
+    if not ranked:
+        return f"当前系统中没有足够的过程质量记录，无法判断哪个机台{prefix}。"
+
+    lines = [f"根据系统数据，{prefix}的机台为："]
+    for i, m in enumerate(ranked, 1):
+        lines.append(
+            f"{i}. {m['machine']}机台：缺陷率 {m['defect_rate']:.2f}%（{m['batch_count']} 批，{m['defect_count']} 个缺陷）"
+        )
+    return "\n".join(lines)
+
+
+def _smart_answer_brand_trend(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """智能牌号趋势回答"""
+    brand = parsed.brands[0] if parsed.brands else None
+
+    if brand:
+        trend = brand_trend(process_records, brand)
+        summary = trend["summary"]
+        if summary["total_batches"] == 0:
+            return f"系统中没有找到牌号 {brand} 的近期质量记录。"
+
+        data_points = trend["trend"]
+        if len(data_points) >= 2:
+            first = data_points[0]["defect_rate"]
+            last = data_points[-1]["defect_rate"]
+            change = round(last - first, 2)
+            direction = "上升" if change > 1 else ("下降" if change < -1 else "稳定")
+            return (
+                f"牌号 {brand} 近期共有 {summary['total_batches']} 批检验记录，"
+                f"缺陷率 {summary['defect_rate']:.2f}%。\n"
+                f"从 {data_points[0]['date']} 到 {data_points[-1]['date']}，"
+                f"缺陷率由 {first:.2f}% 变为 {last:.2f}%（{direction} {abs(change):.2f}%）。"
+            )
+        return (
+            f"牌号 {brand} 近期共有 {summary['total_batches']} 批检验记录，"
+            f"缺陷率 {summary['defect_rate']:.2f}%。"
+        )
+
+    # 未指定牌号，给出所有牌号对比
+    cmp = brand_comparison(process_records)
+    if not cmp:
+        return "当前系统中没有足够的过程质量记录。"
+
+    lines = ["近期各牌号质量对比："]
+    for c in cmp:
+        lines.append(
+            f"- {c['brand']}：缺陷率 {c['defect_rate']:.2f}%（{c['batch_count']} 批，{c['defect_count']} 个缺陷）"
+        )
+    return "\n".join(lines)
+
+
+def _smart_answer_physical_deviation(parsed, physical_records: List[Dict[str, Any]]) -> str:
+    """智能物测偏离回答"""
+    if not physical_records:
+        return "系统中暂无烟支物测检测记录，无法进行偏离分析。"
+
+    brand = parsed.brands[0] if parsed.brands else None
+    analysis = physical_deviation_analysis(physical_records, brand)
+
+    # 如果用户只问了特定指标，只返回该指标
+    if parsed.indicators:
+        specific_indicators = [
+            ind for ind in parsed.indicators
+            if ind in ["length", "circumference", "draw_resistance", "weight", "ventilation"]
+        ]
+        if specific_indicators:
+            analysis = [a for a in analysis if a.get("indicator") in specific_indicators]
+
+    abnormal = [a for a in analysis if a.get("result") == "不合格"]
+    near_boundary = [a for a in analysis if a.get("result") == "合格" and a.get("distance_to_boundary", 100) < 20]
+
+    if not analysis:
+        return "当前系统中没有有效的烟支物测记录。"
+
+    lines = []
+    if brand:
+        lines.append(f"牌号 {brand} 的烟支物测指标分析如下：")
+    else:
+        lines.append("近期烟支物测指标分析如下：")
+
+    for a in analysis:
+        if a.get("avg") is None:
+            lines.append(f"- {a.get('name', a['indicator'])}：暂无有效检测数据。")
+            continue
+        std_text = f"标准 {a.get('standard_display', '无标准')}"
+        result_text = a.get("result", "无标准")
+        if result_text == "合格":
+            lines.append(
+                f"- {a.get('name', a['indicator'])}：平均值 {a['avg']}{a.get('unit', '')}，"
+                f"{std_text}，判定 {result_text}，距离边界约 {a.get('distance_to_boundary', 0)}%。"
+            )
+        elif result_text == "不合格":
+            lines.append(
+                f"- {a.get('name', a['indicator'])}：平均值 {a['avg']}{a.get('unit', '')}，"
+                f"{std_text}，判定 {result_text}，偏差 {a.get('deviation', 0)}{a.get('unit', '')}。"
+            )
+        else:
+            lines.append(
+                f"- {a.get('name', a['indicator'])}：平均值 {a['avg']}{a.get('unit', '')}，{std_text}。"
+            )
+
+    if abnormal:
+        names = "、".join(a.get("name", a["indicator"]) for a in abnormal)
+        lines.append(f"\n⚠️ 需要重点关注：{names} 已超出标准范围。")
+    elif near_boundary:
+        names = "、".join(a.get("name", a["indicator"]) for a in near_boundary)
+        lines.append(f"\n💡 提示：{names} 接近标准边界，建议持续监控。")
+
+    return "\n".join(lines)
+
+
+def _smart_answer_physical_standard(parsed, question: str) -> str:
+    """智能物测标准回答"""
+    from core.physical_standard import (
+        get_indicator_standard,
+        get_brand_standards,
+        check_value,
+        calc_deviation,
+        format_standard,
+        format_range,
+    )
+
+    brand = parsed.brands[0] if parsed.brands else None
+
+    # 提取指标
+    indicator = None
+    for ind in parsed.indicators:
+        if ind in ["length", "circumference", "draw_resistance", "weight", "ventilation"]:
+            indicator = ind
+            break
+
+    if not brand:
+        return (
+            "请提供需要查询的牌号。当前标准库包含以下牌号：\n"
+            + "、".join(get_all_brands())
+            + "\n\n例如：\"摩登（细支）的重量标准是多少？\""
+        )
+
+    std = get_indicator_standard(brand, indicator) if indicator else None
+    if indicator and std:
+        value_match = re.search(r"([-+]?\d*\.?\d+)", question)
+        if value_match:
+            value = float(value_match.group(1))
+            result = check_value(brand, indicator, value)
+            dev = calc_deviation(brand, indicator, value)
+            dev_text = f"，偏差 {dev}{std.get('unit', '')}" if dev is not None else ""
+            return (
+                f"牌号 {brand} 的 {std.get('name', indicator)} 标准为 {format_standard(std)}"
+                f"（范围：{format_range(std)}）。\n"
+                f"检测值 {value}{std.get('unit', '')} 判定结果：{result}{dev_text}。"
+            )
+        return (
+            f"牌号 {brand} 的 {std.get('name', indicator)} 标准为 {format_standard(std)}，"
+            f"标准范围：{format_range(std)}。"
+        )
+
+    # 未指定指标，返回全部
+    brand_std = get_brand_standards(brand)
+    if not brand_std:
+        return f"未找到牌号 {brand} 的物测标准。"
+
+    lines = [f"牌号 {brand} 的烟支物测标准如下："]
+    for ind_key, ind_std in brand_std.get("indicators", {}).items():
+        lines.append(
+            f"- {ind_std.get('name', ind_key)}：{format_standard(ind_std)}（范围：{format_range(ind_std)}）"
+        )
+    return "\n".join(lines)
+
+
+def _smart_answer_defect_detail(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """智能缺陷详情回答"""
+    if not process_records:
+        return "系统中暂无过程质量检验记录，无法提供缺陷详情。"
+
+    top = top_defects(process_records, 8)
+    if not top:
+        return "当前筛选条件下未发现缺陷记录。"
+
+    summary = summarize_process_quality(process_records)
+    lines = [
+        f"当前条件下共 {summary['total_batches']} 批检验记录，",
+        f"其中 {summary['defect_batches']} 批存在缺陷，共发现 {summary['total_defects']} 个缺陷点。",
+        f"\n缺陷详情（按数量排序）：",
+    ]
+    for i, d in enumerate(top, 1):
+        loc = f"（部位：{d['location']}）" if d.get("location") else ""
+        cat = f"[{d['category']}]" if d.get("category") else ""
+        lines.append(f"{i}. {d['name']}{cat}{loc} —— {d['count']} 次")
+
+    return "\n".join(lines)
+
+
+def _smart_answer_rate(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """智能比率/指标数值回答"""
+    summary = summarize_process_quality(process_records)
+    if summary["total_batches"] == 0:
+        return "当前系统中没有足够的数据来计算该指标。"
+
+    lines = []
+    if "qualified_rate" in parsed.indicators or "defect_rate" in parsed.indicators:
+        qualified_pct = round((1 - summary["defect_rate"] / 100) * 100, 2) if summary["total_batches"] > 0 else 0
+        lines.append(f"合格率：约 {qualified_pct:.1f}%")
+        lines.append(f"缺陷率：{summary['defect_rate']:.2f}%")
+
+    if "defect_count" in parsed.indicators:
+        lines.append(f"缺陷总数：{summary['total_defects']} 个")
+
+    if "batch_count" in parsed.indicators:
+        lines.append(f"检验批次：{summary['total_batches']} 批")
+
+    if not lines:
+        lines.append(f"合格率：约 {(1 - summary['defect_rate']/100)*100:.1f}%")
+        lines.append(f"缺陷率：{summary['defect_rate']:.2f}%")
+        lines.append(f"缺陷数：{summary['total_defects']} 个")
+
+    # 时间信息
+    time_desc = ""
+    if parsed.date_from == parsed.date_to:
+        time_desc = f"（{parsed.date_from}）"
+    elif parsed.date_from and parsed.date_to:
+        time_desc = f"（{parsed.date_from} ~ {parsed.date_to}）"
+
+    return "基于系统数据" + time_desc + "：\n" + "\n".join(f"- {line}" for line in lines)
+
+
+def _smart_answer_combined(
+    parsed,
+    process_records: List[Dict[str, Any]],
+    physical_records: List[Dict[str, Any]],
+) -> str:
+    """智能综合分析回答"""
+    parts = []
+
+    # 过程质量概览
+    if process_records:
+        summary = summarize_process_quality(process_records)
+        if summary["total_batches"] > 0:
+            overview = (
+                f"共 {summary['total_batches']} 批检验记录，"
+                f"缺陷率 {summary['defect_rate']:.2f}%，"
+                f"涉及 {len(summary['machines'])} 台机台、{len(summary['brands'])} 个牌号。"
+            )
+            parts.append(overview)
+
+            top = top_defects(process_records, 3)
+            if top:
+                top_text = "、".join(f"{d['name']}({d['count']}次)" for d in top)
+                parts.append(f"主要缺陷：{top_text}。")
+
+            # 如果有次要意图是 machine_focus，附加机台信息
+            if "machine_focus" in parsed.secondary_intents:
+                focus = find_focus_machines(process_records, 2)
+                if focus:
+                    m_info = "、".join(f"{m['machine']}({m['defect_rate']:.1f}%)" for m in focus)
+                    parts.append(f"需关注机台：{m_info}。")
+
+    # 物测概览
+    if physical_records:
+        phys_summary = summarize_physical_test(physical_records)
+        if phys_summary["total_records"] > 0:
+            parts.append(
+                f"烟支物测 {phys_summary['total_records']} 条记录，"
+                f"涉及 {len(phys_summary['brands'])} 个牌号。"
+            )
+
+    if not parts:
+        return "当前筛选条件下没有找到相关数据，暂时无法进行综合分析。"
+
+    return "\n".join(parts)
 
 
 if __name__ == "__main__":
