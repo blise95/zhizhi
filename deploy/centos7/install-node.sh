@@ -2,7 +2,7 @@
 # CentOS 7 glibc 2.17 无法直接用官方 Node 20。安装 unofficial-builds glibc-217 包。
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 # shellcheck source=../common.sh
 . "${SCRIPT_DIR}/../common.sh"
 

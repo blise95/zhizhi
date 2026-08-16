@@ -4,7 +4,7 @@
 #   bash /opt/zhizhi/src/deploy/install.sh
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 # shellcheck source=common.sh
 . "${SCRIPT_DIR}/common.sh"
 
@@ -62,7 +62,11 @@ if systemctl is-active --quiet firewalld; then
   firewall-cmd --reload || true
 fi
 
-ln -sfn "${ZHIZHI_SRC}/deploy/update.sh" /usr/local/bin/zhizhi-update
+cat > /usr/local/bin/zhizhi-update <<EOF
+#!/bin/bash
+exec bash "${ZHIZHI_SRC}/deploy/update.sh" "\$@"
+EOF
+chmod +x /usr/local/bin/zhizhi-update
 chmod +x "${ZHIZHI_SRC}/deploy/update.sh" \
          "${ZHIZHI_SRC}/deploy/healthcheck.sh" \
          "${ZHIZHI_SRC}/deploy/backup-mysql.sh" \

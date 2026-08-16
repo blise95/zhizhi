@@ -2,7 +2,7 @@
 # 安装 MySQL 8 或回退 MariaDB 10.5；库只监听 127.0.0.1；innodb_buffer_pool ≤ 512M
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 # shellcheck source=../common.sh
 . "${SCRIPT_DIR}/../common.sh"
 

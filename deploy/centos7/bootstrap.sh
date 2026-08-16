@@ -3,7 +3,7 @@
 # 不使用 EPEL（EOL 后 metalink 失效，会把整个 yum 卡死）
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 # shellcheck source=../common.sh
 . "${SCRIPT_DIR}/../common.sh"
 
