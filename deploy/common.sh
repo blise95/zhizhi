@@ -7,7 +7,7 @@ ZHIZHI_CONF="${ZHIZHI_CONF:-${ZHIZHI_HOME}/conf}"
 ZHIZHI_LOGS="${ZHIZHI_LOGS:-${ZHIZHI_HOME}/logs}"
 ZHIZHI_BACKUP="${ZHIZHI_BACKUP:-${ZHIZHI_HOME}/backup}"
 ZHIZHI_NODE="${ZHIZHI_NODE:-${ZHIZHI_HOME}/node}"
-ZHIZHI_M2="${ZHIZHI_M2:-${ZHIZHI_HOME}/.m2}"
+ZHIZHI_MAVEN="${ZHIZHI_MAVEN:-${ZHIZHI_HOME}/apache-maven-3.9.6}"
 
 ZHIZHI_REPO="${ZHIZHI_REPO:-https://github.com/blise95/zhizhi.git}"
 ZHIZHI_BRANCH="${ZHIZHI_BRANCH:-main}"
@@ -31,18 +31,26 @@ ensure_dirs() {
 }
 
 ensure_maven() {
-  local mvn_home="${ZHIZHI_SRC}/apache-maven-3.9.6"
+  # Maven 必须装在 Git 仓库外面，否则 unzip 会改脏 src，导致 git pull 冲突
+  local mvn_home="${ZHIZHI_MAVEN}"
   local mvn_bin="${mvn_home}/bin/mvn"
   local zip="${ZHIZHI_SRC}/apache-maven-3.9.6-bin.zip"
   local core_jar
   core_jar="$(ls "${mvn_home}"/lib/maven-core-*.jar 2>/dev/null | head -1 || true)"
 
-  # 仓库 .gitignore 忽略了 *.jar，clone 下来的 Maven 只有脚本没有核心包
   if [ -z "$core_jar" ]; then
-    [ -f "$zip" ] || die "缺少 ${zip}，无法解压 Maven"
-    log "解压 apache-maven-3.9.6-bin.zip"
     command -v unzip >/dev/null || yum --disablerepo=epel install -y unzip
-    unzip -o -q "$zip" -d "${ZHIZHI_SRC}"
+    mkdir -p "${ZHIZHI_HOME}"
+    if [ -f "$zip" ]; then
+      log "解压 Maven 到 ${mvn_home}（不写入 git 目录）"
+      unzip -o -q "$zip" -d "${ZHIZHI_HOME}"
+    else
+      log "仓库无 zip，改为下载 Apache Maven 3.9.6"
+      wget -q -O /tmp/apache-maven-3.9.6-bin.zip \
+        "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.zip"
+      unzip -o -q /tmp/apache-maven-3.9.6-bin.zip -d "${ZHIZHI_HOME}"
+      rm -f /tmp/apache-maven-3.9.6-bin.zip
+    fi
   fi
 
   [ -f "$mvn_bin" ] || die "未找到 $mvn_bin"

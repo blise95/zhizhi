@@ -69,7 +69,7 @@ systemctl restart zhizhi-api
 
 ## 为什么服务器上能编前端
 
-CentOS 7 的 glibc 太旧，官方 Node 20 跑不起来。安装脚本会下载 [unofficial-builds](https://unofficial-builds.nodejs.org/) 的 `linux-x64-glibc-217`。Maven 用仓库里自带的 `apache-maven-3.9.6`。
+CentOS 7 的 glibc 太旧，官方 Node 20 跑不起来。安装脚本会下载 [unofficial-builds](https://unofficial-builds.nodejs.org/) 的 `linux-x64-glibc-217`。Maven 解压到 **`/opt/zhizhi/apache-maven-3.9.6`**，不要解压进 git 目录，否则 `git pull` 会冲突。
 
 **不要在服务器上跑 Ollama / 7B 模型**，8GB 内存不够和 Java、MySQL 共存。智合默认不上；聊天失败不影响主站。
 

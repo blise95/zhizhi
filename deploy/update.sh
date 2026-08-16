@@ -25,12 +25,13 @@ if [ -f "${ZHIZHI_CONF}/deploy_key" ]; then
 fi
 
 if [ "$SKIP_PULL" != "--no-sync" ]; then
-  log "拉取 ${ZHIZHI_BRANCH} ..."
+  log "拉取 ${ZHIZHI_BRANCH}（以 GitHub 为准，丢弃服务器本地改动）..."
   cd "${ZHIZHI_SRC}"
+  git merge --abort >/dev/null 2>&1 || true
+  git rebase --abort >/dev/null 2>&1 || true
   git fetch origin
-  git checkout "${ZHIZHI_BRANCH}"
-  git pull --ff-only origin "${ZHIZHI_BRANCH}"
-  # 拉取后再执行新脚本，避免本次更新改了 update.sh 却跑到一半
+  git checkout -f "${ZHIZHI_BRANCH}"
+  git reset --hard "origin/${ZHIZHI_BRANCH}"
   exec bash "${ZHIZHI_SRC}/deploy/update.sh" --no-sync
 fi
 
