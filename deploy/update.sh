@@ -30,8 +30,9 @@ if [ "$SKIP_PULL" != "--no-sync" ]; then
   git merge --abort >/dev/null 2>&1 || true
   git rebase --abort >/dev/null 2>&1 || true
   git fetch origin
-  git checkout -f "${ZHIZHI_BRANCH}"
+  # 不要先 checkout：有未合并文件时会失败。reset --hard 可直接对齐远端。
   git reset --hard "origin/${ZHIZHI_BRANCH}"
+  git checkout -B "${ZHIZHI_BRANCH}" "origin/${ZHIZHI_BRANCH}" >/dev/null
   exec bash "${ZHIZHI_SRC}/deploy/update.sh" --no-sync
 fi
 

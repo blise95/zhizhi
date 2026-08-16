@@ -8,6 +8,7 @@ ZHIZHI_LOGS="${ZHIZHI_LOGS:-${ZHIZHI_HOME}/logs}"
 ZHIZHI_BACKUP="${ZHIZHI_BACKUP:-${ZHIZHI_HOME}/backup}"
 ZHIZHI_NODE="${ZHIZHI_NODE:-${ZHIZHI_HOME}/node}"
 ZHIZHI_MAVEN="${ZHIZHI_MAVEN:-${ZHIZHI_HOME}/apache-maven-3.9.6}"
+ZHIZHI_M2="${ZHIZHI_M2:-${ZHIZHI_HOME}/.m2}"
 
 ZHIZHI_REPO="${ZHIZHI_REPO:-https://github.com/blise95/zhizhi.git}"
 ZHIZHI_BRANCH="${ZHIZHI_BRANCH:-main}"
@@ -36,7 +37,10 @@ ensure_maven() {
   local mvn_bin="${mvn_home}/bin/mvn"
   local zip="${ZHIZHI_SRC}/apache-maven-3.9.6-bin.zip"
   local core_jar
-  core_jar="$(ls "${mvn_home}"/lib/maven-core-*.jar 2>/dev/null | head -1 || true)"
+  core_jar=""
+  if [ -d "${mvn_home}/lib" ]; then
+    core_jar="$(find "${mvn_home}/lib" -maxdepth 1 -name 'maven-core-*.jar' -print 2>/dev/null | head -1 || true)"
+  fi
 
   if [ -z "$core_jar" ]; then
     command -v unzip >/dev/null || yum --disablerepo=epel install -y unzip
