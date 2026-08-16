@@ -1,0 +1,30 @@
+# 生产环境。密钥只从环境变量读取，不要把真实密码写进仓库。
+server:
+  port: 8080
+  address: 127.0.0.1
+  servlet:
+    context-path: /zhiliang
+
+spring:
+  datasource:
+    url: ${ZHIZHI_DB_URL:jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${ZHIZHI_DB_USER:zhizhi}
+    password: ${ZHIZHI_DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+
+  sql:
+    init:
+      mode: never
+
+logging:
+  file:
+    name: ${ZHIZHI_LOG_FILE:/opt/zhizhi/logs/zhizhi-api.log}
+  level:
+    com.zjzy.quality: INFO
+    org.springframework: WARN

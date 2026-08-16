@@ -1,0 +1,17 @@
+# 若不用环境变量，可把本文件放到 /opt/zhizhi/conf/ 并在启动参数加
+# --spring.config.additional-location=/opt/zhizhi/conf/application-prod.yml
+# 推荐仍用 zhizhi.env，避免密码进 Git。
+server:
+  port: 8080
+  address: 127.0.0.1
+  servlet:
+    context-path: /zhiliang
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: zhizhi
+    password: change-me
+  sql:
+    init:
+      mode: never

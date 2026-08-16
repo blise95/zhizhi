@@ -1,0 +1,18 @@
+[Unit]
+Description=Zhizhi Quality API
+After=network.target mysqld.service mariadb.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=-/opt/zhizhi/conf/zhizhi.env
+WorkingDirectory=/opt/zhizhi
+ExecStart=/usr/bin/java -Xms256m -Xmx768m -jar /opt/zhizhi/app/quality-inspection.jar --spring.profiles.active=prod
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

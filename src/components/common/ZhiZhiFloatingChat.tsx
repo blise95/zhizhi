@@ -15,7 +15,9 @@ interface ChatMessage {
   error?: boolean;
 }
 
-const API_BASE_URL = import.meta.env.VITE_ZHIHE_API_URL || 'http://localhost:8000';
+const API_BASE_URL =
+  import.meta.env.VITE_ZHIHE_API_URL ||
+  (import.meta.env.PROD ? '/zhihe' : 'http://localhost:8000');
 
 const W_WIDTH = 360;
 const W_HEIGHT = 520;
@@ -409,7 +411,7 @@ export function ZhiZhiFloatingChat() {
           {
             id: `a-${Date.now()}`,
             role: 'assistant',
-            content: `智合连接失败：${err instanceof Error ? err.message : '未知错误'}。请确认后端服务已启动（python api/main.py）。`,
+            content: `智合暂不可用（${err instanceof Error ? err.message : '未知错误'}）。主站功能不受影响。`,
             error: true,
           },
         ]);
