@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { getCurrentUser } from '../auth/Login';
 import { RECORD_TYPE, createTypedRecord } from '@/services/qualityData';
+import { formatLocalDate } from '@/utils/analysisUtils';
 
 // 类型定义
 interface TobaccoInspectionData {
@@ -61,7 +62,7 @@ const FILLING_STANDARD = {
 export function TobaccoInspectionInput() {
   // 表单状态
   const [formData, setFormData] = useState<TobaccoInspectionData>({
-    inspectionDate: new Date().toISOString().split('T')[0],
+    inspectionDate: formatLocalDate(new Date()),
     productionPoint: '',
     tobaccoBrand: '',
     batchNumber: '',
@@ -219,7 +220,7 @@ export function TobaccoInspectionInput() {
     }
 
     setFormData({
-      inspectionDate: new Date().toISOString().split('T')[0],
+      inspectionDate: formatLocalDate(new Date()),
       productionPoint: '',
       tobaccoBrand: '',
       batchNumber: '',

@@ -8,14 +8,13 @@ import com.zjzy.quality.entity.WarningLog;
 import com.zjzy.quality.repository.DefectDetailRepository;
 import com.zjzy.quality.repository.InspectionRepository;
 import com.zjzy.quality.repository.WarningRepository;
+import com.zjzy.quality.util.ChinaTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -63,9 +62,8 @@ public class InspectionService {
     @Transactional
     public Map<String, Object> submit(InspectionRecord record) {
         // 0. 设置上传时间和上传人
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (record.getUploadTime() == null || record.getUploadTime().isEmpty()) {
-            record.setUploadTime(sdf.format(new Date()));
+            record.setUploadTime(ChinaTime.nowDateTime());
         }
         if (record.getUploader() == null || record.getUploader().isEmpty()) {
             record.setUploader("未知用户");
@@ -1128,8 +1126,7 @@ public class InspectionService {
      */
     private void writeWarningLogs(List<Map<String, Object>> warns, InspectionRecord record) {
         if (warns == null || warns.isEmpty()) return;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String now = sdf.format(new Date());
+        String now = ChinaTime.nowDateTime();
 
         for (Map<String, Object> w : warns) {
             WarningLog log = new WarningLog();

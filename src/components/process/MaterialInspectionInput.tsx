@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { getCurrentUser } from '../auth/Login';
 import { RECORD_TYPE, createTypedRecord } from '@/services/qualityData';
+import { formatLocalDate } from '@/utils/analysisUtils';
 
 // 类型定义
 interface MaterialInspectionData {
@@ -73,10 +74,7 @@ const INSPECTION_ITEMS = [
 const RESULT_OPTIONS = ['合格', '不合格'];
 
 // 获取当天日期
-const getTodayDate = () => {
-  const today = new Date();
-  return today.toISOString().split('T')[0];
-};
+const getTodayDate = () => formatLocalDate(new Date());
 
 export function MaterialInspectionInput() {
   // 表单状态

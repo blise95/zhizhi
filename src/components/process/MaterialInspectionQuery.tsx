@@ -29,6 +29,7 @@ import {
   updateTypedRecord,
   deleteTypedRecord,
 } from '@/services/qualityData';
+import { formatDateTime, formatLocalDate } from '@/utils/analysisUtils';
 
 // 类型定义
 interface MaterialInspectionRecord {
@@ -82,10 +83,7 @@ const MATERIAL_TYPES = [
 ];
 
 // 获取当天日期
-const getTodayDate = () => {
-  const today = new Date();
-  return today.toISOString().split('T')[0];
-};
+const getTodayDate = () => formatLocalDate(new Date());
 
 export function MaterialInspectionQuery() {
   // 状态管理
@@ -243,8 +241,8 @@ export function MaterialInspectionQuery() {
       csvContent += `${record.overallResult},`;
       csvContent += `${record.images.length}张,`;
       csvContent += `${record.uploader || '-'},`;
-      csvContent += `${record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'},`;
-      csvContent += `${record.updatedAt ? new Date(record.updatedAt).toLocaleString() : '-'}\n`;
+      csvContent += `${formatDateTime(record.createdAt)},`;
+      csvContent += `${formatDateTime(record.updatedAt)}\n`;
     });
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -558,7 +556,7 @@ export function MaterialInspectionQuery() {
                     <td className="py-3 px-4 text-foreground">{record.inspector}</td>
                     <td className="py-3 px-4 text-foreground">{record.uploader || '-'}</td>
                     <td className="py-3 px-4 text-muted-foreground whitespace-nowrap">
-                      {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                      {formatDateTime(record.createdAt)}
                     </td>
                     <td className="py-3 px-4 text-center">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
@@ -930,7 +928,7 @@ export function MaterialInspectionQuery() {
 
               <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground border-t border-border/30 pt-4">
                 <div><span className="font-medium">上传者：</span>{editForm.uploader || '-'}</div>
-                <div><span className="font-medium">上传时间：</span>{editForm.createdAt ? new Date(editForm.createdAt).toLocaleString() : '-'}</div>
+                <div><span className="font-medium">上传时间：</span>{formatDateTime(editForm.createdAt)}</div>
               </div>
             </div>
 

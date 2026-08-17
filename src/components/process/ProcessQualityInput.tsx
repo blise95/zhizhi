@@ -20,6 +20,7 @@ import { ImageCapture } from '../common/ImageCapture';
 import type { ParsedQualityForm } from '@/services/ocrService';
 import { inspectionApi } from '@/services/api';
 import { buildInspectionSubmit } from '@/services/qualityData';
+import { formatLocalDate } from '@/utils/analysisUtils';
 
 // 表单数据类型定义
 interface FormData {
@@ -103,10 +104,7 @@ interface ProcessQualityInputProps {
 
 export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
   // 获取当天日期（YYYY-MM-DD格式）
-  const getTodayDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  };
+  const getTodayDate = () => formatLocalDate(new Date());
 
   // 表单状态
   const [formData, setFormData] = useState<FormData>({

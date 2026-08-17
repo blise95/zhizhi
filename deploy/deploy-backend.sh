@@ -48,7 +48,8 @@ cp -f "$SRC_JAR" "$DEST_JAR"
 log "已发布 $DEST_JAR"
 
 if [ -f /etc/systemd/system/zhizhi-api.service ] || systemctl list-unit-files | grep -q zhizhi-api; then
-  log "重启 zhizhi-api"
+  log "同步 systemd 并重启 zhizhi-api"
+  cp -f "${SCRIPT_DIR}/systemd/zhizhi-api.service" /etc/systemd/system/zhizhi-api.service
   systemctl daemon-reload
   systemctl restart zhizhi-api
 else

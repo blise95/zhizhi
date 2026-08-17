@@ -26,6 +26,7 @@ import {
   updateTypedRecord,
   deleteTypedRecord,
 } from '@/services/qualityData';
+import { formatDateTime, formatLocalDate } from '@/utils/analysisUtils';
 
 // 类型定义
 interface TobaccoInspectionRecord {
@@ -61,8 +62,8 @@ export function TobaccoInspectionQuery() {
   const [allData, setAllData] = useState<TobaccoInspectionRecord[]>([]);
   const [filteredData, setFilteredData] = useState<TobaccoInspectionRecord[]>([]);
   const [filters, setFilters] = useState<FilterConditions>({
-    dateFrom: new Date().toISOString().split('T')[0],
-    dateTo: new Date().toISOString().split('T')[0],
+    dateFrom: formatLocalDate(new Date()),
+    dateTo: formatLocalDate(new Date()),
     productionPoint: '',
     tobaccoBrand: '',
     overallResult: '',
@@ -144,8 +145,8 @@ export function TobaccoInspectionQuery() {
   // 重置筛选
   const handleReset = () => {
     setFilters({
-      dateFrom: new Date().toISOString().split('T')[0],
-      dateTo: new Date().toISOString().split('T')[0],
+      dateFrom: formatLocalDate(new Date()),
+      dateTo: formatLocalDate(new Date()),
       productionPoint: '',
       tobaccoBrand: '',
       overallResult: '',
@@ -154,7 +155,7 @@ export function TobaccoInspectionQuery() {
 
   // 查看当天
   const handleToday = () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date());
     setFilters(prev => ({
       ...prev,
       dateFrom: today,
@@ -235,8 +236,8 @@ export function TobaccoInspectionQuery() {
       item.fillingResult,
       item.overallResult,
       item.uploader || '-',
-      item.createdAt ? new Date(item.createdAt).toLocaleString() : '-',
-      item.updatedAt ? new Date(item.updatedAt).toLocaleString() : '-',
+      item.createdAt ? formatDateTime(item.createdAt) : '-',
+      item.updatedAt ? formatDateTime(item.updatedAt) : '-',
     ]);
 
     const csvContent = [
@@ -249,7 +250,7 @@ export function TobaccoInspectionQuery() {
     const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `烟丝检验结果查询_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `烟丝检验结果查询_${formatLocalDate(new Date())}.csv`;
     link.click();
   };
 
@@ -494,7 +495,7 @@ export function TobaccoInspectionQuery() {
                     </td>
                     <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">{record.uploader || '-'}</td>
                     <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">
-                      {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                      {formatDateTime(record.createdAt)}
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex items-center justify-center gap-2">
@@ -834,7 +835,7 @@ export function TobaccoInspectionQuery() {
 
               <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground border-t border-border/50 pt-4">
                 <div><span className="font-medium">上传者：</span>{editForm.uploader || '-'}</div>
-                <div><span className="font-medium">上传时间：</span>{editForm.createdAt ? new Date(editForm.createdAt).toLocaleString() : '-'}</div>
+                <div><span className="font-medium">上传时间：</span>{formatDateTime(editForm.createdAt)}</div>
               </div>
             </div>
 

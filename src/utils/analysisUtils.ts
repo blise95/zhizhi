@@ -171,6 +171,25 @@ export function formatLocalDate(date: Date): string {
 }
 
 /**
+ * 展示上传时间：已是北京时间的字符串直接显示，带 Z 的 ISO 再转成本地时间。
+ */
+export function formatDateTime(value?: string | null): string {
+  if (!value) return '-';
+  const raw = value.trim();
+  const isUtc = /Z$/i.test(raw) || /[+-]\d{2}:\d{2}$/.test(raw);
+  if (!isUtc) {
+    const naive = raw.replace('T', ' ');
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(naive)) {
+      return naive.slice(0, 19);
+    }
+  }
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return raw;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
+/**
  * 获取当前月份的日期范围
  */
 export function getCurrentMonthRange(): { from: string; to: string } {

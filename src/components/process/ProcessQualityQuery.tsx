@@ -31,6 +31,7 @@ import type { DefectRecord as DefectRecordType } from './AppearanceDefectInput';
 // 导入API服务
 import { inspectionApi } from '../../services/api';
 import { inspectionToProcessRecord } from '@/services/qualityData';
+import { formatDateTime, formatLocalDate } from '@/utils/analysisUtils';
 
 // 数据接口定义
 interface ProcessQualityData {
@@ -90,10 +91,7 @@ const MACHINES = ['2#', '4#', '9#', '10#', 'ALW 9#', 'ALW 1#'];
 
 export function ProcessQualityQuery() {
   // 获取当天日期（YYYY-MM-DD格式）
-  const getTodayDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  };
+  const getTodayDate = () => formatLocalDate(new Date());
 
   // 状态管理
   const [allData, setAllData] = useState<ProcessQualityData[]>([]);
@@ -250,7 +248,7 @@ export function ProcessQualityQuery() {
 
   // 查看当天数据
   const viewTodayData = () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date());
     setFilters(prev => ({
       ...prev,
       dateFrom: today,
@@ -359,8 +357,8 @@ export function ProcessQualityQuery() {
       '盒装缺陷数': item.packDefects?.length || 0,
       '烟支缺陷数': item.cigaretteDefects?.length || 0,
       '上传者': item.uploader || '-',
-      '上传时间': item.createdAt ? new Date(item.createdAt).toLocaleString() : '-',
-      '更新时间': item.updatedAt ? new Date(item.updatedAt).toLocaleString() : '-',
+      '上传时间': formatDateTime(item.createdAt),
+      '更新时间': formatDateTime(item.updatedAt),
     }));
 
     // 创建CSV内容（简单实现，实际项目可使用xlsx库）
@@ -643,7 +641,7 @@ export function ProcessQualityQuery() {
                         <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">{record.samplingTime}</td>
                         <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">{record.uploader || '-'}</td>
                         <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">
-                          {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                          {formatDateTime(record.createdAt)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center">
                           {totalDefects > 0 ? (
@@ -1024,7 +1022,7 @@ export function ProcessQualityQuery() {
 
               <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground border-t border-border/30 pt-4">
                 <div><span className="font-medium">上传者：</span>{editForm.uploader || '-'}</div>
-                <div><span className="font-medium">上传时间：</span>{editForm.createdAt ? new Date(editForm.createdAt).toLocaleString() : '-'}</div>
+                <div><span className="font-medium">上传时间：</span>{formatDateTime(editForm.createdAt)}</div>
               </div>
             </div>
 

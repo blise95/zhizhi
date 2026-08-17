@@ -44,6 +44,7 @@ import {
   updateTypedRecord,
   deleteTypedRecord,
 } from '@/services/qualityData';
+import { formatDateTime, formatLocalDate } from '@/utils/analysisUtils';
 
 // 导入类型定义
 import type {
@@ -143,10 +144,7 @@ interface TrendDataPoint {
 
 export function CigarettePhysicalTestQuery() {
   // 获取当天日期
-  const getTodayDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  };
+  const getTodayDate = () => formatLocalDate(new Date());
 
   // 状态管理
   const [allData, setAllData] = useState<PhysicalTestRecord[]>([]);
@@ -462,8 +460,8 @@ export function CigarettePhysicalTestQuery() {
           '记录人': record.recorder,
           '检测时间': record.testTime,
           '上传者': record.uploader || '-',
-          '上传时间': record.createdAt ? new Date(record.createdAt).toLocaleString() : '-',
-          '更新时间': record.updatedAt ? new Date(record.updatedAt).toLocaleString() : '-',
+          '上传时间': formatDateTime(record.createdAt),
+          '更新时间': formatDateTime(record.updatedAt),
         };
 
         // 添加物测指标
@@ -634,7 +632,7 @@ export function CigarettePhysicalTestQuery() {
                     ` : '<td>-</td><td>-</td><td>-</td><td>-</td>';
                   }).join('')}
                   <td>${record.uploader || '-'}</td>
-                  <td>${record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}</td>
+                  <td>${formatDateTime(record.createdAt)}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -950,7 +948,7 @@ export function CigarettePhysicalTestQuery() {
                       {record.uploader || '-'}
                     </td>
                     <td className="px-3 py-3 text-sm text-muted-foreground whitespace-nowrap">
-                      {record.createdAt ? new Date(record.createdAt).toLocaleString() : '-'}
+                      {formatDateTime(record.createdAt)}
                     </td>
                     {PHYSICAL_TEST_INDICATORS.map(indicator => {
                       const data = record[indicator.id as keyof PhysicalTestRecord] as IndicatorData;

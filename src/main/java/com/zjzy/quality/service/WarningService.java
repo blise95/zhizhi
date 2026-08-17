@@ -6,11 +6,11 @@ import com.zjzy.quality.entity.InspectionRecord;
 import com.zjzy.quality.entity.WarningLog;
 import com.zjzy.quality.repository.InspectionRepository;
 import com.zjzy.quality.repository.WarningRepository;
+import com.zjzy.quality.util.ChinaTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -178,8 +178,7 @@ public class WarningService {
      */
     public void writeWarningLogs(List<Map<String, Object>> warns, InspectionRecord record) {
         if (warns == null || warns.isEmpty()) return;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String now = sdf.format(new Date());
+        String now = ChinaTime.nowDateTime();
 
         for (Map<String, Object> w : warns) {
             WarningLog log = new WarningLog();

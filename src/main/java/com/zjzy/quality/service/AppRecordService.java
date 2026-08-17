@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zjzy.quality.entity.AppRecord;
 import com.zjzy.quality.repository.AppRecordRepository;
+import com.zjzy.quality.util.ChinaTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -90,7 +91,7 @@ public class AppRecordService {
         item.put("recordType", row.getRecordType());
         item.put("payload", readPayload(row.getPayload()));
         item.put("uploader", row.getUploader());
-        item.put("createdAt", row.getCreatedAt() == null ? null : row.getCreatedAt().toString());
+        item.put("createdAt", ChinaTime.format(row.getCreatedAt()));
         return item;
     }
 
