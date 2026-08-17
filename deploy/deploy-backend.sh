@@ -47,6 +47,13 @@ fi
 cp -f "$SRC_JAR" "$DEST_JAR"
 log "已发布 $DEST_JAR"
 
+if [ -f "${ZHIZHI_CONF}/zhizhi.env" ]; then
+  if grep -q 'serverTimezone=Asia/Shanghai' "${ZHIZHI_CONF}/zhizhi.env"; then
+    sed -i 's/serverTimezone=Asia\/Shanghai/serverTimezone=Asia\/Dubai/g' "${ZHIZHI_CONF}/zhizhi.env"
+    log "已把 ${ZHIZHI_CONF}/zhizhi.env 的 JDBC 时区改为 Asia/Dubai"
+  fi
+fi
+
 if [ -f /etc/systemd/system/zhizhi-api.service ] || systemctl list-unit-files | grep -q zhizhi-api; then
   log "同步 systemd 并重启 zhizhi-api"
   cp -f "${SCRIPT_DIR}/systemd/zhizhi-api.service" /etc/systemd/system/zhizhi-api.service

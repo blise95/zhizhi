@@ -171,7 +171,7 @@ export function formatLocalDate(date: Date): string {
 }
 
 /**
- * 展示上传时间：已是北京时间的字符串直接显示，带 Z 的 ISO 再转成本地时间。
+ * 展示上传时间：已是阿联酋时间的字符串直接显示，带 Z 的 ISO 再转到 Asia/Dubai。
  */
 export function formatDateTime(value?: string | null): string {
   if (!value) return '-';
@@ -185,8 +185,18 @@ export function formatDateTime(value?: string | null): string {
   }
   const date = new Date(raw);
   if (Number.isNaN(date.getTime())) return raw;
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Dubai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+  const pick = (type: string) => parts.find((p) => p.type === type)?.value || '00';
+  return `${pick('year')}-${pick('month')}-${pick('day')} ${pick('hour')}:${pick('minute')}:${pick('second')}`;
 }
 
 /**

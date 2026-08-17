@@ -7,7 +7,7 @@ server:
 
 spring:
   datasource:
-    url: ${ZHIZHI_DB_URL:jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false}
+    url: ${ZHIZHI_DB_URL:jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Dubai&allowPublicKeyRetrieval=true&useSSL=false}
     username: ${ZHIZHI_DB_USER:zhizhi}
     password: ${ZHIZHI_DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -20,10 +20,10 @@ spring:
     properties:
       hibernate:
         jdbc:
-          time_zone: Asia/Shanghai
+          time_zone: Asia/Dubai
 
   jackson:
-    time-zone: Asia/Shanghai
+    time-zone: Asia/Dubai
     date-format: yyyy-MM-dd HH:mm:ss
 
   sql:

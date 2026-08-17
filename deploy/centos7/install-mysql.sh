@@ -69,7 +69,7 @@ if [ ! -f "$ENV_FILE" ]; then
   DB_PASS="Aa1!$(openssl rand -base64 12 | tr -d '/+=#' | cut -c1-12)"
   cat > "$ENV_FILE" <<EOF
 SPRING_PROFILES_ACTIVE=prod
-ZHIZHI_DB_URL=jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+ZHIZHI_DB_URL=jdbc:mysql://127.0.0.1:3306/quality_inspection?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Dubai&allowPublicKeyRetrieval=true&useSSL=false
 ZHIZHI_DB_USER=zhizhi
 ZHIZHI_DB_PASSWORD=${DB_PASS}
 ZHIZHI_LOG_FILE=/opt/zhizhi/logs/zhizhi-api.log

@@ -6,10 +6,10 @@ Wants=network.target
 [Service]
 Type=simple
 User=root
-Environment=TZ=Asia/Shanghai
+Environment=TZ=Asia/Dubai
 EnvironmentFile=-/opt/zhizhi/conf/zhizhi.env
 WorkingDirectory=/opt/zhizhi
-ExecStart=/usr/bin/java -Duser.timezone=Asia/Shanghai -Xms256m -Xmx768m -jar /opt/zhizhi/app/quality-inspection.jar --spring.profiles.active=prod
+ExecStart=/usr/bin/java -Duser.timezone=Asia/Dubai -Xms256m -Xmx768m -jar /opt/zhizhi/app/quality-inspection.jar --spring.profiles.active=prod
 SuccessExitStatus=143
 Restart=on-failure
 RestartSec=5
