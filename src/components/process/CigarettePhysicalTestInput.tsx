@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Send,
   RotateCcw,
@@ -114,6 +114,8 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showOCR, setShowOCR] = useState(false);
 
@@ -196,8 +198,11 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
 
   // 提交数据
   const handleSubmit = async () => {
+    if (submittingRef.current) return;
     if (!validateForm()) return;
 
+    submittingRef.current = true;
+    setSubmitting(true);
     const currentUser = getCurrentUser();
     const now = new Date().toISOString();
 
@@ -222,6 +227,9 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
       window.dispatchEvent(new Event('quality-data-updated'));
     } catch (error) {
       alert('保存失败：' + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   };
 
@@ -707,14 +715,15 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
           {/* 提交按钮（科技感大按钮） */}
           <button
             onClick={handleSubmit}
-            className="px-10 py-3.5 text-base font-semibold text-white bg-gradient-to-r from-brand-blue via-blue-500 to-blue-600 hover:from-brand-blue-dark hover:via-blue-600 hover:to-blue-700 rounded-xl shadow-lg shadow-brand-blue/30 hover:shadow-xl hover:shadow-brand-blue/40 transition-all duration-300 border border-brand-blue/20 hover:border-brand-blue/40 relative overflow-hidden group"
+            disabled={submitting}
+            className="px-10 py-3.5 text-base font-semibold text-white bg-gradient-to-r from-brand-blue via-blue-500 to-blue-600 hover:from-brand-blue-dark hover:via-blue-600 hover:to-blue-700 rounded-xl shadow-lg shadow-brand-blue/30 hover:shadow-xl hover:shadow-brand-blue/40 transition-all duration-300 border border-brand-blue/20 hover:border-brand-blue/40 relative overflow-hidden group disabled:opacity-60 disabled:pointer-events-none"
             title="提交后数据将保存到数据库，可在查询页面查看"
           >
             {/* 科技感光效 */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
 
             <Send className="w-5 h-5 relative z-10" />
-            <span className="relative z-10 tracking-wider">提 交</span>
+            <span className="relative z-10 tracking-wider">{submitting ? '提交中…' : '提 交'}</span>
             <ArrowRight className="w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1" />
           </button>
 

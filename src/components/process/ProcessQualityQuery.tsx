@@ -164,8 +164,15 @@ export function ProcessQualityQuery() {
         });
 
         console.log(`✅ 成功从数据库加载 ${convertedData.length} 条质量记录`);
-        setAllData(convertedData);
-        setFilteredData(convertedData);
+        const unique: ProcessQualityData[] = [];
+        const seen = new Set<string>();
+        convertedData.forEach((row) => {
+          if (seen.has(row.id)) return;
+          seen.add(row.id);
+          unique.push(row);
+        });
+        setAllData(unique);
+        setFilteredData(unique);
       } else {
         console.log('ℹ️ 数据库暂无数据');
         setAllData([]);

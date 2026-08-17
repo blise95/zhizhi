@@ -100,6 +100,8 @@ export function MaterialInspectionInput() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -184,10 +186,13 @@ export function MaterialInspectionInput() {
 
   // 提交数据
   const handleSubmit = async () => {
+    if (submittingRef.current) return;
     if (!validateForm()) {
       return;
     }
 
+    submittingRef.current = true;
+    setSubmitting(true);
     const currentUser = getCurrentUser();
     const now = new Date().toISOString();
     const record = {
@@ -220,6 +225,9 @@ export function MaterialInspectionInput() {
       window.dispatchEvent(new Event('quality-data-updated'));
     } catch (error) {
       alert('保存失败：' + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   };
 
@@ -730,7 +738,8 @@ export function MaterialInspectionInput() {
         {/* 提交按钮（科技感设计） */}
         <button
           onClick={handleSubmit}
-          className="px-10 py-3.5 text-base font-semibold text-white bg-gradient-to-r from-brand-blue via-blue-500 to-blue-600 hover:from-brand-blue-dark hover:via-blue-600 hover:to-blue-700 rounded-xl shadow-lg shadow-brand-blue/30 hover:shadow-xl hover:shadow-brand-blue/40 transition-all duration-300 flex items-center gap-3 border border-brand-blue/20 hover:border-brand-blue/40 relative overflow-hidden group"
+          disabled={submitting}
+          className="px-10 py-3.5 text-base font-semibold text-white bg-gradient-to-r from-brand-blue via-blue-500 to-blue-600 hover:from-brand-blue-dark hover:via-blue-600 hover:to-blue-700 rounded-xl shadow-lg shadow-brand-blue/30 hover:shadow-xl hover:shadow-brand-blue/40 transition-all duration-300 flex items-center gap-3 border border-brand-blue/20 hover:border-brand-blue/40 relative overflow-hidden group disabled:opacity-60 disabled:pointer-events-none"
           title="提交后数据将保存到数据库，可在查询页面查看"
         >
           {/* 科技感背景动画 */}
@@ -738,7 +747,7 @@ export function MaterialInspectionInput() {
 
           {/* 按钮内容 */}
           <Send className="w-5 h-5 relative z-10" />
-          <span className="relative z-10">提 交</span>
+          <span className="relative z-10">{submitting ? '提交中…' : '提 交'}</span>
 
           {/* 右侧箭头 */}
           <ArrowRight className="w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />

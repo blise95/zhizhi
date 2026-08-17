@@ -115,14 +115,14 @@ public class InspectionService {
      * 查询全量质检历史数据（按ID降序，最新在前）
      */
     public List<InspectionRecord> listAll() {
-        return inspectionRepo.findAllByOrderByIdDesc();
+        return distinctById(inspectionRepo.findAllByOrderByIdDesc());
     }
 
     /**
      * 按日期范围查询（降序）
      */
     public List<InspectionRecord> listByDateRange(String startDate, String endDate) {
-        return inspectionRepo.findByDateBetweenOrderByIdDesc(startDate, endDate);
+        return distinctById(inspectionRepo.findByDateBetweenOrderByIdDesc(startDate, endDate));
     }
 
     /**
@@ -152,7 +152,18 @@ public class InspectionService {
             records = records.stream().filter(r -> machine.equals(r.getMachineId())).collect(Collectors.toList());
         }
 
-        return records;
+        return distinctById(records);
+    }
+
+    private List<InspectionRecord> distinctById(List<InspectionRecord> records) {
+        Map<Long, InspectionRecord> unique = new LinkedHashMap<>();
+        for (InspectionRecord record : records) {
+            if (record.getId() == null) {
+                continue;
+            }
+            unique.putIfAbsent(record.getId(), record);
+        }
+        return new ArrayList<>(unique.values());
     }
 
     /**

@@ -1,6 +1,9 @@
 package com.zjzy.quality.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +105,7 @@ public class InspectionRecord {
     private String uploadTime;
 
     @OneToMany(mappedBy = "inspection", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<DefectDetail> defectDetails = new ArrayList<>();
 
     // ==================== 辅助方法 ====================
