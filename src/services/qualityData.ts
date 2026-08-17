@@ -56,6 +56,8 @@ export function buildInspectionSubmit(input: {
   brand: string;
   sampleTime?: string;
   sampleTicketNo?: string;
+  steelStamp?: string;
+  tobaccoBatch?: string;
   uploader: string;
   boxDefects?: FrontendDefect[];
   cartonDefects?: FrontendDefect[];
@@ -71,6 +73,8 @@ export function buildInspectionSubmit(input: {
     brand: input.brand,
     sampleTime: input.sampleTime || '',
     sampleTicketNo: input.sampleTicketNo || '',
+    steelStamp: input.steelStamp || '',
+    tobaccoBatch: input.tobaccoBatch || '',
     uploader: input.uploader,
     cigaretteA: countGrade(input.cigaretteDefects, 'A'),
     cigaretteB: countGrade(input.cigaretteDefects, 'B'),
@@ -107,7 +111,8 @@ export function inspectionToProcessRecord(record: InspectionRecord): ProcessQual
     shiftGroup: record.shift,
     shift: record.team,
     inspector: record.uploader,
-    batchNumber: record.sampleTicketNo || '',
+    batchNumber: record.tobaccoBatch || '',
+    steelStamp: record.steelStamp || '',
     boxDefects: fromDetails(record, 'case'),
     cartonDefects: fromDetails(record, 'carton'),
     packDefects: fromDetails(record, 'boxSmall'),

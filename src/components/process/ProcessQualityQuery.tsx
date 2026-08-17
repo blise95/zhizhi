@@ -151,8 +151,8 @@ export function ProcessQualityQuery() {
             recorder: mapped.inspector,
             samplingTime: record.sampleTime || '',
             samplingNo: record.sampleTicketNo || '',
-            steelStamp: '',
-            tobaccoBatch: mapped.batchNumber || '',
+            steelStamp: record.steelStamp || '',
+            tobaccoBatch: record.tobaccoBatch || mapped.batchNumber || '',
             boxDefects: mapped.boxDefects as DefectRecordType[] | undefined,
             cartonDefects: mapped.cartonDefects as DefectRecordType[] | undefined,
             packDefects: mapped.packDefects as DefectRecordType[] | undefined,
@@ -311,7 +311,9 @@ export function ProcessQualityQuery() {
         partnerSite: editForm.productionPoint,
         brand: editForm.brand,
         sampleTime: editForm.samplingTime,
-        sampleTicketNo: editForm.samplingNo || editForm.tobaccoBatch,
+        sampleTicketNo: editForm.samplingNo,
+        steelStamp: editForm.steelStamp,
+        tobaccoBatch: editForm.tobaccoBatch,
         uploader: editForm.recorder,
       });
       await loadData();
@@ -763,7 +765,7 @@ export function ProcessQualityQuery() {
                   ].map((item) => (
                     <div key={item.label} className="p-3 rounded-lg bg-background/50 border border-border/30">
                       <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
-                      <p className="text-sm font-medium text-foreground">{item.value}</p>
+                      <p className="text-sm font-medium text-foreground">{item.value || '-'}</p>
                     </div>
                   ))}
                 </div>

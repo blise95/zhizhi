@@ -50,6 +50,7 @@ export interface ProcessQualityRecord {
   shift: string;
   inspector: string;
   batchNumber: string;
+  steelStamp?: string;
   boxDefects?: DefectRecord[];
   cartonDefects?: DefectRecord[];
   packDefects?: DefectRecord[];

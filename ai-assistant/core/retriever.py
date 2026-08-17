@@ -3,7 +3,6 @@
 """
 import re
 from typing import List, Dict, Any
-from core.vectorstore import QualityVectorStore
 
 
 def expand_query(query: str) -> List[str]:
@@ -48,10 +47,17 @@ def reciprocal_rank_fusion(
     ]
 
 
+class EmptyRetriever:
+    """无向量库时的空检索，不影响业务数据问答"""
+
+    def retrieve(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        return []
+
+
 class QualityRetriever:
     """质量知识检索器"""
 
-    def __init__(self, vector_store: QualityVectorStore):
+    def __init__(self, vector_store):
         self.vector_store = vector_store
 
     def retrieve(

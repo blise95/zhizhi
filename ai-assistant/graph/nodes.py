@@ -13,10 +13,8 @@ from typing import Dict, Any, List, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_openai import ChatOpenAI
-from langchain_ollama import ChatOllama
 
 import config
-from core.retriever import QualityRetriever
 from core.business_data import BusinessDataProvider
 from core import quality_analytics as qa
 
@@ -127,6 +125,7 @@ def create_llm():
     if provider == "mock":
         return MockLLM()
     if provider == "ollama":
+        from langchain_ollama import ChatOllama
         return ChatOllama(
             model=cfg["model"],
             base_url=cfg["base_url"],
@@ -137,6 +136,8 @@ def create_llm():
         api_key=cfg["api_key"],
         base_url=cfg["base_url"],
         temperature=0.1,
+        timeout=60,
+        max_retries=2,
     )
 
 
@@ -221,7 +222,7 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
         return {"question_type": "out_of_scope", "scenario": "out_of_scope"}
 
 
-def retrieve_knowledge(state: Dict[str, Any], retriever: QualityRetriever) -> Dict[str, Any]:
+def retrieve_knowledge(state: Dict[str, Any], retriever: Any) -> Dict[str, Any]:
     """知识库检索节点"""
     question = state["question"]
     results = retriever.retrieve(question, top_k=config.TOP_K_RERANK)

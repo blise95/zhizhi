@@ -10,6 +10,7 @@ zhizhi-sync        # 只拉 GitHub 最新代码（reset --hard，不构建）
 zhizhi-frontend    # 只发前端（Nginx 静态资源，不重启 Java）
 zhizhi-backend     # 只打 JAR 并重启 Java（不跑 npm）
 zhizhi-update      # 上面三步一起做
+zhizhi-zhihe       # 启用智合（智谱远程 API，可选）
 ```
 
 ---
@@ -72,7 +73,26 @@ systemctl restart zhizhi-api
 
 CentOS 7 的 glibc 太旧，官方 Node 20 跑不起来。安装脚本会下载 [unofficial-builds](https://unofficial-builds.nodejs.org/) 的 `linux-x64-glibc-217`。Maven 解压到 **`/opt/zhizhi/apache-maven-3.9.6`**，不要解压进 git 目录，否则 `git pull` 会冲突。
 
-**不要在服务器上跑 Ollama / 7B 模型**，8GB 内存不够和 Java、MySQL 共存。智合默认不上；聊天失败不影响主站。
+**不要在服务器上跑 Ollama / 7B 模型**，8GB 内存不够和 Java、MySQL 共存。
+
+### 启用智合（智谱 API）
+
+主站不依赖智合。要让右下角聊天能回答，用智谱远程接口：
+
+```bash
+# 1. 拉最新代码
+zhizhi-sync
+
+# 2. 写入 API Key（只做一次）
+cp -n /opt/zhizhi/src/deploy/conf/zhihe.env.example /opt/zhizhi/conf/zhihe.env
+chmod 600 /opt/zhizhi/conf/zhihe.env
+vi /opt/zhizhi/conf/zhihe.env    # 把 ZHIPU_API_KEY 换成智谱控制台的 Key
+
+# 3. 安装 Python 依赖并启动
+zhizhi-zhihe
+```
+
+Key 在 [智谱开放平台](https://open.bigmodel.cn/) 创建。模型默认 `glm-4-flash`。聊天走 `http://服务器/zhihe/ask`，质量数据由网页随问题提交，不读浏览器。没有质量标准 PDF 时，仍可问「今天质量怎么样」这类数据问题。
 
 ---
 

@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS inspection_record (
     brand           VARCHAR(50)     NULL                     COMMENT '牌号',
     sample_time     VARCHAR(10)     NULL                     COMMENT '取样时间',
     sample_ticket_no VARCHAR(50)    NULL                     COMMENT '取样件号',
+    steel_stamp     VARCHAR(50)     NULL                     COMMENT '条盒钢印',
+    tobacco_batch   VARCHAR(50)     NULL                     COMMENT '烟丝批次',
     -- 烟支内在物测指标已拆分至 physical_measurement 子表
 
     -- 烟支外观缺陷 ABCD

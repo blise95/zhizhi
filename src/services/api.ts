@@ -92,6 +92,8 @@ export interface InspectionRecord {
   brand: string | null;
   sampleTime: string | null;
   sampleTicketNo: string | null;
+  steelStamp: string | null;
+  tobaccoBatch: string | null;
   cigaretteA: number;
   cigaretteB: number;
   cigaretteC: number;

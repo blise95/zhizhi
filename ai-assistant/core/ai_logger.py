@@ -20,7 +20,7 @@ from typing import Dict, Any, List, Optional
 import config
 
 
-LOG_DIR = Path(config.BASE_DIR) / "data" / "ai_logs"
+LOG_DIR = Path(os.getenv("ZHIHE_LOG_DIR", str(Path(config.BASE_DIR) / "data" / "ai_logs")))
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 

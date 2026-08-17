@@ -41,6 +41,12 @@ public class InspectionRecord {
     @Column(name = "sample_ticket_no", length = 50)
     private String sampleTicketNo;
 
+    @Column(name = "steel_stamp", length = 50)
+    private String steelStamp;
+
+    @Column(name = "tobacco_batch", length = 50)
+    private String tobaccoBatch;
+
     // 烟支内在物测指标（1:N 拆分为子表）
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "inspection", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -162,6 +168,12 @@ public class InspectionRecord {
 
     public String getSampleTicketNo() { return sampleTicketNo; }
     public void setSampleTicketNo(String sampleTicketNo) { this.sampleTicketNo = sampleTicketNo; }
+
+    public String getSteelStamp() { return steelStamp; }
+    public void setSteelStamp(String steelStamp) { this.steelStamp = steelStamp; }
+
+    public String getTobaccoBatch() { return tobaccoBatch; }
+    public void setTobaccoBatch(String tobaccoBatch) { this.tobaccoBatch = tobaccoBatch; }
 
     public List<PhysicalMeasurement> getPhysicalMeasurements() { return physicalMeasurements; }
     public void setPhysicalMeasurements(List<PhysicalMeasurement> physicalMeasurements) { this.physicalMeasurements = physicalMeasurements; }

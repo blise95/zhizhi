@@ -10,7 +10,10 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 
-import requests
+try:
+    import requests
+except ImportError:
+    requests = None
 
 import config
 
@@ -29,6 +32,8 @@ def load_from_file(path: Path) -> List[Dict[str, Any]]:
 
 def load_from_api(url: str) -> List[Dict[str, Any]]:
     """从前端业务 API 获取数据"""
+    if requests is None:
+        return []
     try:
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()

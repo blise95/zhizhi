@@ -325,6 +325,8 @@ export function ProcessQualityInput({ onBack }: ProcessQualityInputProps) {
           brand,
           sampleTime: formData.samplingTime || '',
           sampleTicketNo: formData.sampleNumber || '',
+          steelStamp: formData.steelStamp || '',
+          tobaccoBatch: formData.tobaccoBatch || '',
           uploader: currentUser?.displayName || currentUser?.username || '未知用户',
           boxDefects: defectData.box,
           cartonDefects: defectData.carton,

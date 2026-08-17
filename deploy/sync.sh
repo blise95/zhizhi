@@ -28,4 +28,4 @@ git checkout -B "${ZHIZHI_BRANCH}" "origin/${ZHIZHI_BRANCH}" >/dev/null
 git log -1 --oneline
 git status -sb
 log "代码已对齐 origin/${ZHIZHI_BRANCH}"
-log "接下来按需执行：zhizhi-frontend  和/或  zhizhi-backend"
+log "接下来按需执行：zhizhi-frontend / zhizhi-backend / zhizhi-zhihe"

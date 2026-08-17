@@ -34,14 +34,13 @@ from graph.nodes import (
     generate_answer,
     fallback_answer,
 )
-from core.retriever import QualityRetriever
 from core.business_data import BusinessDataProvider
 
 
 class ZhiZhiAssistant:
     """智合助手封装"""
 
-    def __init__(self, retriever: QualityRetriever, data_provider: BusinessDataProvider):
+    def __init__(self, retriever: Any, data_provider: BusinessDataProvider):
         self.retriever = retriever
         self.data_provider = data_provider
         self.graph = build_zhizhi_graph(retriever, data_provider)
@@ -78,7 +77,7 @@ class ZhiZhiAssistant:
 
 
 def build_zhizhi_graph(
-    retriever: QualityRetriever,
+    retriever: Any,
     data_provider: BusinessDataProvider,
 ) -> StateGraph:
     """构建智合问答工作流"""

@@ -15,8 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 import config
-from core.vectorstore import QualityVectorStore
-from core.retriever import QualityRetriever
+from core.retriever import EmptyRetriever
 from core.business_data import BusinessDataProvider
 from core.ai_logger import log_ask
 from core.physical_standard import (
@@ -54,12 +53,15 @@ _assistant: Optional[ZhiZhiAssistant] = None
 def get_assistant() -> ZhiZhiAssistant:
     global _assistant
     if _assistant is None:
-        vs = QualityVectorStore(config.VECTOR_STORE_PATH)
-        if not vs.exists():
-            raise RuntimeError(
-                "向量库未构建，请先运行：python scripts/index_documents.py"
-            )
-        retriever = QualityRetriever(vs)
+        retriever: Any = EmptyRetriever()
+        vs_path = config.VECTOR_STORE_PATH
+        if vs_path.exists() and any(vs_path.iterdir()):
+            try:
+                from core.vectorstore import QualityVectorStore
+                from core.retriever import QualityRetriever
+                retriever = QualityRetriever(QualityVectorStore(vs_path))
+            except Exception as exc:
+                print(f"[zhihe] 向量库加载失败，仅使用业务数据问答: {exc}")
         provider = BusinessDataProvider()
         _assistant = ZhiZhiAssistant(retriever, provider)
     return _assistant
@@ -100,7 +102,18 @@ def root():
 @app.get("/health")
 def health():
     vector_store_exists = config.VECTOR_STORE_PATH.exists() and any(config.VECTOR_STORE_PATH.iterdir())
-    return {"status": "ok", "vector_store_exists": vector_store_exists}
+    llm_cfg = {"provider": config.LLM_PROVIDER}
+    try:
+        if config.LLM_PROVIDER == "zhipu":
+            llm_cfg["model"] = config.ZHIPU_CHAT_MODEL
+            llm_cfg["configured"] = bool(config.ZHIPU_API_KEY) and not config.ZHIPU_API_KEY.startswith("your-")
+    except Exception:
+        llm_cfg["configured"] = False
+    return {
+        "status": "ok",
+        "vector_store_exists": vector_store_exists,
+        "llm": llm_cfg,
+    }
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -241,4 +254,4 @@ def check_physical_standard(req: PhysicalCheckRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

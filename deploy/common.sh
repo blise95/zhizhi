@@ -7,6 +7,7 @@ ZHIZHI_CONF="${ZHIZHI_CONF:-${ZHIZHI_HOME}/conf}"
 ZHIZHI_LOGS="${ZHIZHI_LOGS:-${ZHIZHI_HOME}/logs}"
 ZHIZHI_BACKUP="${ZHIZHI_BACKUP:-${ZHIZHI_HOME}/backup}"
 ZHIZHI_NODE="${ZHIZHI_NODE:-${ZHIZHI_HOME}/node}"
+ZHIZHI_PYTHON="${ZHIZHI_PYTHON:-${ZHIZHI_HOME}/python}"
 ZHIZHI_MAVEN="${ZHIZHI_MAVEN:-${ZHIZHI_HOME}/apache-maven-3.9.6}"
 ZHIZHI_M2="${ZHIZHI_M2:-${ZHIZHI_HOME}/.m2}"
 ZHIZHI_WEB="${ZHIZHI_WEB:-${ZHIZHI_HOME}/web}"
@@ -50,8 +51,13 @@ EOF
 #!/bin/bash
 exec bash "${ZHIZHI_SRC}/deploy/update.sh" "\$@"
 EOF
+  cat > /usr/local/bin/zhizhi-zhihe <<EOF
+#!/bin/bash
+exec bash "${ZHIZHI_SRC}/deploy/deploy-zhihe.sh" "\$@"
+EOF
   chmod +x /usr/local/bin/zhizhi-sync /usr/local/bin/zhizhi-frontend \
-           /usr/local/bin/zhizhi-backend /usr/local/bin/zhizhi-update
+           /usr/local/bin/zhizhi-backend /usr/local/bin/zhizhi-update \
+           /usr/local/bin/zhizhi-zhihe
 }
 
 setup_git_ssh() {

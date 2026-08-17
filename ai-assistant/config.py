@@ -11,9 +11,9 @@ load_dotenv()
 # 项目根目录
 BASE_DIR = Path(__file__).resolve().parent
 
-# 标准文档路径
-DOC_RATING = Path(os.getenv("DOC_RATING", r"C:\Users\lenovo\Desktop\本次素材网页系统\卷烟外在质量分级及评级规定20231228.pdf"))
-DOC_DEFECT = Path(os.getenv("DOC_DEFECT", r"C:\Users\lenovo\Desktop\本次素材网页系统\卷烟外在质量缺陷判定20231030.pdf"))
+# 标准文档路径（可选；没有 PDF 时仍可回答系统数据问题）
+DOC_RATING = Path(os.getenv("DOC_RATING", str(BASE_DIR / "docs" / "卷烟外在质量分级及评级规定.pdf")))
+DOC_DEFECT = Path(os.getenv("DOC_DEFECT", str(BASE_DIR / "docs" / "卷烟外在质量缺陷判定.pdf")))
 
 # 向量库存储目录
 VECTOR_STORE_PATH = Path(os.getenv("VECTOR_STORE_PATH", str(BASE_DIR / "data" / "vector_store")))
@@ -47,7 +47,7 @@ OLLAMA_CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
 OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
 
 ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY", "")
-ZHIPU_BASE_URL = os.getenv("ZHIPU_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
+ZHIPU_BASE_URL = os.getenv("ZHIPU_BASE_URL", "https://open.bigmodel.cn/api/paas/v4").rstrip("/")
 ZHIPU_CHAT_MODEL = os.getenv("ZHIPU_CHAT_MODEL", "glm-4-flash")
 
 
@@ -83,6 +83,8 @@ def get_llm_config():
             "model": OLLAMA_CHAT_MODEL,
         }
     if LLM_PROVIDER == "zhipu":
+        if not ZHIPU_API_KEY or ZHIPU_API_KEY.startswith("your-") or "在这里填" in ZHIPU_API_KEY:
+            raise RuntimeError("LLM_PROVIDER=zhipu 时必须在环境变量中配置真实的 ZHIPU_API_KEY")
         return {
             "provider": "openai_compatible",
             "api_key": ZHIPU_API_KEY,

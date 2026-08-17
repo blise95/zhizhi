@@ -9,8 +9,11 @@ import com.zjzy.quality.repository.DefectDetailRepository;
 import com.zjzy.quality.repository.InspectionRepository;
 import com.zjzy.quality.repository.WarningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -29,6 +32,9 @@ public class InspectionService {
     private InspectionRepository inspectionRepo;
 
     @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
     private WarningRepository warningRepo;
 
     @Autowired
@@ -36,6 +42,20 @@ public class InspectionService {
 
     @Autowired
     private DefectDetailRepository defectDetailRepo;
+
+    @PostConstruct
+    public void ensureExtraColumns() {
+        try {
+            jdbcTemplate.execute("ALTER TABLE inspection_record ADD COLUMN steel_stamp VARCHAR(50) NULL COMMENT '条盒钢印'");
+        } catch (Exception ignored) {
+            // 列已存在
+        }
+        try {
+            jdbcTemplate.execute("ALTER TABLE inspection_record ADD COLUMN tobacco_batch VARCHAR(50) NULL COMMENT '烟丝批次'");
+        } catch (Exception ignored) {
+            // 列已存在
+        }
+    }
 
     /**
      * 提交质检数据（核心业务入口）
@@ -150,6 +170,8 @@ public class InspectionService {
         if (incoming.getBrand() != null) existing.setBrand(incoming.getBrand());
         if (incoming.getSampleTime() != null) existing.setSampleTime(incoming.getSampleTime());
         if (incoming.getSampleTicketNo() != null) existing.setSampleTicketNo(incoming.getSampleTicketNo());
+        if (incoming.getSteelStamp() != null) existing.setSteelStamp(incoming.getSteelStamp());
+        if (incoming.getTobaccoBatch() != null) existing.setTobaccoBatch(incoming.getTobaccoBatch());
         if (incoming.getUploader() != null) existing.setUploader(incoming.getUploader());
         inspectionRepo.save(existing);
         Map<String, Object> result = new HashMap<>();
