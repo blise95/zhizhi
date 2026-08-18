@@ -206,7 +206,14 @@ export function CigarettePhysicalTestInput({ onBack }: CigarettePhysicalTestInpu
 
     const record: PhysicalTestRecord = {
       id: Date.now().toString(),
-      ...basicInfo,
+      date: basicInfo.date,
+      shiftType: OPTIONS.shift.find(s => s.value === basicInfo.shiftType)?.label || basicInfo.shiftType,
+      shift: basicInfo.shiftNumber,
+      machine: basicInfo.machine,
+      productionPoint: OPTIONS.productionPoint.find(p => p.value === basicInfo.productionPoint)?.label || basicInfo.productionPoint,
+      brand: OPTIONS.brand.find(b => b.value === basicInfo.brand)?.label || basicInfo.brand,
+      recorder: basicInfo.recorder,
+      testTime: basicInfo.testTime,
       length: indicatorData['length'] || createEmptyIndicatorData(),
       circumference: indicatorData['circumference'] || createEmptyIndicatorData(),
       drawResistance: indicatorData['drawResistance'] || createEmptyIndicatorData(),

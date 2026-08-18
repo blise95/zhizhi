@@ -62,6 +62,13 @@ import {
   calculatePhysicalIndicatorAnalysis,
   generateAIComprehensiveAnalysis,
 } from '../../utils/comprehensiveAnalysisUtils';
+import {
+  formatStandardRange,
+  getBrandStandards,
+  resolveBrandName,
+  sameBrand,
+  STANDARD_INDICATORS,
+} from '../../services/cigarettePhysicalStandardService';
 
 // 筛选选项
 const PRODUCTION_POINTS = ['阿联酋环球烟草', '印尼科伦印象'];
@@ -131,6 +138,7 @@ export function ComprehensiveQualityAnalysis() {
   const [filters, setFilters] = useState<ComprehensiveFilters>(getDefaultComprehensiveFilters);
   const [allRecords, setAllRecords] = useState<any[]>([]);
   const [allPhysicalRecords, setAllPhysicalRecords] = useState<any[]>([]);
+  const [physicalBrand, setPhysicalBrand] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -174,12 +182,55 @@ export function ComprehensiveQualityAnalysis() {
     return filterRecordsByConditions(dateFiltered, filters);
   }, [allRecords, previousRange, filters]);
 
-  const filteredPhysicalRecords = useMemo(() => {
+  useEffect(() => {
+    if (filters.brand) {
+      setPhysicalBrand(filters.brand);
+    }
+  }, [filters.brand]);
+
+  const physicalBrandsInPeriod = useMemo(() => {
+    const names = new Set<string>();
+    allPhysicalRecords.forEach((r: { date?: string; brand?: string }) => {
+      if (r.date && r.date >= periodRange.from && r.date <= periodRange.to && r.brand) {
+        names.add(resolveBrandName(r.brand) || r.brand);
+      }
+    });
+    return names;
+  }, [allPhysicalRecords, periodRange]);
+
+  const effectivePhysicalBrand = physicalBrand || filters.brand || '';
+
+  const physicalRecordsForBrand = useMemo(() => {
     const dateFiltered = allPhysicalRecords.filter(
-      r => r.date >= periodRange.from && r.date <= periodRange.to
+      (r: { date?: string }) => r.date && r.date >= periodRange.from && r.date <= periodRange.to
     );
-    return filterPhysicalRecordsByConditions(dateFiltered, filters);
-  }, [allPhysicalRecords, periodRange, filters]);
+    const otherFiltered = filterPhysicalRecordsByConditions(dateFiltered, {
+      productionPoint: filters.productionPoint,
+      brand: '',
+      machine: filters.machine,
+      shiftGroup: filters.shiftGroup,
+      shift: filters.shift,
+    });
+    if (!effectivePhysicalBrand) return [];
+    return otherFiltered.filter(r => sameBrand(r.brand, effectivePhysicalBrand));
+  }, [allPhysicalRecords, periodRange, filters.productionPoint, filters.machine, filters.shiftGroup, filters.shift, effectivePhysicalBrand]);
+
+  const physicalDailyRows = useMemo(() => {
+    return [...physicalRecordsForBrand]
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)))
+      .map((r) => ({
+        id: String(r.id),
+        date: r.date,
+        machine: r.machine || '-',
+        length: r.length?.x ?? '-',
+        circumference: r.circumference?.x ?? '-',
+        drawResistance: r.drawResistance?.x ?? '-',
+        weight: r.weight?.x ?? '-',
+        ventilation: r.ventilation?.x ?? '-',
+      }));
+  }, [physicalRecordsForBrand]);
+
+  const physicalBrandStd = effectivePhysicalBrand ? getBrandStandards(effectivePhysicalBrand) : null;
 
   const metrics = useMemo(() => calculateCoreMetrics(filteredRecords as any[]), [filteredRecords]);
   const trend = useMemo(() => calculateComprehensiveTrend(filteredRecords as any[], periodRange), [filteredRecords, periodRange]);
@@ -193,8 +244,8 @@ export function ComprehensiveQualityAnalysis() {
     [filteredRecords, previousRecords]
   );
   const physicalAnalysis = useMemo(
-    () => calculatePhysicalIndicatorAnalysis(filteredPhysicalRecords as any[], periodRange),
-    [filteredPhysicalRecords, periodRange]
+    () => calculatePhysicalIndicatorAnalysis(physicalRecordsForBrand as any[], periodRange, effectivePhysicalBrand),
+    [physicalRecordsForBrand, periodRange, effectivePhysicalBrand]
   );
   const aiAnalysis = useMemo(
     () =>
@@ -212,7 +263,9 @@ export function ComprehensiveQualityAnalysis() {
     [metrics, trend, fieldComparison, productionPointData, machineData, top10, contribution, periodComparison, physicalAnalysis]
   );
 
-  const hasData = filteredRecords.length > 0;
+  const hasProcessData = filteredRecords.length > 0;
+  const hasPhysicalInPeriod = physicalBrandsInPeriod.size > 0;
+  const hasData = hasProcessData || hasPhysicalInPeriod;
 
   const metricCard = (
     label: string,
@@ -413,7 +466,10 @@ export function ComprehensiveQualityAnalysis() {
           </div>
           <div className="space-y-1.5 flex items-end">
             <button
-              onClick={() => setFilters(getDefaultComprehensiveFilters())}
+              onClick={() => {
+                setFilters(getDefaultComprehensiveFilters());
+                setPhysicalBrand('');
+              }}
               className="w-full px-3 py-2 rounded-lg text-xs font-medium border border-slate-600/30 text-slate-300 bg-slate-800/40 hover:bg-slate-700/40 transition-colors"
             >
               重置筛选
@@ -439,6 +495,8 @@ export function ComprehensiveQualityAnalysis() {
         </div>
       ) : (
         <>
+          {hasProcessData && (
+          <>
           {/* 核心指标 */}
           <section className="relative overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-800/30 backdrop-blur-sm p-6">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent"></div>
@@ -800,58 +858,153 @@ export function ComprehensiveQualityAnalysis() {
               })}
             </div>
           </section>
+          </>
+          )}
 
-          {/* 烟支物测指标分析 */}
+          {/* 烟支物测指标分析：必须按牌号看，各牌号标准不同 */}
           <section className="relative overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-800/30 backdrop-blur-sm p-6">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"></div>
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-4">
               <div className="relative p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
                 <Activity className="w-5 h-5 text-cyan-400" />
               </div>
               <h2 className="text-lg font-bold text-white">烟支物测指标分析</h2>
-              <span className="ml-auto text-xs text-slate-500 font-mono">PHYSICAL TEST</span>
+              <span className="ml-auto text-xs text-slate-500 font-mono">PHYSICAL TEST · BY BRAND</span>
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              {physicalAnalysis.map(indicator => {
-                const hasData = indicator.data.some(d => d.x !== indicator.data[0]?.center);
+            <p className="text-xs text-slate-400 mb-4">
+              各牌号物测标准不同，请先选择牌号。图表只展示该牌号在统计周期内实际录入过的检测值，空白日期不补标准值。
+            </p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {BRANDS.map((brand) => {
+                const selected = effectivePhysicalBrand === brand;
+                const hasRecords = physicalBrandsInPeriod.has(brand);
                 return (
-                  <div key={indicator.indicatorId} className="p-4 rounded-xl bg-slate-900/40 border border-slate-700/20">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-bold text-white">{indicator.name}</h3>
-                      <span className="text-xs text-slate-500 font-mono">{indicator.unit}</span>
-                    </div>
-                    <div className="h-56">
-                      {hasData ? (
-                        <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={indicator.data} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#33415540" />
-                            <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                            <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} domain={['auto', 'auto']} />
-                            <Tooltip
-                              cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
-                              contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(6, 182, 212, 0.25)', borderRadius: 8 }}
-                              itemStyle={{ color: '#e2e8f0' }}
-                              labelStyle={{ color: '#94a3b8' }}
-                            />
-                            <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} />
-                            <ReferenceLine y={indicator.data[0]?.center} stroke="#10b981" strokeDasharray="5 5" label={{ value: '中心值', fill: '#10b981', fontSize: 10 }} />
-                            <ReferenceLine y={indicator.data[0]?.upper} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '上限', fill: '#f59e0b', fontSize: 10 }} />
-                            <ReferenceLine y={indicator.data[0]?.lower} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '下限', fill: '#f59e0b', fontSize: 10 }} />
-                            <Line type="monotone" dataKey="x" name="实际检测值" stroke="#06b6d4" strokeWidth={2} dot={{ fill: '#06b6d4', r: 3 }} activeDot={{ r: 5 }} />
-                          </ComposedChart>
-                        </ResponsiveContainer>
-                      ) : (
-                        <div className="h-full flex items-center justify-center text-slate-500 text-xs">
-                          当前周期暂无{indicator.name}数据
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  <button
+                    key={brand}
+                    type="button"
+                    onClick={() => setPhysicalBrand(brand)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                      selected
+                        ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50'
+                        : hasRecords
+                        ? 'bg-slate-800/60 text-slate-200 border-slate-600/40 hover:border-cyan-500/40'
+                        : 'bg-slate-900/40 text-slate-500 border-slate-700/30 hover:border-slate-500/40'
+                    }`}
+                  >
+                    {brand}
+                    {hasRecords ? <span className="ml-1 text-[10px] text-cyan-400/80">有数据</span> : null}
+                  </button>
                 );
               })}
             </div>
+            {effectivePhysicalBrand ? (
+              <>
+                <div className="mb-5 p-3 rounded-lg bg-slate-900/50 border border-slate-700/30 text-xs text-slate-300">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span>当前牌号：<span className="text-cyan-300 font-medium">{effectivePhysicalBrand}</span></span>
+                    <span>本期录入 {physicalDailyRows.length} 条</span>
+                    {physicalBrandStd && STANDARD_INDICATORS.map((ind) => (
+                      <span key={ind.key} className="text-slate-400">
+                        {ind.name} {formatStandardRange(physicalBrandStd.indicators[ind.key] || null)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  {physicalAnalysis.map(indicator => {
+                    const hasIndicatorData = indicator.data.some(d => d.x != null);
+                    const lowers = indicator.data.map(d => d.lower).filter((v) => typeof v === 'number');
+                    const uppers = indicator.data.map(d => d.upper).filter((v) => typeof v === 'number');
+                    const actuals = indicator.data.map(d => d.x).filter((v): v is number => v != null);
+                    const yMin = Math.min(...lowers, ...actuals);
+                    const yMax = Math.max(...uppers, ...actuals);
+                    const pad = Number.isFinite(yMin) && Number.isFinite(yMax) ? Math.max((yMax - yMin) * 0.08, 0.01) : 0;
+                    return (
+                      <div key={indicator.indicatorId} className="p-4 rounded-xl bg-slate-900/40 border border-slate-700/20">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-sm font-bold text-white">{indicator.name}</h3>
+                          <span className="text-xs text-slate-500 font-mono">{indicator.unit}</span>
+                        </div>
+                        <div className="h-56">
+                          {hasIndicatorData ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                              <ComposedChart data={indicator.data} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#33415540" />
+                                <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
+                                <YAxis
+                                  stroke="#64748b"
+                                  fontSize={11}
+                                  tickLine={false}
+                                  axisLine={false}
+                                  domain={Number.isFinite(yMin) && Number.isFinite(yMax) ? [yMin - pad, yMax + pad] : ['auto', 'auto']}
+                                />
+                                <Tooltip
+                                  cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                                  contentStyle={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(6, 182, 212, 0.25)', borderRadius: 8 }}
+                                  itemStyle={{ color: '#e2e8f0' }}
+                                  labelStyle={{ color: '#94a3b8' }}
+                                  formatter={(value: number | null, name: string) => [
+                                    value == null ? '未录入' : value,
+                                    name,
+                                  ]}
+                                />
+                                <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} />
+                                <ReferenceLine y={indicator.data[0]?.center} stroke="#10b981" strokeDasharray="5 5" label={{ value: '中心值', fill: '#10b981', fontSize: 10 }} />
+                                <ReferenceLine y={indicator.data[0]?.upper} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '上限', fill: '#f59e0b', fontSize: 10 }} />
+                                <ReferenceLine y={indicator.data[0]?.lower} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: '下限', fill: '#f59e0b', fontSize: 10 }} />
+                                <Line type="monotone" dataKey="x" name="实际检测值" stroke="#06b6d4" strokeWidth={2} dot={{ fill: '#06b6d4', r: 3 }} activeDot={{ r: 5 }} connectNulls={false} />
+                              </ComposedChart>
+                            </ResponsiveContainer>
+                          ) : (
+                            <div className="h-full flex items-center justify-center text-slate-500 text-xs">
+                              该牌号本期暂无{indicator.name}录入数据
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {physicalDailyRows.length > 0 && (
+                  <div className="mt-6 overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-700/40 text-slate-400">
+                          <th className="px-3 py-2 text-left font-medium">日期</th>
+                          <th className="px-3 py-2 text-left font-medium">机台</th>
+                          <th className="px-3 py-2 text-left font-medium">长度 X</th>
+                          <th className="px-3 py-2 text-left font-medium">圆周 X</th>
+                          <th className="px-3 py-2 text-left font-medium">吸阻 X</th>
+                          <th className="px-3 py-2 text-left font-medium">重量 X</th>
+                          <th className="px-3 py-2 text-left font-medium">通风度 X</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {physicalDailyRows.map((row) => (
+                          <tr key={row.id} className="border-b border-slate-800/60 text-slate-200">
+                            <td className="px-3 py-2">{row.date}</td>
+                            <td className="px-3 py-2">{row.machine}</td>
+                            <td className="px-3 py-2">{row.length}</td>
+                            <td className="px-3 py-2">{row.circumference}</td>
+                            <td className="px-3 py-2">{row.drawResistance}</td>
+                            <td className="px-3 py-2">{row.weight}</td>
+                            <td className="px-3 py-2">{row.ventilation}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="h-40 flex items-center justify-center text-slate-500 text-sm">
+                请选择牌号后查看该牌号已录入的物测结果
+              </div>
+            )}
           </section>
 
+          {hasProcessData && (
+          <>
           {/* AI综合质量评价 */}
           <section className="relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-br from-slate-800/60 via-slate-900/40 to-blue-900/20 backdrop-blur-sm p-6">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
@@ -928,6 +1081,8 @@ export function ComprehensiveQualityAnalysis() {
               </div>
             )}
           </section>
+          </>
+          )}
         </>
       )}
     </div>

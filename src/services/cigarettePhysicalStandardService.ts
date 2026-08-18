@@ -62,6 +62,16 @@ export function resolveBrandName(brand: string): string | null {
   return null;
 }
 
+/** 判断两个牌号是否为同一牌号（兼容内部 value 与中文名） */
+export function sameBrand(a?: string | null, b?: string | null): boolean {
+  if (!a && !b) return true;
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const ra = resolveBrandName(a);
+  const rb = resolveBrandName(b);
+  return !!ra && !!rb && ra === rb;
+}
+
 /** 物测指标 key 列表 */
 export const PHYSICAL_INDICATOR_KEYS = ['length', 'circumference', 'drawResistance', 'weight', 'ventilation'] as const;
 

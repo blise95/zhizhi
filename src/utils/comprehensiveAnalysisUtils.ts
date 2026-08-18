@@ -15,8 +15,8 @@ import { DefectType, getDefectFieldByType, DEFECT_RATE_BASE, formatLocalDate } f
 import {
   STANDARD_INDICATORS,
   getBrandStandards,
-  getIndicatorStandard,
   resolveBrandName,
+  sameBrand,
   type PhysicalIndicatorKey,
 } from '../services/cigarettePhysicalStandardService';
 
@@ -107,7 +107,8 @@ export interface PeriodComparison {
 export interface PhysicalTrendPoint {
   label: string;
   fullLabel: string;
-  x: number;
+  x: number | null;
+  sampleCount: number;
   upper: number;
   lower: number;
   center: number;
@@ -269,15 +270,38 @@ export function filterRecordsByConditions(
   });
 }
 
+const PRODUCTION_POINT_ALIASES: Record<string, string> = {
+  uae: '阿联酋环球烟草',
+  indonesia: '印尼科伦印象',
+};
+
+const SHIFT_ALIASES: Record<string, string> = {
+  morning: '早班',
+  night: '夜班',
+};
+
+function canonicalLabel(value: string | undefined, aliases: Record<string, string>): string {
+  if (!value) return '';
+  return aliases[value] || value;
+}
+
 export function filterPhysicalRecordsByConditions(
   records: PhysicalTestRecord[],
   filters: Pick<FilterConditions, 'productionPoint' | 'brand' | 'machine' | 'shiftGroup' | 'shift'>
 ): PhysicalTestRecord[] {
   return records.filter(record => {
-    if (filters.productionPoint && record.productionPoint !== filters.productionPoint) return false;
-    if (filters.brand && record.brand !== filters.brand) return false;
+    if (filters.productionPoint) {
+      const want = canonicalLabel(filters.productionPoint, PRODUCTION_POINT_ALIASES);
+      const got = canonicalLabel(record.productionPoint, PRODUCTION_POINT_ALIASES);
+      if (got !== want) return false;
+    }
+    if (filters.brand && !sameBrand(record.brand, filters.brand)) return false;
     if (filters.machine && record.machine !== filters.machine) return false;
-    if (filters.shiftGroup && record.shiftType !== filters.shiftGroup) return false;
+    if (filters.shiftGroup) {
+      const want = canonicalLabel(filters.shiftGroup, SHIFT_ALIASES);
+      const got = canonicalLabel(record.shiftType, SHIFT_ALIASES);
+      if (got !== want) return false;
+    }
     if (filters.shift && record.shift !== filters.shift) return false;
     return true;
   });
@@ -609,13 +633,17 @@ function parsePhysicalValue(value: string | number | undefined): number | null {
 
 export function calculatePhysicalIndicatorAnalysis(
   records: PhysicalTestRecord[],
-  range: PeriodRange
+  range: PeriodRange,
+  brand?: string
 ): PhysicalIndicatorAnalysis[] {
-  const buckets = createPhysicalBuckets(range);
+  const brandKey = resolveBrandName(brand || '');
+  if (!brandKey) {
+    return [];
+  }
 
-  // 取参考牌号：优先使用 records 中第一条记录的牌号（通常筛选后一致）
-  const referenceBrand = records.length > 0 ? resolveBrandName(records[0].brand) : null;
-  const brandStd = referenceBrand ? getBrandStandards(referenceBrand) : null;
+  const brandRecords = records.filter(r => resolveBrandName(r.brand) === brandKey);
+  const brandStd = getBrandStandards(brandKey);
+  const buckets = createPhysicalBuckets(range);
 
   return STANDARD_INDICATORS.map((indicator) => {
     const std = brandStd?.indicators[indicator.key as PhysicalIndicatorKey];
@@ -624,19 +652,20 @@ export function calculatePhysicalIndicatorAnalysis(
     const lower = std?.standard.min ?? 0;
 
     const data: PhysicalTrendPoint[] = buckets.map(bucket => {
-      const matched = records.filter(r => bucket.match(r.date));
+      const matched = brandRecords.filter(r => bucket.match(r.date));
       const values = matched
         .map(r => parsePhysicalValue((r as any)[indicator.key]?.x))
         .filter((v): v is number => v !== null);
 
       const avgX = values.length > 0
         ? parseFloat((values.reduce((s, v) => s + v, 0) / values.length).toFixed(3))
-        : center;
+        : null;
 
       return {
         label: bucket.label,
         fullLabel: bucket.fullLabel,
         x: avgX,
+        sampleCount: values.length,
         upper,
         lower,
         center,
@@ -749,7 +778,7 @@ export function generateAIComprehensiveAnalysis(
   if (metrics.abnormalCount > 0) risks.push(`发现 ${metrics.abnormalCount} 批异常批次（含不合格/A类/合格带问题）。`);
 
   physicalAnalysis.forEach(indicator => {
-    const outOfRange = indicator.data.some(d => d.x > d.upper || d.x < d.lower);
+    const outOfRange = indicator.data.some(d => d.x != null && (d.x > d.upper || d.x < d.lower));
     if (outOfRange) {
       risks.push(`${indicator.name}存在超出标准上下限的检测值，需校准设备或调整工艺参数。`);
     }

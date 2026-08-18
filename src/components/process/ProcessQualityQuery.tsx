@@ -125,15 +125,13 @@ export function ProcessQualityQuery() {
     return () => window.removeEventListener('quality-data-updated', refresh);
   }, []);
 
-  // 加载数据 - 从后端MySQL数据库获取
+  // 加载全部记录，日期等条件在前端筛选。
+  // 不能按当天去请求：改日期不会重新拉库，第二天就查不到前一天的数据。
   const loadData = async () => {
     setIsLoading(true);
     try {
       console.log('📡 正在从后端数据库加载质检数据...');
-      const apiData = await inspectionApi.list({
-        startDate: filters.dateFrom || undefined,
-        endDate: filters.dateTo || undefined,
-      });
+      const apiData = await inspectionApi.list();
 
       if (apiData && Array.isArray(apiData) && apiData.length > 0) {
         const convertedData: ProcessQualityData[] = apiData.map((record) => {
@@ -170,11 +168,9 @@ export function ProcessQualityQuery() {
           unique.push(row);
         });
         setAllData(unique);
-        setFilteredData(unique);
       } else {
         console.log('ℹ️ 数据库暂无数据');
         setAllData([]);
-        setFilteredData([]);
       }
     } catch (error) {
       console.error('❌ 从后端加载数据失败:', error);
@@ -559,7 +555,7 @@ export function ProcessQualityQuery() {
                 重置
               </button>
               <button
-                onClick={() => {}}
+                onClick={loadData}
                 className="px-6 py-2 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors flex items-center gap-2 text-sm font-medium shadow-lg shadow-brand-blue/25"
               >
                 <Search className="w-4 h-4" />
@@ -593,7 +589,7 @@ export function ProcessQualityQuery() {
             </div>
             <p className="text-lg font-medium text-foreground mb-2">暂无数据</p>
             <p className="text-sm text-muted-foreground">
-              请调整筛选条件或点击"查看当天"按钮
+              请调整日期范围或筛选条件后点击「查询」
             </p>
           </div>
         ) : (
