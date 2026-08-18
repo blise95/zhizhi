@@ -535,9 +535,6 @@ const QualityDashboard: React.FC = () => {
               <div className="mb-4 flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-semibold text-white">开动牌号明细</h3>
-                  <p className="mt-1 text-xs text-slate-400">
-                    {runningBrandDate} 共 {runningBrands.length} 个不重复牌号
-                  </p>
                 </div>
                 <button
                   type="button"
