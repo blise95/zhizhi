@@ -20,6 +20,10 @@ import { ZhiZhiFloatingChat } from './components/common/ZhiZhiFloatingChat';
 import Login, { getCurrentUser, logout } from './components/auth/Login';
 import { authApi } from './services/api';
 
+function appHomePath() {
+  return window.location.pathname.startsWith('/zhiliang') ? '/zhiliang/' : '/';
+}
+
 function App() {
   const [activeMenu, setActiveMenu] = useState(() => {
     try {
@@ -44,6 +48,7 @@ function App() {
       logout();
       setIsAuthenticated(false);
       setCurrentUser(null);
+      window.history.replaceState(null, '', appHomePath());
       return;
     }
 
@@ -73,16 +78,18 @@ function App() {
   const handleLoginSuccess = () => {
     const user = getCurrentUser();
     if (user) {
+      window.history.replaceState(null, '', appHomePath());
       setIsAuthenticated(true);
       setCurrentUser(user);
     }
   };
 
-  // 登出
+  // 登出后回到入口，显示登录页
   const handleLogout = () => {
     logout();
     setIsAuthenticated(false);
     setCurrentUser(null);
+    window.history.replaceState(null, '', appHomePath());
   };
 
   // 未登录时显示登录页面

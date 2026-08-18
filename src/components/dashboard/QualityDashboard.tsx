@@ -37,10 +37,13 @@ import {
   ChevronRight,
   Filter,
   Sparkles,
+  Package,
+  X,
 } from 'lucide-react';
 
 import { loadProcessQualityData } from '@/utils/analysisUtils';
 import type { ProcessQualityRecord } from '@/utils/analysisUtils';
+import { resolveBrandName } from '@/services/cigarettePhysicalStandardService';
 import {
   getTimeRange,
   getPreviousRange,
@@ -334,6 +337,26 @@ const AlertList: React.FC<{ alerts: AlertItem[] }> = ({ alerts }) => {
   );
 };
 
+function dubaiToday(): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Dubai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+}
+
+function uniqueRunningBrands(records: ProcessQualityRecord[], date: string): string[] {
+  const names = new Set<string>();
+  records.forEach((r) => {
+    if (r.inspectionDate !== date) return;
+    const raw = (r.brand || '').trim();
+    if (!raw) return;
+    names.add(resolveBrandName(raw) || raw);
+  });
+  return Array.from(names).sort((a, b) => a.localeCompare(b, 'zh-CN'));
+}
+
 // ==================== 主组件 ====================
 
 const QualityDashboard: React.FC = () => {
@@ -343,6 +366,8 @@ const QualityDashboard: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [allRecords, setAllRecords] = useState<ProcessQualityRecord[]>([]);
   const [activeDefectIndex, setActiveDefectIndex] = useState<number | null>(null);
+  const [runningBrandDate, setRunningBrandDate] = useState(dubaiToday);
+  const [showRunningBrands, setShowRunningBrands] = useState(false);
 
   // 实时更新时间
   useEffect(() => {
@@ -389,6 +414,10 @@ const QualityDashboard: React.FC = () => {
     [stats, currentRecords, previousRecords, timeRange]
   );
   const health = useMemo(() => computeHealthStatus(stats, alerts), [stats, alerts]);
+  const runningBrands = useMemo(
+    () => uniqueRunningBrands(allRecords, runningBrandDate),
+    [allRecords, runningBrandDate]
+  );
 
   const comparisonLabel = previousRange.label;
 
@@ -456,6 +485,89 @@ const QualityDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* 指定日期开动牌号（去重） */}
+        <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-cyan-500/25 bg-slate-900/60 p-5 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-300">
+              <Package className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-white">指定日期开动牌号</h2>
+              <p className="text-xs text-slate-500">按检验日期统计，同一牌号只计 1 次</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1.5">
+              <Calendar className="h-4 w-4 text-cyan-400" />
+              <input
+                type="date"
+                value={runningBrandDate}
+                onChange={(e) => {
+                  setRunningBrandDate(e.target.value);
+                  setShowRunningBrands(false);
+                }}
+                className="bg-transparent text-sm text-slate-200 outline-none"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowRunningBrands(true)}
+              className="flex items-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200 transition-colors hover:bg-cyan-500/20"
+            >
+              <span className="text-2xl font-bold text-white leading-none">{runningBrands.length}</span>
+              <span>个牌号</span>
+              <ChevronRight className="h-4 w-4" />
+              查看明细
+            </button>
+          </div>
+        </div>
+
+        {showRunningBrands && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+            onClick={() => setShowRunningBrands(false)}
+          >
+            <div
+              className="w-full max-w-lg rounded-2xl border border-slate-700/50 bg-slate-900 p-5 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-semibold text-white">开动牌号明细</h3>
+                  <p className="mt-1 text-xs text-slate-400">
+                    {runningBrandDate} 共 {runningBrands.length} 个不重复牌号
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowRunningBrands(false)}
+                  className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              {runningBrands.length === 0 ? (
+                <p className="rounded-lg border border-dashed border-slate-700/60 py-10 text-center text-sm text-slate-500">
+                  该日期暂无过程质量录入，没有开动牌号
+                </p>
+              ) : (
+                <ul className="max-h-80 space-y-2 overflow-y-auto">
+                  {runningBrands.map((brand, index) => (
+                    <li
+                      key={brand}
+                      className="flex items-center gap-3 rounded-lg border border-slate-700/40 bg-slate-800/40 px-3 py-2.5"
+                    >
+                      <span className="w-6 text-xs text-slate-500">{index + 1}</span>
+                      <Package className="h-4 w-4 text-cyan-400" />
+                      <span className="text-sm text-slate-100">{brand}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* 第一层：核心指标 */}
         <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
