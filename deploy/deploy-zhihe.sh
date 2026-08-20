@@ -29,9 +29,27 @@ fi
 
 # shellcheck disable=SC1090
 . "$ENV_FILE"
+ZHIPU_API_KEY="$(printf '%s' "${ZHIPU_API_KEY:-}" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")"
+ZHIPU_BASE_URL="${ZHIPU_BASE_URL:-https://open.bigmodel.cn/api/paas/v4}"
+ZHIPU_BASE_URL="${ZHIPU_BASE_URL%/}"
 if [ -z "${ZHIPU_API_KEY:-}" ] || [[ "${ZHIPU_API_KEY}" == *"在这里填"* ]] || [[ "${ZHIPU_API_KEY}" == your-* ]]; then
   die "请在 $ENV_FILE 填入真实的智谱 API Key（ZHIPU_API_KEY）"
 fi
+
+log "校验智谱 Embedding API Key"
+probe_body="/tmp/zhihe-emb-probe.json"
+probe_code="$(
+  curl -sS -o "$probe_body" -w '%{http_code}' \
+    --connect-timeout 15 --max-time 30 \
+    -H "Authorization: Bearer ${ZHIPU_API_KEY}" \
+    -H "Content-Type: application/json" \
+    -d "{\"model\":\"${ZHIPU_EMBEDDING_MODEL:-embedding-2}\",\"input\":\"ping\"}" \
+    "${ZHIPU_BASE_URL}/embeddings" || echo 000
+)"
+if [ "$probe_code" != "200" ]; then
+  die "智谱 Embedding 鉴权失败 HTTP ${probe_code}。请到 https://open.bigmodel.cn/usercenter/apikeys 重新创建 API Key，写入 ${ENV_FILE}（不要加引号或空格）。响应：$(head -c 300 "$probe_body" 2>/dev/null || true)"
+fi
+log "智谱 API Key 有效"
 
 mkdir -p "${ZHIZHI_LOGS}/zhihe" "${ZHIZHI_HOME}/zhihe-data"
 

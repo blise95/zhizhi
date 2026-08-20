@@ -51,7 +51,17 @@ OLLAMA_CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
 
 OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
 
-ZHIPU_API_KEY = os.getenv("ZHIPU_API_KEY", "")
+def _clean_secret(value: str) -> str:
+    """去掉首尾空白、CRLF 和包裹引号，避免 env 文件填错导致 401。"""
+    if not value:
+        return ""
+    v = value.strip().strip("\r")
+    if len(v) >= 2 and v[0] == v[-1] and v[0] in "\"'":
+        v = v[1:-1].strip()
+    return v
+
+
+ZHIPU_API_KEY = _clean_secret(os.getenv("ZHIPU_API_KEY", ""))
 ZHIPU_BASE_URL = os.getenv("ZHIPU_BASE_URL", "https://open.bigmodel.cn/api/paas/v4").rstrip("/")
 ZHIPU_CHAT_MODEL = os.getenv("ZHIPU_CHAT_MODEL", "glm-4-flash")
 
