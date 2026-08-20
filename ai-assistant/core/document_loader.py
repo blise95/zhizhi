@@ -8,7 +8,7 @@ PDF 文档解析与加载
 import re
 from pathlib import Path
 from typing import List, Dict, Any
-import pdfplumber
+from pypdf import PdfReader
 
 
 class PDFDocument:
@@ -21,21 +21,20 @@ class PDFDocument:
         self.metadata: Dict[str, Any] = {}
 
     def load(self) -> "PDFDocument":
-        """加载 PDF 并提取文本、表格和元数据"""
-        with pdfplumber.open(self.file_path) as pdf:
-            self.metadata = {
-                "file_name": self.file_path.name,
-                "doc_name": self.doc_name,
-                "total_pages": len(pdf.pages),
-            }
-            for page_num, page in enumerate(pdf.pages, 1):
-                text = page.extract_text() or ""
-                tables = page.extract_tables() or []
-                self.pages.append({
-                    "page_number": page_num,
-                    "text": text.strip(),
-                    "tables": tables,
-                })
+        """加载 PDF 并提取文本。生产环境用纯 Python 的 pypdf，避免 Pillow/tiktoken 源码编译。"""
+        reader = PdfReader(str(self.file_path))
+        self.metadata = {
+            "file_name": self.file_path.name,
+            "doc_name": self.doc_name,
+            "total_pages": len(reader.pages),
+        }
+        for page_num, page in enumerate(reader.pages, 1):
+            text = page.extract_text() or ""
+            self.pages.append({
+                "page_number": page_num,
+                "text": text.strip(),
+                "tables": [],
+            })
         return self
 
 

@@ -39,9 +39,15 @@ log "创建/更新 Python 虚拟环境 $VENV"
 if [ ! -x "${VENV}/bin/python" ]; then
   "$PY_BIN" -m venv "$VENV"
 fi
-"${VENV}/bin/python" -m pip install -q -U pip -i "$PIP_MIRROR"
-log "安装智合依赖（走清华 PyPI 镜像）"
-"${VENV}/bin/python" -m pip install -q -r "$REQ" -i "$PIP_MIRROR"
+"${VENV}/bin/python" -m pip install -q -U pip setuptools wheel -i "$PIP_MIRROR"
+log "安装智合依赖（优先预编译包，tiktoken 固定 0.7.0 以适配 CentOS 7）"
+# 独立 Python 的 sysconfig 可能指向 clang；即便回退编译也用 gcc
+export CC="${CC:-gcc}"
+export CXX="${CXX:-g++}"
+if ! "${VENV}/bin/python" -m pip install --prefer-binary --only-binary=tiktoken -r "$REQ" -i "$PIP_MIRROR"; then
+  log "清华镜像安装失败，改走官方 PyPI"
+  "${VENV}/bin/python" -m pip install --prefer-binary --only-binary=tiktoken -r "$REQ"
+fi
 
 DOC_RATING="${DOC_RATING:-${AI_DIR}/docs/卷烟外在质量分级及评级规定.pdf}"
 DOC_DEFECT="${DOC_DEFECT:-${AI_DIR}/docs/卷烟外在质量缺陷判定.pdf}"
