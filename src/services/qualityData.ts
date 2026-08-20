@@ -130,7 +130,13 @@ export async function listTypedRecords<T extends { id?: string | number }>(type:
   const rows = await recordApi.list(type);
   return rows.map((row) => {
     const payload = (row.payload || {}) as T;
-    return { ...payload, id: String(row.id) };
+    return {
+      ...payload,
+      id: String(row.id),
+      // 上传时间/上传者以数据库列为准，避免 JSON 里 ISO(Z) 再转时区导致和表对不上
+      ...(row.uploader ? { uploader: row.uploader } : {}),
+      ...(row.createdAt ? { createdAt: row.createdAt } : {}),
+    } as T;
   });
 }
 
