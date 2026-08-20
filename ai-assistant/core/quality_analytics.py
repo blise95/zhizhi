@@ -27,6 +27,13 @@ from core.physical_standard import (
     format_standard,
     format_range,
 )
+from core.rating_standard import (
+    explain_score,
+    extract_score_from_question,
+    format_rating_distribution,
+    format_rating_rules,
+    summarize_ratings,
+)
 
 
 # -------------------- 数据加载 --------------------
@@ -147,6 +154,14 @@ def summarize_process_quality(records: List[Dict[str, Any]]) -> Dict[str, Any]:
             "machines": [],
             "brands": [],
             "production_points": [],
+            "pass_rate": 0.0,
+            "excellent_rate": 0.0,
+            "pass_count": 0,
+            "excellent_count": 0,
+            "first_count": 0,
+            "second_count": 0,
+            "unqualified_count": 0,
+            "avg_score": 0.0,
         }
 
     total_defects = 0
@@ -165,6 +180,7 @@ def summarize_process_quality(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         if qty > 0:
             defect_batches += 1
 
+    rating_summary = summarize_ratings(records)
     return {
         "total_batches": total,
         "total_defects": total_defects,
@@ -173,6 +189,15 @@ def summarize_process_quality(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         "machines": sorted(m for m in machines if m),
         "brands": sorted(b for b in brands if b),
         "production_points": sorted(p for p in points if p),
+        "pass_rate": rating_summary["pass_rate"],
+        "excellent_rate": rating_summary["excellent_rate"],
+        "pass_count": rating_summary["pass_count"],
+        "excellent_count": rating_summary["excellent_count"],
+        "first_count": rating_summary["first_count"],
+        "second_count": rating_summary["second_count"],
+        "unqualified_count": rating_summary["unqualified_count"],
+        "avg_score": rating_summary["avg_score"],
+        "rating_summary": rating_summary,
     }
 
 
@@ -656,6 +681,58 @@ def answer_physical_standard_question(question: str) -> str:
     return "\n".join(lines)
 
 
+def answer_rating_standard_question(question: str) -> str:
+    """回答 5.3.1 外在质量评级分值线问题，不依赖向量库。"""
+    score = extract_score_from_question(question)
+    if score is not None:
+        return explain_score(score)
+    return format_rating_rules()
+
+
+def answer_batch_rating(process_records: List[Dict[str, Any]], question: str) -> str:
+    """结合系统批次数据解释为何评为某一等级。"""
+    if not process_records:
+        return (
+            f"{format_rating_rules()}\n\n"
+            "当前系统中暂无检验批次，无法对照具体批次说明评级原因。"
+        )
+
+    summary = summarize_ratings(process_records)
+    ratings = summary.get("ratings", [])
+    target_label = None
+    for label in ["优等品", "一等品", "二等品", "不合格品"]:
+        if label in question:
+            target_label = label
+            break
+    if "不合格" in question and not target_label:
+        target_label = "不合格品"
+
+    if target_label:
+        matched = [r for r in ratings if r.get("rating_label") == target_label]
+        if not matched:
+            return (
+                f"{format_rating_rules()}\n\n"
+                f"当前筛选条件下没有评为{target_label}的批次。"
+            )
+        sample = matched[0]
+        extra = f"共 {len(matched)} 批。" if len(matched) > 1 else ""
+        return (
+            f"{format_rating_rules()}\n\n"
+            f"例如 {sample.get('inspection_date') or '该'}批次"
+            f"（{sample.get('brand') or '未标注牌号'} / {sample.get('machine') or '未标注机台'}）"
+            f"累计扣分 {sample.get('total_score')} 分，因此评为{target_label}。{extra}"
+        )
+
+    latest = ratings[-1]
+    return (
+        f"{format_rating_rules()}\n\n"
+        f"最近一批（{latest.get('inspection_date') or '日期未知'}，"
+        f"{latest.get('brand') or '未标注牌号'}）累计扣分 {latest.get('total_score')} 分，"
+        f"判定为{latest.get('rating_label')}。"
+        f"\n{format_rating_distribution(summary)}"
+    )
+
+
 def answer_physical_deviation(
     physical_records: List[Dict[str, Any]], brand: Optional[str] = None
 ) -> str:
@@ -818,6 +895,17 @@ def _detect_scenario_fallback(question: str) -> str:
     if any(k in q for k in standard_kws) and any(k in q for k in physical_kws):
         return "physical_standard"
 
+    if looks_like_batch_rating_question(question):
+        return "batch_rating"
+    if looks_like_rating_question(question):
+        return "rating_standard"
+    try:
+        from core.defect_standard import looks_like_defect_question
+        if looks_like_defect_question(question):
+            return "defect_standard"
+    except Exception:
+        pass
+
     # 综合分析（默认）
     return "combined"
 
@@ -870,6 +958,13 @@ def smart_answer(
         return _smart_answer_physical_deviation(parsed, physical_records)
     elif scenario == "physical_standard":
         return _smart_answer_physical_standard(parsed, question)
+    elif scenario == "rating_standard":
+        return _smart_answer_rating_standard(parsed, question)
+    elif scenario == "defect_standard":
+        from core.defect_standard import answer_defect_question
+        return answer_defect_question(question)
+    elif scenario == "batch_rating":
+        return _smart_answer_batch_rating(parsed, process_records, question)
     elif scenario == "defect_detail":
         return _smart_answer_defect_detail(parsed, process_records)
     elif scenario == "rate_query":
@@ -912,6 +1007,13 @@ def _answer_by_scenario(
         return answer_physical_deviation(physical_records, brand)
     elif scenario == "physical_standard":
         return answer_physical_standard_question(question)
+    elif scenario == "rating_standard":
+        return answer_rating_standard_question(question)
+    elif scenario == "defect_standard":
+        from core.defect_standard import answer_defect_question
+        return answer_defect_question(question)
+    elif scenario == "batch_rating":
+        return answer_batch_rating(process_records, question)
     else:
         summary = summarize_process_quality(process_records)
         if summary["total_batches"] == 0:
@@ -957,18 +1059,28 @@ def _smart_answer_today(parsed, process_records: List[Dict[str, Any]]) -> str:
     # 检查用户是否问了特定指标
     ind_answers = []
     if "qualified_rate" in parsed.indicators:
-        qualified = round((1 - summary["defect_rate"] / 100) * 100, 2) if summary["total_batches"] > 0 else 0
-        ind_answers.append(f"合格率约 {qualified:.1f}%")
+        ind_answers.append(f"合格率 {summary.get('pass_rate', 0):.1f}%（累计扣分≤200分）")
     if "defect_count" in parsed.indicators:
         ind_answers.append(f"缺陷总数 {summary['total_defects']} 个")
     if "defect_rate" in parsed.indicators:
         ind_answers.append(f"缺陷率 {summary['defect_rate']:.2f}%")
+
+    rating_line = ""
+    if summary.get("total_batches", 0) > 0:
+        rating_line = (
+            f"\n按 5.3.1 评级：优等品 {summary.get('excellent_count', 0)} 批，"
+            f"一等品 {summary.get('first_count', 0)} 批，"
+            f"二等品 {summary.get('second_count', 0)} 批，"
+            f"不合格品 {summary.get('unqualified_count', 0)} 批；"
+            f"合格率 {summary.get('pass_rate', 0):.1f}%，优质率 {summary.get('excellent_rate', 0):.1f}%。"
+        )
 
     base = (
         f"今日系统共录入 {summary['total_batches']} 批过程质量检验记录，"
         f"涉及机台 {', '.join(summary['machines']) if summary['machines'] else '无'}，"
         f"牌号 {', '.join(summary['brands']) if summary['brands'] else '无'}。\n"
         f"缺陷批次 {summary['defect_batches']} 批，缺陷率 {summary['defect_rate']:.2f}%，整体状态：{status}。"
+        f"{rating_line}"
     )
     if ind_answers:
         base += f"\n{'；'.join(ind_answers)}。"
@@ -1178,6 +1290,14 @@ def _smart_answer_physical_standard(parsed, question: str) -> str:
     return "\n".join(lines)
 
 
+def _smart_answer_rating_standard(parsed, question: str) -> str:
+    return answer_rating_standard_question(question)
+
+
+def _smart_answer_batch_rating(parsed, process_records: List[Dict[str, Any]], question: str) -> str:
+    return answer_batch_rating(process_records, question)
+
+
 def _smart_answer_defect_detail(parsed, process_records: List[Dict[str, Any]]) -> str:
     """智能缺陷详情回答"""
     if not process_records:
@@ -1209,8 +1329,8 @@ def _smart_answer_rate(parsed, process_records: List[Dict[str, Any]]) -> str:
 
     lines = []
     if "qualified_rate" in parsed.indicators or "defect_rate" in parsed.indicators:
-        qualified_pct = round((1 - summary["defect_rate"] / 100) * 100, 2) if summary["total_batches"] > 0 else 0
-        lines.append(f"合格率：约 {qualified_pct:.1f}%")
+        lines.append(f"合格率：{summary.get('pass_rate', 0):.1f}%（累计扣分 ≤ 200 分为合格）")
+        lines.append(f"优质率：{summary.get('excellent_rate', 0):.1f}%（优等品，累计扣分 ≤ 18 分）")
         lines.append(f"缺陷率：{summary['defect_rate']:.2f}%")
 
     if "defect_count" in parsed.indicators:
@@ -1220,9 +1340,17 @@ def _smart_answer_rate(parsed, process_records: List[Dict[str, Any]]) -> str:
         lines.append(f"检验批次：{summary['total_batches']} 批")
 
     if not lines:
-        lines.append(f"合格率：约 {(1 - summary['defect_rate']/100)*100:.1f}%")
+        lines.append(f"合格率：{summary.get('pass_rate', 0):.1f}%")
+        lines.append(f"优质率：{summary.get('excellent_rate', 0):.1f}%")
         lines.append(f"缺陷率：{summary['defect_rate']:.2f}%")
         lines.append(f"缺陷数：{summary['total_defects']} 个")
+        if summary.get("total_batches", 0) > 0:
+            lines.append(
+                f"评级分布：优等 {summary.get('excellent_count', 0)} / "
+                f"一等 {summary.get('first_count', 0)} / "
+                f"二等 {summary.get('second_count', 0)} / "
+                f"不合格 {summary.get('unqualified_count', 0)}"
+            )
 
     # 时间信息
     time_desc = ""
@@ -1248,6 +1376,8 @@ def _smart_answer_combined(
         if summary["total_batches"] > 0:
             overview = (
                 f"共 {summary['total_batches']} 批检验记录，"
+                f"合格率 {summary.get('pass_rate', 0):.1f}%，"
+                f"优质率 {summary.get('excellent_rate', 0):.1f}%，"
                 f"缺陷率 {summary['defect_rate']:.2f}%，"
                 f"涉及 {len(summary['machines'])} 台机台、{len(summary['brands'])} 个牌号。"
             )

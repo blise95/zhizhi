@@ -123,6 +123,24 @@ INTENT_KEYWORDS: Dict[str, List[str]] = {
     "query_rate": [
         "率", "比例", "百分比", "%", "占比",
         "优质率", "合格率", "缺陷率", "不合格率",
+        "优等品率", "一等品率", "二等品率",
+    ],
+    "query_rating_standard": [
+        "优等品", "一等品", "二等品", "不合格品",
+        "分值线", "评级规定", "累计扣分", "产品评级",
+        "几等品", "质量评级", "扣多少分",
+        "合格产品", "评级办法",
+    ],
+    "query_batch_rating": [
+        "这个批次", "该批次", "本批次", "批次为什么",
+        "为什么是优等", "为什么是一等", "为什么是二等",
+        "为什么不合格", "批次评级", "批次等级",
+    ],
+    "query_defect_standard": [
+        "怎么判定", "如何判定", "判定标准", "缺陷判定",
+        "缺陷代码", "属于什么等级", "A类缺陷", "B类缺陷",
+        "C类缺陷", "D类缺陷", "严重缺陷", "较重缺陷",
+        "一般缺陷", "轻微缺陷",
     ],
 }
 
@@ -455,6 +473,9 @@ class QuestionParser:
             "query_physical_standard": "physical_standard",
             "query_defect_detail": "defect_detail",
             "query_rate": "rate_query",
+            "query_rating_standard": "rating_standard",
+            "query_batch_rating": "batch_rating",
+            "query_defect_standard": "defect_standard",
         }
 
         p.primary_intent = intent_to_scenario.get(best_intent, "combined")
@@ -546,6 +567,39 @@ class QuestionParser:
                 p.primary_intent = "today_quality"
                 p.intent_confidence = 0.84
 
+        # 规则8.5：具体缺陷名称/代码/判定标准，优先于评级分值线
+        try:
+            from core.defect_standard import looks_like_defect_question
+            if looks_like_defect_question(p.raw):
+                if p.primary_intent != "defect_standard":
+                    p.secondary_intents.append(p.primary_intent)
+                p.primary_intent = "defect_standard"
+                p.intent_confidence = 0.93
+                return
+        except Exception:
+            pass
+
+        # 规则9：外在质量评级分值线（5.3.1），优先于泛知识问答
+        from core.rating_standard import looks_like_batch_rating_question, looks_like_rating_question
+        has_physical_kw_for_rating = any(
+            k in q for k in ["物测", "烟支", "长度", "圆周", "吸阻", "重量", "通风度"]
+        )
+        if looks_like_batch_rating_question(p.raw) and not has_physical_kw_for_rating:
+            if p.primary_intent != "batch_rating":
+                p.secondary_intents.append(p.primary_intent)
+            p.primary_intent = "batch_rating"
+            p.intent_confidence = 0.9
+        elif looks_like_rating_question(p.raw) and not has_physical_kw_for_rating:
+            # 「优质率/优等品率」走比率查询，不覆盖成纯规则问答
+            rate_only = any(k in q for k in ["优质率", "优等品率", "一等品率", "二等品率", "合格率"])
+            if rate_only and p.primary_intent in ["rate_query", "today_quality"]:
+                pass
+            else:
+                if p.primary_intent != "rating_standard":
+                    p.secondary_intents.append(p.primary_intent)
+                p.primary_intent = "rating_standard"
+                p.intent_confidence = 0.92
+
     # -------------------- 方向判断 --------------------
 
     def _detect_direction(self, p: ParsedQuestion):
@@ -628,6 +682,9 @@ if __name__ == "__main__":
         "为什么质量变差了？",
         "吸阻合格吗？",
         "重量有没有超标？",
+        "累计扣分 50 分属于什么等级？",
+        "优等品的分值线是多少？",
+        "这个批次为什么是二等品？",
         "整体情况如何",
         "最近缺陷数量多不多",
         "各牌号对比一下",

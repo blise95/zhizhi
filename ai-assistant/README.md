@@ -78,14 +78,13 @@ OLLAMA_CHAT_MODEL=qwen2.5:7b
 
 ### 3. 构建质量知识向量库
 
-```bash
-python scripts/index_documents.py
-```
+生产环境不要在开发机构建。推代码后在服务器执行 `zhizhi-zhihe`，会解析 `docs/` 下两份 PDF，用智谱 Embedding 写入 `/opt/zhizhi/zhihe-data/vector_store/`。
 
-该脚本会：
-- 解析两个 PDF 文档
-- 按章节、表格、缺陷规则进行智能切分
-- 生成 Embedding 并保存到 `data/vector_store/`
+本机调试（可选）：
+
+```bash
+python scripts/index_documents.py --require-vector
+```
 
 ### 4. 准备业务数据（可选但推荐）
 

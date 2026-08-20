@@ -92,7 +92,15 @@ vi /opt/zhizhi/conf/zhihe.env    # 把 ZHIPU_API_KEY 换成智谱控制台的 Ke
 zhizhi-zhihe
 ```
 
-Key 在 [智谱开放平台](https://open.bigmodel.cn/) 创建。模型默认 `glm-4-flash`。聊天走 `http://服务器/zhihe/ask`，质量数据由网页随问题提交，不读浏览器。没有质量标准 PDF 时，仍可问「今天质量怎么样」这类数据问题。
+Key 在 [智谱开放平台](https://open.bigmodel.cn/) 创建。模型默认 `glm-4-flash`。聊天走 `http://服务器/zhihe/ask`，质量数据由网页随问题提交，不读浏览器。
+
+`zhizhi-zhihe` 会在服务器上解析 `ai-assistant/docs/` 里的两份企业标准 PDF，用智谱 `embedding-2` 生成向量库，写到 `/opt/zhizhi/zhihe-data/vector_store/`。不要在 8GB 机器上跑 Ollama 或本地 Embedding 模型。文档更新后再次执行 `zhizhi-zhihe` 会自动重建；强制重建：
+
+```bash
+FORCE_REINDEX=1 zhizhi-zhihe
+```
+
+`/health` 里 `vector_store_exists: true` 表示知识库已就绪。
 
 ---
 

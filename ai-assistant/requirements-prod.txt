@@ -1,4 +1,5 @@
-# 生产智合（智谱远程 API）。不含本机 Ollama / Chroma / fastembed，省内存。
+# 生产智合（智谱远程 API）。不含本机 Ollama / fastembed，省内存。
+# 向量库用智谱 embedding-2 生成，保存为 gzip JSON，不依赖 Chroma。
 langchain-core>=0.2.0
 langchain-openai>=0.1.0
 langgraph>=0.1.0
@@ -7,3 +8,4 @@ pydantic>=2.7.0
 fastapi>=0.111.0
 uvicorn[standard]>=0.30.0
 requests>=2.31.0
+pdfplumber>=0.11.0

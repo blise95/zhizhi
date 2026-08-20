@@ -1,0 +1,2736 @@
+{
+  "箱装外观缺陷": {
+    "description": "纸箱及箱内大条相关缺陷",
+    "locations": {
+      "纸箱杂项": [
+        {
+          "location": "纸箱杂项",
+          "name": "纸箱未粘牢",
+          "code": "XXWNC",
+          "standard": "机封纸箱无胶，或纸箱胶带未封牢纸箱摇盖接缝",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱杂项",
+          "name": "纸箱内部粘牢",
+          "code": "XXNNC",
+          "standard": "纸箱与大条或大条与大条粘结在一起",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱杂项",
+          "name": "纸箱大条错装混装",
+          "code": "XTCPA",
+          "standard": "甲牌号卷烟纸箱中错装混装了乙牌号大条，或同牌号卷烟箱生产批 次号和条的客户码不对应",
+          "category": "A",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱杂项",
+          "name": "纸箱缺条多条",
+          "code": "XTQDA",
+          "standard": "箱内实装大条数量少于或多于产品内控标准要求的数量",
+          "category": "A",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱杂项",
+          "name": "纸箱夹杂",
+          "code": "XAJZC",
+          "standard": "纸箱内装有非标准要求装入的物品，如废纸、胶带等",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱杂项",
+          "name": "纸箱来料夹杂",
+          "code": "XFJZC",
+          "standard": "纸箱来料带有非标准要求装入的物品，如废纸、胶带等",
+          "category": "C",
+          "source_page": 4
+        }
+      ],
+      "纸箱": [
+        {
+          "location": "纸箱",
+          "name": "纸箱破残",
+          "code": "XXPSC",
+          "standard": "纸箱可视面有撕裂长度≥20cm的破损或有最大直径≥20cm的孔洞",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱损伤",
+          "code": "XXSSC",
+          "standard": "纸箱损坏并导致条盒产生C类缺陷",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱错用",
+          "code": "XXCYA",
+          "standard": "甲牌号卷烟成品中错用乙牌号纸箱，或标注有效期、生产日期、生 产批号等信息不符合要求",
+          "category": "A",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱霉变",
+          "code": "XXMBA",
+          "standard": "纸箱表面有霉变痕迹",
+          "category": "A",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱污",
+          "code": "XXWZC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径）及数目符合C区 规定（一般先确定数目再观察长度，后续缺陷同此）。",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱箱盖摺角",
+          "code": "XXZJC",
+          "standard": "大小箱盖向外翘起或向内折进",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱印刷缺陷",
+          "code": "XFYSD",
+          "standard": "文字、图案模糊或轻微残缺不全",
+          "category": "D",
+          "source_page": 4
+        },
+        {
+          "location": "纸箱",
+          "name": "纸箱式样不符",
+          "code": "XFSYC",
+          "standard": "文字、图案错印、漏印或严重残缺不全",
+          "category": "C",
+          "source_page": 4
+        }
+      ],
+      "胶带": [
+        {
+          "location": "胶带",
+          "name": "纸箱漏底",
+          "code": "XJLDC",
+          "standard": "纸箱盖整体或局部无胶带粘接",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "胶带",
+          "name": "纸箱胶带粘结异常",
+          "code": "XJNJD",
+          "standard": "纸箱侧面胶带长度≥90mm或≤50mm；胶带切口倾斜或突出长度≥ 5mm；胶带纵向和纸箱的非粘结长度≥20mm",
+          "category": "D",
+          "source_page": 4
+        },
+        {
+          "location": "胶带",
+          "name": "纸箱胶带错用",
+          "code": "XJCYD",
+          "standard": "甲牌号封箱胶带用作乙牌号",
+          "category": "D",
+          "source_page": 4
+        },
+        {
+          "location": "胶带",
+          "name": "纸箱胶带式样不符",
+          "code": "XFJYD",
+          "standard": "文字、图案错印、漏印或残缺不全、胶面缺失",
+          "category": "D",
+          "source_page": 4
+        }
+      ],
+      "追溯标识": [
+        {
+          "location": "追溯标识",
+          "name": "标识无",
+          "code": "XMBWC",
+          "standard": "纸箱追溯标识印被抹去但未补盖新印，出厂产品无质量合格标识",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "追溯标识",
+          "name": "标识错误",
+          "code": "XMBCC",
+          "standard": "追溯标识印有数字错误、模糊或缺失而导致无法辨认，或未经批准 使用其他章，或有2个不同的标识印，或不印于规定区域，或已与",
+          "category": "C",
+          "source_page": 4
+        },
+        {
+          "location": "追溯标识",
+          "name": "条件关联错误",
+          "code": "XMGCB",
+          "standard": "条件关联列表中不存在抽取的条烟二维码，或无法读取关联信息",
+          "category": "B",
+          "source_page": 5
+        }
+      ]
+    },
+    "total_defects": 21
+  },
+  "条装外观缺陷": {
+    "description": "条盒（含透明纸、拉线等）相关缺陷",
+    "locations": {
+      "条盒杂项": [
+        {
+          "location": "条盒杂项",
+          "name": "条盒轧皱",
+          "code": "TAZZC",
+          "standard": "条盒（含透明纸）表面皱褶线长度≥30mm或皱纹累 积面积≥900mm2或伤及小包",
+          "category": "C",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "条盒轧破",
+          "code": "TAZPB",
+          "standard": "条盒（含透明纸）表面破损长度≥30mm或有孔洞直 径≥5mm",
+          "category": "B",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "条盒内部粘连",
+          "code": "THNNC",
+          "standard": "条盒长边或横头粘连小包",
+          "category": "C",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "条盒缺包",
+          "code": "TBQBA",
+          "standard": "条内实装小包数量少于产品内控标准要求的数量",
+          "category": "A",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "条盒小包错装混装",
+          "code": "TBCPA",
+          "standard": "甲牌号大条内错装混装乙牌号小包，或同牌号大条 和小包的客户码不同",
+          "category": "A",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "条盒外夹杂",
+          "code": "TAWZC",
+          "standard": "条盒透明纸内部或外部夹有符合C区规定的废纸、 胶块、拼接胶带或烟末等杂物",
+          "category": "C",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "条盒内夹杂",
+          "code": "TANZC",
+          "standard": "条盒纸内部夹有符合C区规定的的废纸、胶块等杂 物",
+          "category": "C",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "透明纸吸附条盒纸（内 含水雾或水渍）",
+          "code": "THXTC",
+          "standard": "条盒纸正反两面（不包括长边和横头）与透明纸的 累积吸附面积（缺陷分布外沿框定的平行于长短边 的矩形面积）≥900mm2",
+          "category": "C",
+          "source_page": 5
+        },
+        {
+          "location": "条盒杂项",
+          "name": "盒条关联错误",
+          "code": "TAGCB",
+          "standard": "盒条关联列表中不存在抽取的盒装二维码，或无法 读取关联信息",
+          "category": "B",
+          "source_page": 6
+        }
+      ],
+      "拉线": [
+        {
+          "location": "拉线",
+          "name": "拉线无",
+          "code": "TLWWB",
+          "standard": "透明纸上无拉线粘结",
+          "category": "B",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线残缺",
+          "code": "TLCQC",
+          "standard": "透明纸上拉线不完整，未粘结长度≥10mm",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线错用",
+          "code": "TLCYC",
+          "standard": "甲牌号卷烟成品中错用乙牌号拉线",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线倒置",
+          "code": "TLDZC",
+          "standard": "拉线位置（在尾部）错误",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线搭口错位",
+          "code": "TLDKC",
+          "standard": "拉线内外端头垂直拉线方向无重合且间距d≥2mm",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线高低",
+          "code": "TLGDD",
+          "standard": "拉线中心距临近横头过远或过近，硬盒：＞60mm 或＜50mm；软盒：＞55mm或＜45mm",
+          "category": "D",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线撕拉不畅",
+          "code": "TLSLC",
+          "standard": "拉线拉不开或拉断或拉线头反向烫死",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线切口切偏",
+          "code": "TLQKC",
+          "standard": "切口切偏，拉线头被切断",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线宽度不符",
+          "code": "TFLKC",
+          "standard": "宽度偏差大于0.5mm（设计值2.5mm）",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "拉线",
+          "name": "拉线印刷缺陷",
+          "code": "TFLYD",
+          "standard": "有字或隐字拉线印刷不完整、或同批存在明显色差",
+          "category": "D",
+          "source_page": 6
+        }
+      ],
+      "透明纸": [
+        {
+          "location": "透明纸",
+          "name": "透明纸无",
+          "code": "TTWWB",
+          "standard": "条盒纸外无透明纸包装",
+          "category": "B",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸多",
+          "code": "TTDYC",
+          "standard": "条盒纸外透明纸＞1张",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸残缺",
+          "code": "TTCQB",
+          "standard": "透明纸不完整累积面积≥100mm2",
+          "category": "B",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸破",
+          "code": "TTZPB",
+          "standard": "透明纸虽完整但有撕裂长度≥10mm的破损或有最 大直径≥10mm的孔洞",
+          "category": "B",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸烫破",
+          "code": "TTTPB",
+          "standard": "烫损直径≥10mm",
+          "category": "B",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸皱",
+          "code": "TTZZC",
+          "standard": "透明纸非热封面皱褶线长度及在所在面分布面积 符合C区规定",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸烫皱",
+          "code": "TTTZC",
+          "standard": "热封底面（不含横头交界10mm区域）有长度≥10mm 的皱褶线且累积面积≥3/4面积",
+          "category": "C",
+          "source_page": 6
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸热封不牢",
+          "code": "TTRKC",
+          "standard": "透明纸（包括端部和背（侧）边外搭口）粘结不牢 长度≥60mm或露出条盒纸≥8mm",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸松紧",
+          "code": "TTSJC",
+          "standard": "拉紧后多余长度≥4mm或过紧导致条盒纸正面凹陷 深度≥2mm",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸污",
+          "code": "TTZWC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥1处",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸划痕",
+          "code": "TTHHC",
+          "standard": "表面因摩擦留有长度≥50mm且宽度≥0.5mm的划伤 痕迹且≥5条",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸折角",
+          "code": "TTZJC",
+          "standard": "透明纸折角长度≥10mm的个数≥2个",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸出角",
+          "code": "TTCJC",
+          "standard": "透明纸折叠处超出条盒平面的长度≥2mm",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸长短",
+          "code": "TTCDC",
+          "standard": "一端透明纸搭口宽度≤3mm",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸热封变色",
+          "code": "TTRBD",
+          "standard": "透明纸因热封而出现肉眼可辨的明显色差",
+          "category": "D",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸拼接",
+          "code": "TTPJC",
+          "standard": "透明纸含有拼接段",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸材料缺陷",
+          "code": "TFTWC",
+          "standard": "来料有折皱、暴筋、气泡",
+          "category": "C",
+          "source_page": 7
+        }
+      ],
+      "免税烟 标志": [
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志错用",
+          "code": "TMSCA",
+          "standard": "甲客商卷烟成品中错用乙客商免税烟标志",
+          "category": "A",
+          "source_page": 7
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志无",
+          "code": "TMSWB",
+          "standard": "条透明纸免税烟标志粘结处无免税烟标志",
+          "category": "B",
+          "source_page": 7
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志信息不全",
+          "code": "TMSBB",
+          "standard": "卷烟成品免税烟标志数字码位等特征信息辨识不 清",
+          "category": "B",
+          "source_page": 7
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志污",
+          "code": "TMSUC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥3处",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志残缺",
+          "code": "TMSQB",
+          "standard": "免税烟标志不完整，缺损≥1/4总面积",
+          "category": "B",
+          "source_page": 7
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志破",
+          "code": "TMSPC",
+          "standard": "免税烟标志虽完整但有长度≥2mm的撕破、裂缝或 有面积≥3mm2的孔洞或破损",
+          "category": "C",
+          "source_page": 7
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志擦伤",
+          "code": "TMSID",
+          "standard": "免税烟标志表面有露底",
+          "category": "D",
+          "source_page": 8
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志翘折",
+          "code": "TMSZC",
+          "standard": "免税烟标志向内折进或向外翘起的斜线长度≥ 10mm，或两个粘结面都没粘牢",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志多",
+          "code": "TMSYC",
+          "standard": "粘结处免税烟标志＞1张",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志皱",
+          "code": "TMSFC",
+          "standard": "免税烟标志表面有长度≥10mm的皱褶（线）或有≥ 1/2所在面面积的皱纹",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志反倒",
+          "code": "TMSDB",
+          "standard": "免税烟标志内外面反向",
+          "category": "B",
+          "source_page": 8
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志偏位",
+          "code": "TMSLC",
+          "standard": "免税烟标志四角在长边或短边方向距标准位距离 差≥3mm",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志凸出",
+          "code": "TMSTC",
+          "standard": "免税烟标志凸出长度≥2mm",
+          "category": "C",
+          "source_page": 8
+        }
+      ],
+      "条盒纸": [
+        {
+          "location": "条盒纸",
+          "name": "条盒纸无",
+          "code": "THWWA",
+          "standard": "条盒无条盒纸",
+          "category": "A",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸残缺",
+          "code": "THCQB",
+          "standard": "条盒纸不完整，有直径或长度≥1mm的洞或缺角",
+          "category": "B",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸破",
+          "code": "THPSB",
+          "standard": "条盒纸虽完整但有撕裂长度≥5mm的破裂或有直径 ≥1mm的孔洞",
+          "category": "B",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸错用",
+          "code": "THCYA",
+          "standard": "甲牌号卷烟成品中错用乙牌号条盒纸，或标注有效 期、生产日期、生产批号等信息不符合要求",
+          "category": "A",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸反包",
+          "code": "THFBA",
+          "standard": "条盒纸印刷面在条盒内部",
+          "category": "A",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸皱",
+          "code": "THZZC",
+          "standard": "条盒纸表面有长度≥15mm皱褶",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸压痕",
+          "code": "THYHC",
+          "standard": "表面有深度≥0.2mm且长度≥20mm的轧压痕迹， 或长度大于所在面长边1/2长度的轧压痕迹",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸擦伤",
+          "code": "THCSC",
+          "standard": "擦露底纸长度≥6mm",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸污",
+          "code": "THWZC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥1处",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸多",
+          "code": "THDYC",
+          "standard": "条盒纸＞1张",
+          "category": "C",
+          "source_page": 8
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸折叠不到位",
+          "code": "THZDC",
+          "standard": "条盒纸长边超出临近端面距离≥1mm或短边已超 出临近端面并露出小盒或内舌外露",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸爆墨",
+          "code": "THBMC",
+          "standard": "表面油墨爆裂长度（或直径）及数目符合C区规定",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸粘接不牢",
+          "code": "THBKC",
+          "standard": "透明纸拉掉后条盒纸长边或短边完全爆开",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸翘折",
+          "code": "THQZC",
+          "standard": "条盒纸向内或向外有斜线摺角≥5mm,斜线参考图 中红虚线",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸色差",
+          "code": "TFHCC",
+          "standard": "严重色差，或△E≥4.0",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸外观缺陷",
+          "code": "TFHWC",
+          "standard": "文字、图案严重模糊或残缺不全",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸印刷缺陷",
+          "code": "TFHYC",
+          "standard": "印刷污点长度（或直径）≥5mm的≥3处；或者透 明纸撕除后条盒纸脱色面积≥400mm2",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "条盒纸",
+          "name": "条盒纸样式不符",
+          "code": "TFHSA",
+          "standard": "文字、图案错印、漏印",
+          "category": "A",
+          "source_page": 9
+        }
+      ],
+      "钢印": [
+        {
+          "location": "钢印",
+          "name": "钢印错无",
+          "code": "TGWWC",
+          "standard": "钢印错用或无钢印",
+          "category": "C",
+          "source_page": 9
+        },
+        {
+          "location": "钢印",
+          "name": "钢印缺或糊",
+          "code": "TGQHD",
+          "standard": "钢印缺或糊而无法辨识",
+          "category": "D",
+          "source_page": 9
+        },
+        {
+          "location": "钢印",
+          "name": "钢印刻破",
+          "code": "TGKPC",
+          "standard": "刻破字符导致无法辨识",
+          "category": "C",
+          "source_page": 9
+        }
+      ]
+    },
+    "total_defects": 70
+  },
+  "盒装外观缺陷": {
+    "description": "小盒（含透明纸、拉线、商标纸、内衬纸等）相关缺陷",
+    "locations": {
+      "小盒杂项": [
+        {
+          "location": "小盒杂项",
+          "name": "小盒轧皱",
+          "code": "HAZZB",
+          "standard": "小盒（包含透明纸在内的两种包装材料及以上）表 面有最大直径（或长度）≥10mm的皱褶（线）",
+          "category": "B",
+          "source_page": 9
+        },
+        {
+          "location": "小盒杂项",
+          "name": "小盒轧破",
+          "code": "HAZPB",
+          "standard": "小盒（包含透明纸在内的两种包装材料及以上）表",
+          "category": "B",
+          "source_page": 9
+        },
+        {
+          "location": "小盒杂项",
+          "name": "小盒外部粘连",
+          "code": "HAWLC",
+          "standard": "小盒粘结在一起，轻拉不开或拉开后产生破裂",
+          "category": "C",
+          "source_page": 10
+        },
+        {
+          "location": "小盒杂项",
+          "name": "小盒内部未粘牢",
+          "code": "HANJB",
+          "standard": "两种及以上包装材料（商标纸、框架纸、内衬纸） 之间无胶水或材料成型明显错位，或有胶水点但可 以被轻拉扯出",
+          "category": "B",
+          "source_page": 10
+        },
+        {
+          "location": "小盒杂项",
+          "name": "小盒外夹杂",
+          "code": "HAJZB",
+          "standard": "小盒透明纸内部或外部夹有长度≥5mm纸屑、胶块、 拼接胶带等杂物≥2处，或有≥20点的烟末或纸灰",
+          "category": "B",
+          "source_page": 10
+        },
+        {
+          "location": "小盒杂项",
+          "name": "小盒内夹杂",
+          "code": "HANZB",
+          "standard": "小盒商标纸内夹有长度≥5mm的纸屑、胶块、拼接 胶带等杂物",
+          "category": "B",
+          "source_page": 10
+        },
+        {
+          "location": "小盒杂项",
+          "name": "小盒外形不方正",
+          "code": "HAWXC",
+          "standard": "小盒上部与下部宽度之差≥3mm",
+          "category": "C",
+          "source_page": 10
+        },
+        {
+          "location": "小盒杂项",
+          "name": "透明纸吸附商标纸（内 含水雾或水渍）",
+          "code": "HAXFC",
+          "standard": "透明纸与商标纸的正反面（不包括长边、顶部、底 部）累积吸附面积（缺陷分布外沿框定的平行于长 短边的矩形面积）≥200mm2",
+          "category": "C",
+          "source_page": 10
+        }
+      ],
+      "拉线": [
+        {
+          "location": "拉线",
+          "name": "拉线无",
+          "code": "HLCHB",
+          "standard": "透明纸上无拉线粘结",
+          "category": "B",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线错用",
+          "code": "HLCYC",
+          "standard": "甲牌号卷烟成品中错用乙牌号拉线",
+          "category": "C",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线残缺",
+          "code": "HLCQB",
+          "standard": "透明纸上拉线不完整，未粘结长度≥10mm",
+          "category": "B",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线皱",
+          "code": "HLLZC",
+          "standard": "拉线皱褶连续长度≥10mm且≥10处",
+          "category": "C",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线字体反向",
+          "code": "HLZFD",
+          "standard": "拉线印刷字体顺序颠倒",
+          "category": "D",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线倒置",
+          "code": "HLDZB",
+          "standard": "拉线位置（在底部）错误",
+          "category": "B",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线搭口错位",
+          "code": "HLDKC",
+          "standard": "拉线内外端头垂直拉线方向无重合，间距d≥1mm",
+          "category": "C",
+          "source_page": 10
+        },
+        {
+          "location": "拉线",
+          "name": "拉线切口切偏",
+          "code": "HLQKC",
+          "standard": "切口切偏，拉线头被切断",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "拉线",
+          "name": "拉线高低",
+          "code": "HLGDD",
+          "standard": "拉线上沿距离商标纸顶部的长度d过大或过小， 硬盒：d＞27mm或d＜22mm 软盒：d＞7mm或d＜2mm",
+          "category": "D",
+          "source_page": 11
+        },
+        {
+          "location": "拉线",
+          "name": "拉线撕拉不畅",
+          "code": "HLSLB",
+          "standard": "拉线拉不开或拉线拉断",
+          "category": "B",
+          "source_page": 11
+        },
+        {
+          "location": "拉线",
+          "name": "拉线宽度不符",
+          "code": "HFLKC",
+          "standard": "宽度偏差大于0.5mm（设计值2.5mm）",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "拉线",
+          "name": "拉线印刷缺陷",
+          "code": "HFLYD",
+          "standard": "有字或隐字拉线印刷不完整、或同批存在明显色差",
+          "category": "D",
+          "source_page": 11
+        }
+      ],
+      "透明纸": [
+        {
+          "location": "透明纸",
+          "name": "透明纸无",
+          "code": "HTWWA",
+          "standard": "商标纸外无透明纸包装",
+          "category": "A",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸残缺",
+          "code": "HTCQA",
+          "standard": "透明纸不完整面积≥100mm2或露出商标纸面积≥ 100mm2",
+          "category": "A",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸多",
+          "code": "HTDYC",
+          "standard": "商标纸外透明纸＞1张",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸破",
+          "code": "HTPSB",
+          "standard": "透明纸虽完整但有长度≥10mm的撕破、裂缝或有最 大直径≥5mm的孔洞",
+          "category": "B",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸烫破",
+          "code": "HTTPB",
+          "standard": "烫损最大直径≥10mm",
+          "category": "B",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸皱",
+          "code": "HTZZC",
+          "standard": "透明纸非热封面皱褶线长度及在所在面分布面积 符合C区规定",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸烫皱",
+          "code": "HTTZC",
+          "standard": "热封面皱褶（线）长度≥20mm或面积≥3/4所在面 面积",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸热封变色",
+          "code": "HTBSC",
+          "standard": "热封后，透明纸明显色差面积≥1/2热封面积",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸热封不牢",
+          "code": "HTRKC",
+          "standard": "透明纸（包括上下端和长侧边外搭口）粘结不牢长 度≥5mm",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸松紧",
+          "code": "HTSJC",
+          "standard": "拉紧后多余长度≥3mm或过紧导致商标纸正面或侧 面凹陷深度≥1mm",
+          "category": "C",
+          "source_page": 11
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸污",
+          "code": "HTWZC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥3mm",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸划痕",
+          "code": "HTHHC",
+          "standard": "表面因摩擦留有长度≥50mm或宽度≥0.5mm的划伤 痕迹≥3条",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸超平面",
+          "code": "HTCMC",
+          "standard": "透明纸长侧边超出小盒平面≥2mm",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸倒包",
+          "code": "HTDHB",
+          "standard": "拉线处于小盒下部",
+          "category": "B",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸折角",
+          "code": "HTZJC",
+          "standard": "透明纸折角长度及数目符合C区规定或露出商标纸 ＜100mm2",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸出角",
+          "code": "HTCJC",
+          "standard": "透明纸折叠处超出小盒平面的长度≥2mm",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸长短",
+          "code": "HTCDC",
+          "standard": "两端透明纸搭口重叠较小者的宽度d≤4mm（细支≤ 2mm）",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸拼接",
+          "code": "HTPJC",
+          "standard": "透明纸含有拼接段",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "透明纸",
+          "name": "透明纸材料缺陷",
+          "code": "HFTWC",
+          "standard": "来料有折皱、暴筋、气泡",
+          "category": "C",
+          "source_page": 12
+        }
+      ],
+      "印花": [
+        {
+          "location": "印花",
+          "name": "印花错用",
+          "code": "HYCYB",
+          "standard": "甲牌号卷烟成品中错用乙牌号印花",
+          "category": "B",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花无",
+          "code": "HYWWA",
+          "standard": "软包或软包硬化产品印花粘结处无印花",
+          "category": "A",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花污",
+          "code": "HYWZC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥1处",
+          "category": "C",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花残缺",
+          "code": "HYCQB",
+          "standard": "印花不完整，缺损≥1/4总面积",
+          "category": "B",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花破",
+          "code": "HYPSB",
+          "standard": "印花虽完整但有长度≥2mm的撕破、裂缝或有面积 ≥3mm2的孔洞或破损",
+          "category": "B",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花擦伤",
+          "code": "HYCSD",
+          "standard": "印花表面有露底",
+          "category": "D",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花翘折",
+          "code": "HYQZB",
+          "standard": "印花向内折进或向外翘起的斜线长度≥10mm，或前 后两个粘结面都没粘牢",
+          "category": "B",
+          "source_page": 12
+        },
+        {
+          "location": "印花",
+          "name": "印花多",
+          "code": "HYDYC",
+          "standard": "粘结处印花＞1张",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花皱",
+          "code": "HYZZC",
+          "standard": "印花表面有长度≥10mm的皱褶（线）或有≥1/2所 在面面积的皱纹",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花反倒",
+          "code": "HYFDC",
+          "standard": "印花与小盒粘结时内外反向",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花偏位",
+          "code": "HYWPC",
+          "standard": "印花四个角在长边方向距小盒顶部最大距离差≥ 6mm；印花四个角在短边方向距小盒临近侧边最大 距离差≥4mm（或露出商标纸胶水位）",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花凸出",
+          "code": "HYTCC",
+          "standard": "印花凸出长度≥2mm",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花吐胶",
+          "code": "HYTJC",
+          "standard": "印花胶水溢出长度及条数符合C区规定",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花裁切偏位",
+          "code": "HYCPC",
+          "standard": "印花裁切边与印刷边框、图形或字体间距＜0.5mm （印刷边框、图形或字体不完整）",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花印刷缺陷",
+          "code": "HFYYC",
+          "standard": "文字、图案严重模糊、残缺不全，或印刷偏位≥ 0.5mm",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花色差",
+          "code": "HFYCC",
+          "standard": "严重色差，或△E≥4.0",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花式样不符",
+          "code": "HFYSC",
+          "standard": "文字、图案错印、漏印",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "印花",
+          "name": "印花毛刺",
+          "code": "HYMCD",
+          "standard": "印花裁切后有毛刺",
+          "category": "D",
+          "source_page": 13
+        }
+      ],
+      "税票": [
+        {
+          "location": "税票",
+          "name": "税票错用",
+          "code": "HSPCA",
+          "standard": "甲牌号卷烟成品中错用乙牌号税票",
+          "category": "A",
+          "source_page": 13
+        },
+        {
+          "location": "税票",
+          "name": "税票无",
+          "code": "HSPWB",
+          "standard": "卷烟成品税票粘结处无税票",
+          "category": "B",
+          "source_page": 13
+        },
+        {
+          "location": "税票",
+          "name": "税票粘结不符",
+          "code": "HSPNB",
+          "standard": "盒盖打开税票无破损",
+          "category": "B",
+          "source_page": 13
+        },
+        {
+          "location": "税票",
+          "name": "税码不全",
+          "code": "HSPBB",
+          "standard": "卷烟成品税票税码辨识不清",
+          "category": "B",
+          "source_page": 13
+        },
+        {
+          "location": "税票",
+          "name": "税票污",
+          "code": "HSPUC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥3处",
+          "category": "C",
+          "source_page": 13
+        },
+        {
+          "location": "税票",
+          "name": "税票残缺",
+          "code": "HSPQB",
+          "standard": "税票不完整，缺损≥1/4总面积",
+          "category": "B",
+          "source_page": 13
+        },
+        {
+          "location": "税票",
+          "name": "税票破",
+          "code": "HSPPC",
+          "standard": "税票虽完整但有长度≥2mm的撕破、裂缝或有面积 ≥3mm2的孔洞或破损",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票擦伤",
+          "code": "HSPID",
+          "standard": "税票表面有露底",
+          "category": "D",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票翘折",
+          "code": "HSPZC",
+          "standard": "税票向内折进或向外翘起的斜线长度≥10mm，或两 个粘结面都没粘牢",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票多",
+          "code": "HSPYC",
+          "standard": "粘结处税票＞1张",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票皱",
+          "code": "HSPFC",
+          "standard": "税票表面有长度≥10mm的皱褶（线）或有≥1/2所 在面面积的皱纹",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票反倒",
+          "code": "HSPDB",
+          "standard": "税票与小盒粘结时内外面反向",
+          "category": "B",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票偏位",
+          "code": "HSPLC",
+          "standard": "税票四角在长边或短边方向距标准位距离差≥3mm",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票凸出",
+          "code": "HSPTC",
+          "standard": "税票凸出长度≥2mm",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "税票",
+          "name": "税票吐胶",
+          "code": "HSPJC",
+          "standard": "税票胶水溢点数大于3点且总长度大于10mm",
+          "category": "C",
+          "source_page": 14
+        }
+      ],
+      "免税烟 标志": [
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志错用",
+          "code": "HMSCA",
+          "standard": "甲客商卷烟成品中错用乙客商免税烟标志",
+          "category": "A",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志无",
+          "code": "HMSWB",
+          "standard": "小盒免税烟标志粘结处无免税烟标志",
+          "category": "B",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志信息不全",
+          "code": "HMSBB",
+          "standard": "卷烟成品免税烟标志数字码位等特征信息辨识不 清",
+          "category": "B",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志污",
+          "code": "HMSUC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥3处",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志残缺",
+          "code": "HMSQB",
+          "standard": "免税烟标志不完整，缺损≥1/4总面积",
+          "category": "B",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志破",
+          "code": "HMSPC",
+          "standard": "免税烟标志虽完整但有长度≥2mm的撕破、裂缝（工 艺设计切口除外）或有面积≥3mm2的孔洞或破损",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志擦伤",
+          "code": "HMSID",
+          "standard": "免税烟标志表面有露底",
+          "category": "D",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志翘折",
+          "code": "HMSZC",
+          "standard": "免税烟标志向内折进或向外翘起的斜线长度≥",
+          "category": "C",
+          "source_page": 14
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志多",
+          "code": "HMSYC",
+          "standard": "粘结处免税烟标志＞1张",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志皱",
+          "code": "HMSFC",
+          "standard": "免税烟标志表面有长度≥10mm的皱褶（线）或有≥ 1/2所在面面积的皱纹",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志反倒",
+          "code": "HMSDB",
+          "standard": "免税烟标志内外面反向",
+          "category": "B",
+          "source_page": 15
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志偏位",
+          "code": "HMSLC",
+          "standard": "免税烟标志四角在长边或短边方向距标准位距离 差≥3mm",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志凸出",
+          "code": "HMSTC",
+          "standard": "免税烟标志凸出长度≥2mm",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "免税烟 标志",
+          "name": "免税烟标志吐胶",
+          "code": "HMSJC",
+          "standard": "免税烟标志胶水溢点数大于3点且总长度大于10mm",
+          "category": "C",
+          "source_page": 15
+        }
+      ],
+      "框架纸": [
+        {
+          "location": "框架纸",
+          "name": "框架纸无",
+          "code": "HKWWB",
+          "standard": "小盒内无框架纸",
+          "category": "B",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸残缺",
+          "code": "HKCQB",
+          "standard": "可视框架纸不完整面积≥100mm2",
+          "category": "B",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸破",
+          "code": "HKPSC",
+          "standard": "可视框架纸虽完整但有长度≥5mm的撕破、裂缝或 有面积≥3mm2且＜5mm2的孔洞或破损",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸露",
+          "code": "HKLCC",
+          "standard": "框架纸露于商标纸外",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸错用",
+          "code": "HKCYC",
+          "standard": "甲牌号卷烟成品中错用乙牌号框架纸",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸反",
+          "code": "HFKFC",
+          "standard": "成型后框架纸内外面反向",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸皱",
+          "code": "HKZZC",
+          "standard": "可视框架纸表面有长度≥10mm的皱褶（线）或有≥ 1/2可视面积的皱纹",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸污",
+          "code": "HKWZC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥2处",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸擦伤",
+          "code": "HKCSC",
+          "standard": "可视擦露底纸长度及数目符合C区规定",
+          "category": "C",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸拼接",
+          "code": "HKPJB",
+          "standard": "框架纸含有拼接段",
+          "category": "B",
+          "source_page": 15
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸毛刺",
+          "code": "HKMCD",
+          "standard": "框架纸裁切后有毛刺",
+          "category": "D",
+          "source_page": 16
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸卡口",
+          "code": "HKKKC",
+          "standard": "单铝包框架纸，两折切虚线的距离≤52mm（新中支 ≤47mm）；双铝包框架纸，两折切虚线的距离≤ 62mm；或者有一边折切虚线位置的卡纸外表面未切 断长度≥5mm；或者有一边折切虚线位置的上端达 到卡纸上边沿",
+          "category": "C",
+          "source_page": 16
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸卡边",
+          "code": "HKKBD",
+          "standard": "盒盖反复开合20次内产生卡纸侧边与盒盖内耳卡 顿损伤而不能正常盖合",
+          "category": "D",
+          "source_page": 16
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸偏位",
+          "code": "HKWPC",
+          "standard": "框架纸正面露出长度与中心值差值≥2mm；或者两 侧面宽度差≥3mm",
+          "category": "C",
+          "source_page": 16
+        },
+        {
+          "location": "框架纸",
+          "name": "框架纸式样不符",
+          "code": "HFKSC",
+          "standard": "无花纹（压纹）",
+          "category": "C",
+          "source_page": 16
+        }
+      ],
+      "商标纸": [
+        {
+          "location": "商标纸",
+          "name": "商标纸无",
+          "code": "HSWWA",
+          "standard": "小盒无商标纸",
+          "category": "A",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸残缺",
+          "code": "HSCQB",
+          "standard": "商标纸成型后缺损面积≥25mm2",
+          "category": "B",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸破",
+          "code": "HSPSB",
+          "standard": "商标纸虽完整但有长度≥10mm的撕破、裂缝或有面 积≥3mm2且＜5mm2的孔洞或破损",
+          "category": "B",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸错用",
+          "code": "HSCYA",
+          "standard": "甲牌号卷烟成品中错用乙牌号商标纸，或标注有效 期、生产日期、生产批号等信息不符合要求",
+          "category": "A",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸反包",
+          "code": "HSFBA",
+          "standard": "商标纸印刷面在小盒内部",
+          "category": "A",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸皱",
+          "code": "HSZZC",
+          "standard": "商标纸表面不平整，有长度≥10mm的皱褶（线）或 有≥1/2所在面面积的皱纹",
+          "category": "C",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸压痕",
+          "code": "HSYHC",
+          "standard": "表面有深度≥0.2mm且长度≥3mm的轧压痕迹",
+          "category": "C",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸擦伤",
+          "code": "HSCSC",
+          "standard": "擦伤或露底纸长度≥6mm",
+          "category": "C",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸污",
+          "code": "HSWZC",
+          "standard": "污迹（油渍、污渍、水渍、胶渍）长度（或直径）",
+          "category": "C",
+          "source_page": 16
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸多",
+          "code": "HSDYC",
+          "standard": "小盒商标纸＞1张",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸爆墨",
+          "code": "HSBMC",
+          "standard": "表面油墨爆裂长度≥5mm且≥3点",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸爆壳",
+          "code": "HSBKB",
+          "standard": "透明纸拉掉后硬包小耳朵或软包长侧边爆开，或未 爆开但盒盖打开后小耳朵爆开",
+          "category": "B",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸斜角露白",
+          "code": "HSXLC",
+          "standard": "斜角露框架纸最大宽度≥2mm",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸翘边",
+          "code": "HSQBB",
+          "standard": "商标纸折角线（含斜角反翘）≥15mm",
+          "category": "B",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸折叠不到位",
+          "code": "HSZDB",
+          "standard": "硬盒：盒盖舌头没有完全折入盒盖；盒盖舌头折线 与正面开启线距离（重叠）≥2mm或盒盖两侧耳开 线离底部的距离差≥2mm； 软盒：商标纸长边与临近底面距离≥4mm；商标纸 底部折叠错位或露铝纸；商标纸底部露白最大宽度 (前后折叠方向）≥2mm；滚包（商标不居中）",
+          "category": "B",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "盒盖粘连",
+          "code": "HSGNB",
+          "standard": "盒盖与衬纸或框架纸粘结，拉开后有破损",
+          "category": "B",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸长短壳",
+          "code": "HSCDC",
+          "standard": "软盒商标纸侧面重叠处商标纸高低≥2mm或软盒商 标纸低于铝纸上边沿的距离≥3mm",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸印刷缺陷",
+          "code": "HFSYC",
+          "standard": "印刷污点长度（或直径）及数目符合C 区规定",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸光油缺陷",
+          "code": "HFSGC",
+          "standard": "表面上光明显起泡",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸外观缺陷",
+          "code": "HFSWC",
+          "standard": "文字、图案严重模糊或残缺不全",
+          "category": "C",
+          "source_page": 17
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸色差",
+          "code": "HFSCC",
+          "standard": "严重色差，或△E≥4.0",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "商标纸",
+          "name": "商标纸式样不符",
+          "code": "HFSSA",
+          "standard": "文字、图案错印、漏印",
+          "category": "A",
+          "source_page": 18
+        }
+      ],
+      "商标纸/内 衬纸": [
+        {
+          "location": "商标纸/内 衬纸",
+          "name": "钢印错无",
+          "code": "HGWWC",
+          "standard": "小盒（内衬纸）无钢印或者错用钢印",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "商标纸/内 衬纸",
+          "name": "钢印残缺",
+          "code": "HGCQC",
+          "standard": "硬盒：字符线条不完整导致无法辨识",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "商标纸/内 衬纸",
+          "name": "钢印糊",
+          "code": "HGHHC",
+          "standard": "硬盒：因模糊导致无法辨识",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "商标纸/内 衬纸",
+          "name": "钢印刻破",
+          "code": "HGKPC",
+          "standard": "刻破字符导致无法辨识",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "商标纸/内 衬纸",
+          "name": "钢印位置（倒置/偏/多）",
+          "code": "HGWZC",
+          "standard": "倒置或多、少字符或偏位导致钢印信息不完整",
+          "category": "C",
+          "source_page": 18
+        }
+      ],
+      "内衬纸": [
+        {
+          "location": "内衬纸",
+          "name": "内衬纸无",
+          "code": "HCWWB",
+          "standard": "盒包装无内衬纸",
+          "category": "B",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸残缺",
+          "code": "HCCQB",
+          "standard": "可视范围内衬纸不完整≥100mm2",
+          "category": "B",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸破",
+          "code": "HCPSB",
+          "standard": "可视内衬纸虽完整但有长度≥5mm的撕破、裂缝或 有面积≥3mm2且＜25mm2的孔洞或破损",
+          "category": "B",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸错用",
+          "code": "HCCYB",
+          "standard": "甲牌号卷烟成品中错用乙牌号内衬纸",
+          "category": "B",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸皱",
+          "code": "HCZZC",
+          "standard": "可视内衬纸皱褶（线）长度或所占所在面面积符合 C区规定",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸式样不符",
+          "code": "HFCSC",
+          "standard": "文字、图案错印、漏印",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸色差",
+          "code": "HFCCC",
+          "standard": "严重色差，或△E≥4.0",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸压花后墨色脱落",
+          "code": "HFCWC",
+          "standard": "压花后明显露底",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸爆墨",
+          "code": "HFCMC",
+          "standard": "可视表面油墨爆裂长度≥5mm且≥3点",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸污",
+          "code": "HCWZC",
+          "standard": "内外面污迹（油渍、污渍、水渍、胶渍）长度（或 直径）≥5mm的≥1处",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸轧花缺",
+          "code": "HCYQC",
+          "standard": "可视缺失面积≥100 mm2",
+          "category": "C",
+          "source_page": 18
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸轧花不清晰（淡、 糊、不匀）",
+          "code": "HCYHC",
+          "standard": "打开盒盖可见范围内：若轧花糊区域和周围衬纸色 泽相近，则单点≥16mm2或多点面积和≥100mm2判轧 花不清晰；若轧花糊区域和周围衬纸色泽相差较 大，则单点≥5mm2判轧花不清晰",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "厂徽无",
+          "code": "HCCHB",
+          "standard": "没有应有的厂徽",
+          "category": "B",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "厂徽残缺",
+          "code": "HCHQC",
+          "standard": "厂徽不完整，缺失≥1/2个厂徽",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "厂徽不清晰",
+          "code": "HCBQC",
+          "standard": "厂徽标志模糊，面积≥1/2个厂徽",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "厂徽位置",
+          "code": "HCHPC",
+          "standard": "左右≥1个厂徽被框架纸遮盖或上部超出铝纸折线 或下部被框架纸遮盖",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸拼接",
+          "code": "HCPJB",
+          "standard": "内衬纸含有拼接段",
+          "category": "B",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸长短",
+          "code": "HCCDC",
+          "standard": "顶部衬纸≥21mm或≤10mm；中支、细支顶部衬纸≥ 10mm或≤6mm",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸折叠不到位",
+          "code": "HCZJB",
+          "standard": "顶部折角不到位且露烟支",
+          "category": "B",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸撕片未切断",
+          "code": "HCFQC",
+          "standard": "应切断的长边未切断，≥1/2长边长度",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸擦伤",
+          "code": "HCCSC",
+          "standard": "打开盒盖或移除印花后，可视内衬纸擦伤或露底纸 长度≥10mm",
+          "category": "C",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸搭接无重叠",
+          "code": "HCDJB",
+          "standard": "内衬纸分切长度不足、无搭接",
+          "category": "B",
+          "source_page": 19
+        },
+        {
+          "location": "内衬纸",
+          "name": "内衬纸印字利群切割",
+          "code": "HCLQD",
+          "standard": "普通直包撕片上端印字利群切割而字体不完整",
+          "category": "D",
+          "source_page": 19
+        }
+      ],
+      "烟支填装": [
+        {
+          "location": "烟支填装",
+          "name": "缺支",
+          "code": "HJQYA",
+          "standard": "1包内烟支数量＜20支（指20支装），有滤嘴无 烟支也判为缺支",
+          "category": "A",
+          "source_page": 19
+        },
+        {
+          "location": "烟支填装",
+          "name": "倒支",
+          "code": "HJDZB",
+          "standard": "烟支滤嘴端位于小盒底部",
+          "category": "B",
+          "source_page": 19
+        },
+        {
+          "location": "烟支填装",
+          "name": "多支",
+          "code": "HADYA",
+          "standard": "1包内烟支＞20支（指20支装）",
+          "category": "A",
+          "source_page": 19
+        },
+        {
+          "location": "烟支填装",
+          "name": "烟支排列不齐",
+          "code": "HJPLD",
+          "standard": "未按7-6-7方式整齐排列",
+          "category": "D",
+          "source_page": 19
+        },
+        {
+          "location": "烟支填装",
+          "name": "错支",
+          "code": "HJCPA",
+          "standard": "纸箱、条盒、小盒均为甲牌号，烟支却为（或混有） 乙牌号",
+          "category": "A",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "短支",
+          "code": "HADZA",
+          "standard": "比标准长度短5mm以上（包括5mm），有烟支无滤 嘴也判为短支",
+          "category": "A",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "残支",
+          "code": "HACZA",
+          "standard": "烟支不完整，破裂长度≥5mm",
+          "category": "A",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "轧坏烟",
+          "code": "HAGDB",
+          "standard": "烟支虽完整，但有损坏",
+          "category": "B",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "小盒烟支粘连",
+          "code": "HANLB",
+          "standard": "烟支之间或烟支与铝纸粘接",
+          "category": "B",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "滤嘴脱落",
+          "code": "HALTA",
+          "standard": "滤嘴和烟支脱离",
+          "category": "A",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "烟支缩头",
+          "code": "HASTB",
+          "standard": "整盒烟支端部有≥1mm的空陷",
+          "category": "B",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "烟支粘末",
+          "code": "HANMD",
+          "standard": "滤嘴端部粘有≥10点（20支总计）的烟末",
+          "category": "D",
+          "source_page": 20
+        },
+        {
+          "location": "烟支填装",
+          "name": "虫烟",
+          "code": "HACYA",
+          "standard": "小盒内有虫或异物或烟支有虫蛀",
+          "category": "A",
+          "source_page": 20
+        }
+      ]
+    },
+    "total_defects": 164
+  },
+  "烟支外观缺陷": {
+    "description": "烟支本身及烟支物理指标相关缺陷",
+    "locations": {
+      "卷烟端面": [
+        {
+          "location": "卷烟端面",
+          "name": "空头",
+          "code": "JKKTB",
+          "standard": "卷烟端面空陷深度≥5mm且空陷截面积≥2/3端面或烟丝 全部下陷≥3mm",
+          "category": "B",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "触头",
+          "code": "JACTC",
+          "standard": "烟支端面受挤压变形≥1/3圆周且深度≥2mm",
+          "category": "C",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "吐丝",
+          "code": "JATSC",
+          "standard": "在烟支切口截面以外烟丝长度≥4mm的≥1条或长度≥2mm 且＜4mm的≥2条",
+          "category": "C",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "滤嘴缩头",
+          "code": "JZSTC",
+          "standard": "整个滤嘴截面下陷深度≥1mm",
+          "category": "C",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "切口不齐",
+          "code": "JQBQD",
+          "standard": "卷烟或滤嘴端面切口锯齿状或有毛渣",
+          "category": "D",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "切口斜",
+          "code": "JQXXC",
+          "standard": "卷烟端面不平齐,高低差距≥2mm",
+          "category": "C",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "切口破",
+          "code": "JQPSC",
+          "standard": "卷烟端面切口平齐但切口处卷烟纸或水松纸有划破或撕 破,长度≥3mm且＜5mm",
+          "category": "C",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "棉线露出",
+          "code": "JZMLC",
+          "standard": "薄荷滤嘴内部棉线在切口截面以外,长度≥2mm",
+          "category": "C",
+          "source_page": 20
+        },
+        {
+          "location": "卷烟端面",
+          "name": "胶孔",
+          "code": "JZJKB",
+          "standard": "滤嘴端面有孔洞,孔面积≥2mm2",
+          "category": "B",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "沟槽不均匀",
+          "code": "JZGCD",
+          "standard": "沟槽滤棒沟槽孔径大小不一",
+          "category": "D",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "滤嘴中空深度不符",
+          "code": "JFZKC",
+          "standard": "中空深度≤2mm或≥（2×标准值）mm",
+          "category": "C",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "滤嘴污",
+          "code": "JZWZB",
+          "standard": "污迹总面积≥1 mm2",
+          "category": "B",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "端面夹杂",
+          "code": "JQJZC",
+          "standard": "烟支端面有非烟草类杂物夹入",
+          "category": "C",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "滤嘴生丝",
+          "code": "JZSSC",
+          "standard": "滤嘴端面有白色的丝束白点（丝束开松不全）且点数≥3 点",
+          "category": "C",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "中空滤嘴形状不符",
+          "code": "JFXZB",
+          "standard": "滤嘴端面丝束断层或开裂",
+          "category": "B",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟端面",
+          "name": "孔洞",
+          "code": "JZKDB",
+          "standard": "滤嘴端面有非胶孔的孔洞，长边直径≥1mm",
+          "category": "B",
+          "source_page": 21
+        }
+      ],
+      "卷烟搭口": [
+        {
+          "location": "卷烟搭口",
+          "name": "卷烟搭口夹杂",
+          "code": "JDJZC",
+          "standard": "卷烟搭口夹有非烟末类杂物,或夹有烟末总长度≥4mm（包 括水松纸与烟支接合处）",
+          "category": "C",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "烟支搭口宽窄不一",
+          "code": "JDKZC",
+          "standard": "卷烟纸的搭接重叠宽度长短不相同,长短差≥2mm",
+          "category": "C",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "卷烟搭口翘褶",
+          "code": "JDBPB",
+          "standard": "水松纸搭口翘褶，露出卷烟纸、成型纸最宽长度≥1/4滤 棒圆周",
+          "category": "B",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "爆口",
+          "code": "JDBKA",
+          "standard": "卷烟经90°扭转,烟支搭口处爆开的长度≥1/4烟支长度",
+          "category": "A",
+          "source_page": 21
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "豁口",
+          "code": "JDHKB",
+          "standard": "搭口脱胶,脱胶长度≥5mm",
+          "category": "B",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "烟支搭口焦黄",
+          "code": "JDTJC",
+          "standard": "烟支搭口焦黄总长度≥10mm",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "搭口皱",
+          "code": "JDZZC",
+          "standard": "卷烟搭口或搭口边缘有皱纹, 皱纹总长度及凹陷深度符合 C区规定",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "搭口污",
+          "code": "JDWZC",
+          "standard": "卷烟搭口有胶水渍、烟灰等污迹,污迹总面积≥6 mm2",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "搭口破",
+          "code": "JDPSC",
+          "standard": "卷烟在卷制成型时搭口被划破、撕破，长度≥3mm且＜5mm",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "漏气",
+          "code": "JALQB",
+          "standard": "滤棒与烟支接装不牢固，掰开后烟支顶部仍有一定宽度的 卷烟纸保持原来的切口形状,此宽度卷烟纸上光滑且无胶 水痕迹",
+          "category": "B",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "水松纸粘贴不齐",
+          "code": "JSBQC",
+          "standard": "水松纸搭口粘结时上下有差牙，长短差≥2mm",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "水松纸标示错位",
+          "code": "JSDBD",
+          "standard": "印于水松纸上的牌别字体图案在水松纸分切处，搓接后出 现牌别字体图案明显少笔划或多笔划",
+          "category": "D",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "水松纸分切",
+          "code": "JSFQB",
+          "standard": "水松纸分切宽度太短，其宽度≤3/4倍的滤棒圆周",
+          "category": "B",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "卷烟纸分切",
+          "code": "JPFQD",
+          "standard": "卷烟纸分切切口不平齐，有锯齿形或毛渣",
+          "category": "D",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟搭口",
+          "name": "卷烟纸搭口粘贴位 置错误",
+          "code": "JDCWC",
+          "standard": "搭口粘贴处的卷烟纸搭接方向错误",
+          "category": "C",
+          "source_page": 22
+        }
+      ],
+      "卷烟钢印": [
+        {
+          "location": "卷烟钢印",
+          "name": "钢印刻破",
+          "code": "JGKPB",
+          "standard": "钢印刻破卷烟纸,卷烟纸破开长度≥3mm且＜5mm",
+          "category": "B",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟钢印",
+          "name": "钢印错无",
+          "code": "JGYCB",
+          "standard": "牌号钢印用错或无",
+          "category": "B",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟钢印",
+          "name": "钢印残缺",
+          "code": "JGCQC",
+          "standard": "钢印图文线条不完整,且已不能识别钢印内容",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟钢印",
+          "name": "钢印模糊",
+          "code": "JGMHC",
+          "standard": "钢印图文线条不清晰,且已不能识别钢印内容",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟钢印",
+          "name": "钢印污点",
+          "code": "JGWDC",
+          "standard": "钢印图案文字线条上染有油墨,墨线长度≥1mm",
+          "category": "C",
+          "source_page": 22
+        },
+        {
+          "location": "卷烟钢印",
+          "name": "钢印颜色不符",
+          "code": "JGYSC",
+          "standard": "钢印色彩与用料标准不符（钢印油墨用错）",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟钢印",
+          "name": "钢印位置不对",
+          "code": "JGWZC",
+          "standard": "牌号、完税钢印与水松纸间距d1≤0mm或d1≥19mm；或套 色钢印间距d2≤0mm，或内置钢印外露于卷烟表面",
+          "category": "C",
+          "source_page": 23
+        }
+      ],
+      "卷烟表面": [
+        {
+          "location": "卷烟表面",
+          "name": "破烟",
+          "code": "JPPSC",
+          "standard": "卷烟表面有破裂（不包括钢印刻破和搭口破），长度≥2mm 且＜5mm",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "卷烟纸皱",
+          "code": "JPZYC",
+          "standard": "卷烟纸表面有总长度及凹陷深度符合C区规定",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸皱",
+          "code": "JSZTC",
+          "standard": "水松纸表面有总长度及凹陷深度符合C区规定",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "卷烟表面污",
+          "code": "JAWZC",
+          "standard": "卷烟表面有油渍、水渍、油墨、胶渍等污渍（不包括搭口 处）污迹总面积≥6 mm2",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸式样不符",
+          "code": "JFSSC",
+          "standard": "文字、图案错印、漏印",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸色差",
+          "code": "JFSCC",
+          "standard": "严重色差，或△E≥2.5",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸拖墨",
+          "code": "JFSTC",
+          "standard": "拖墨总面积≥6mm2",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸印刷缺陷",
+          "code": "JFSYC",
+          "standard": "文字、图案严重模糊或残缺不全",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸分切偏位",
+          "code": "JFSFC",
+          "standard": "图案、文字距边偏差≥1mm",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "卷烟纸外观不符",
+          "code": "JFJWB",
+          "standard": "卷烟纸罗纹缺失",
+          "category": "B",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "布带印",
+          "code": "JPBDC",
+          "standard": "由布带造成的烟支上明显针眼",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "滤嘴挤压变形",
+          "code": "JZBXD",
+          "standard": "滤嘴受挤压变形明显（不包括端面挤压变形），或滤嘴端受 挤压明显变形",
+          "category": "D",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸起泡",
+          "code": "JSQPC",
+          "standard": "贯通整个滤嘴的长条泡状",
+          "category": "C",
+          "source_page": 23
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸长短",
+          "code": "JSCDC",
+          "standard": "水松纸长度与标准水松纸长度差≥1mm",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟表面",
+          "name": "卷烟纸多",
+          "code": "JPDYB",
+          "standard": "带有盘与盘之间拼接卷烟纸的卷烟",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸多",
+          "code": "JSDYB",
+          "standard": "带有盘与盘之间拼接水松纸的卷烟，或带有盘内来料拼接 水松纸的卷烟,或带有非拼接产生的多张水松纸的卷烟",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟表面",
+          "name": "水松纸擦痕",
+          "code": "JSCHC",
+          "standard": "水松纸表面有露出底色的划痕，总长度≥1周或≥2/3滤嘴 长",
+          "category": "C",
+          "source_page": 24
+        }
+      ],
+      "卷烟内部": [
+        {
+          "location": "卷烟内部",
+          "name": "杂物",
+          "code": "JAZWB",
+          "standard": "卷烟内有塑料、铁器等非烟草类杂物",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "烟支凹陷（软点）",
+          "code": "JKAXD",
+          "standard": "手摸烟支明显感觉烟支部分区域偏软",
+          "category": "D",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "竹节烟",
+          "code": "JAZJD",
+          "standard": "手摸烟支感觉有明显的松紧节",
+          "category": "D",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "滤嘴软",
+          "code": "JZSRC",
+          "standard": "手摸滤嘴明显感觉偏软",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "滤嘴夹烟末",
+          "code": "JZJMD",
+          "standard": "滤嘴水松纸与滤棒之间有可见烟末",
+          "category": "D",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "滤嘴内无爆珠",
+          "code": "JFBZB",
+          "standard": "滤嘴内部没有指定数量和要求的爆珠",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "滤嘴内爆珠破损",
+          "code": "JZBZB",
+          "standard": "滤嘴内部爆珠不完整",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "卷烟内部",
+          "name": "装接间隙（皮老虎）",
+          "code": "JZPHC",
+          "standard": "滤嘴与烟支的结合处有间隙,距离≥3mm",
+          "category": "C",
+          "source_page": 24
+        }
+      ],
+      "其他": [
+        {
+          "location": "其他",
+          "name": "错牌混牌",
+          "code": "JACHB",
+          "standard": "烟支卷烟材料错用",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "重量",
+          "code": "JAZLC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "圆周",
+          "code": "JAYZC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "吸阻",
+          "code": "JAXZC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "长度",
+          "code": "JACDC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "总通风度",
+          "code": "JAZTC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "嘴通风度",
+          "code": "JALTC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "硬度",
+          "code": "JAYDC",
+          "standard": "检测值超过上下限且超限值＞允差的50%",
+          "category": "C",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "含水率",
+          "code": "JASFB",
+          "standard": "含水率≤10.5%或含水率≥13.5%",
+          "category": "B",
+          "source_page": 24
+        },
+        {
+          "location": "其他",
+          "name": "含末率",
+          "code": "JAHMB",
+          "standard": "检测值超过上限且超限值＞上限值的50%",
+          "category": "B",
+          "source_page": 25
+        },
+        {
+          "location": "其他",
+          "name": "端部落丝量",
+          "code": "JADLC",
+          "standard": "检测值≥15mg",
+          "category": "C",
+          "source_page": 25
+        },
+        {
+          "location": "其他",
+          "name": "熄火",
+          "code": "JAXHA",
+          "standard": "卷烟点燃后，烟支连续阴燃的长度＜40mm",
+          "category": "A",
+          "source_page": 25
+        },
+        {
+          "location": "其他",
+          "name": "引燃强度",
+          "code": "JAYRA",
+          "standard": "卷烟熄灭测试（CET）通过率≤75%",
+          "category": "A",
+          "source_page": 25
+        },
+        {
+          "location": "其他",
+          "name": "压实端位置",
+          "code": "JAYSB",
+          "standard": "检测值的绝对值＞8mm",
+          "category": "B",
+          "source_page": 25
+        }
+      ]
+    },
+    "total_defects": 77
+  }
+}

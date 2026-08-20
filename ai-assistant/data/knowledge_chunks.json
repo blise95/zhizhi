@@ -1,0 +1,3708 @@
+[
+  {
+    "text": "【5.3.1 外在质量评级】\n依据《卷烟外在质量分级及评级规定》（QJ/ZY-GY.02-027-2023）5.3.1：\n产品外在质量按累计扣分评定。合格产品为累计扣分 ≤ 200 分，不合格产品为累计扣分 ＞ 200 分。\n合格产品再分为三级：\n- 优等品：累计扣分 ≤ 18 分\n- 一等品：累计扣分 ＞ 18 分且 ≤ 100 分\n- 二等品：累计扣分 ＞ 100 分且 ≤ 200 分",
+    "metadata": {
+      "doc_name": "卷烟外在质量分级及评级规定",
+      "page_number": 4,
+      "section_title": "5.3.1 外在质量产品分级评定",
+      "source": "rating_standard",
+      "chunk_type": "rating"
+    }
+  },
+  {
+    "text": "【表1 A类缺陷】\nA类为严重缺陷，判定原则：对消费者利益有直接损害。单位扣分区间 X≥100。表1扣分：箱100 / 条100 / 盒200 / 外观120 / 杂项200。",
+    "metadata": {
+      "doc_name": "卷烟外在质量分级及评级规定",
+      "page_number": 3,
+      "section_title": "表1 缺陷分级和单位扣分值",
+      "source": "rating_standard",
+      "chunk_type": "grade",
+      "category": "A"
+    }
+  },
+  {
+    "text": "【表1 B类缺陷】\nB类为较重缺陷，判定原则：很难被消费者接受。单位扣分区间 20≤X＜100。表1扣分：箱30 / 条30 / 盒50 / 外观20 / 杂项30。",
+    "metadata": {
+      "doc_name": "卷烟外在质量分级及评级规定",
+      "page_number": 3,
+      "section_title": "表1 缺陷分级和单位扣分值",
+      "source": "rating_standard",
+      "chunk_type": "grade",
+      "category": "B"
+    }
+  },
+  {
+    "text": "【表1 C类缺陷】\nC类为一般缺陷，判定原则：会引起消费者不满意。单位扣分区间 5＜X＜20。表1扣分：箱10 / 条10 / 盒10 / 物测12 / 外观8 / 杂项10。",
+    "metadata": {
+      "doc_name": "卷烟外在质量分级及评级规定",
+      "page_number": 3,
+      "section_title": "表1 缺陷分级和单位扣分值",
+      "source": "rating_standard",
+      "chunk_type": "grade",
+      "category": "C"
+    }
+  },
+  {
+    "text": "【表1 D类缺陷】\nD类为轻微缺陷，判定原则：消费者可能发现但不介意。单位扣分区间 X≤5。表1扣分：箱5 / 条5 / 盒5 / 物测2 / 外观2 / 杂项2。",
+    "metadata": {
+      "doc_name": "卷烟外在质量分级及评级规定",
+      "page_number": 3,
+      "section_title": "表1 缺陷分级和单位扣分值",
+      "source": "rating_standard",
+      "chunk_type": "grade",
+      "category": "D"
+    }
+  },
+  {
+    "text": "【纸箱杂项 / 纸箱未粘牢】\n纸箱未粘牢（代码 XXWNC）属于C类（一般缺陷），部位：箱装/纸箱杂项。\n判定标准：机封纸箱无胶，或纸箱胶带未封牢纸箱摇盖接缝\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱杂项 / 纸箱未粘牢",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXWNC"
+    }
+  },
+  {
+    "text": "【纸箱杂项 / 纸箱内部粘牢】\n纸箱内部粘牢（代码 XXNNC）属于C类（一般缺陷），部位：箱装/纸箱杂项。\n判定标准：纸箱与大条或大条与大条粘结在一起\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱杂项 / 纸箱内部粘牢",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXNNC"
+    }
+  },
+  {
+    "text": "【纸箱杂项 / 纸箱大条错装混装】\n纸箱大条错装混装（代码 XTCPA）属于A类（严重缺陷），部位：箱装/纸箱杂项。\n判定标准：甲牌号卷烟纸箱中错装混装了乙牌号大条，或同牌号卷烟箱生产批 次号和条的客户码不对应\n单位扣分：箱A类 100 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱杂项 / 纸箱大条错装混装",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XTCPA"
+    }
+  },
+  {
+    "text": "【纸箱杂项 / 纸箱缺条多条】\n纸箱缺条多条（代码 XTQDA）属于A类（严重缺陷），部位：箱装/纸箱杂项。\n判定标准：箱内实装大条数量少于或多于产品内控标准要求的数量\n单位扣分：箱A类 100 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱杂项 / 纸箱缺条多条",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XTQDA"
+    }
+  },
+  {
+    "text": "【纸箱杂项 / 纸箱夹杂】\n纸箱夹杂（代码 XAJZC）属于C类（一般缺陷），部位：箱装/纸箱杂项。\n判定标准：纸箱内装有非标准要求装入的物品，如废纸、胶带等\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱杂项 / 纸箱夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XAJZC"
+    }
+  },
+  {
+    "text": "【纸箱杂项 / 纸箱来料夹杂】\n纸箱来料夹杂（代码 XFJZC）属于C类（一般缺陷），部位：箱装/纸箱杂项。\n判定标准：纸箱来料带有非标准要求装入的物品，如废纸、胶带等\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱杂项 / 纸箱来料夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XFJZC"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱破残】\n纸箱破残（代码 XXPSC）属于C类（一般缺陷），部位：箱装/纸箱。\n判定标准：纸箱可视面有撕裂长度≥20cm的破损或有最大直径≥20cm的孔洞\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱破残",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXPSC"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱损伤】\n纸箱损伤（代码 XXSSC）属于C类（一般缺陷），部位：箱装/纸箱。\n判定标准：纸箱损坏并导致条盒产生C类缺陷\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱损伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXSSC"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱错用】\n纸箱错用（代码 XXCYA）属于A类（严重缺陷），部位：箱装/纸箱。\n判定标准：甲牌号卷烟成品中错用乙牌号纸箱，或标注有效期、生产日期、生 产批号等信息不符合要求\n单位扣分：箱A类 100 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXCYA"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱霉变】\n纸箱霉变（代码 XXMBA）属于A类（严重缺陷），部位：箱装/纸箱。\n判定标准：纸箱表面有霉变痕迹\n单位扣分：箱A类 100 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱霉变",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXMBA"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱污】\n纸箱污（代码 XXWZC）属于C类（一般缺陷），部位：箱装/纸箱。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径）及数目符合C区 规定（一般先确定数目再观察长度，后续缺陷同此）。\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXWZC"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱箱盖摺角】\n纸箱箱盖摺角（代码 XXZJC）属于C类（一般缺陷），部位：箱装/纸箱。\n判定标准：大小箱盖向外翘起或向内折进\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱箱盖摺角",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XXZJC"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱印刷缺陷】\n纸箱印刷缺陷（代码 XFYSD）属于D类（轻微缺陷），部位：箱装/纸箱。\n判定标准：文字、图案模糊或轻微残缺不全\n单位扣分：箱D类 5 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XFYSD"
+    }
+  },
+  {
+    "text": "【纸箱 / 纸箱式样不符】\n纸箱式样不符（代码 XFSYC）属于C类（一般缺陷），部位：箱装/纸箱。\n判定标准：文字、图案错印、漏印或严重残缺不全\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "纸箱 / 纸箱式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XFSYC"
+    }
+  },
+  {
+    "text": "【胶带 / 纸箱漏底】\n纸箱漏底（代码 XJLDC）属于C类（一般缺陷），部位：箱装/胶带。\n判定标准：纸箱盖整体或局部无胶带粘接\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "胶带 / 纸箱漏底",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XJLDC"
+    }
+  },
+  {
+    "text": "【胶带 / 纸箱胶带粘结异常】\n纸箱胶带粘结异常（代码 XJNJD）属于D类（轻微缺陷），部位：箱装/胶带。\n判定标准：纸箱侧面胶带长度≥90mm或≤50mm；胶带切口倾斜或突出长度≥ 5mm；胶带纵向和纸箱的非粘结长度≥20mm\n单位扣分：箱D类 5 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "胶带 / 纸箱胶带粘结异常",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XJNJD"
+    }
+  },
+  {
+    "text": "【胶带 / 纸箱胶带错用】\n纸箱胶带错用（代码 XJCYD）属于D类（轻微缺陷），部位：箱装/胶带。\n判定标准：甲牌号封箱胶带用作乙牌号\n单位扣分：箱D类 5 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "胶带 / 纸箱胶带错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XJCYD"
+    }
+  },
+  {
+    "text": "【胶带 / 纸箱胶带式样不符】\n纸箱胶带式样不符（代码 XFJYD）属于D类（轻微缺陷），部位：箱装/胶带。\n判定标准：文字、图案错印、漏印或残缺不全、胶面缺失\n单位扣分：箱D类 5 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "胶带 / 纸箱胶带式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XFJYD"
+    }
+  },
+  {
+    "text": "【追溯标识 / 标识无】\n标识无（代码 XMBWC）属于C类（一般缺陷），部位：箱装/追溯标识。\n判定标准：纸箱追溯标识印被抹去但未补盖新印，出厂产品无质量合格标识\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "追溯标识 / 标识无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XMBWC"
+    }
+  },
+  {
+    "text": "【追溯标识 / 标识错误】\n标识错误（代码 XMBCC）属于C类（一般缺陷），部位：箱装/追溯标识。\n判定标准：追溯标识印有数字错误、模糊或缺失而导致无法辨认，或未经批准 使用其他章，或有2个不同的标识印，或不印于规定区域，或已与\n单位扣分：箱C类 10 分，判定标准约第 4 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 4,
+      "section_title": "追溯标识 / 标识错误",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XMBCC"
+    }
+  },
+  {
+    "text": "【追溯标识 / 条件关联错误】\n条件关联错误（代码 XMGCB）属于B类（较重缺陷），部位：箱装/追溯标识。\n判定标准：条件关联列表中不存在抽取的条烟二维码，或无法读取关联信息\n单位扣分：箱B类 30 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "追溯标识 / 条件关联错误",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "XMGCB"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒轧皱】\n条盒轧皱（代码 TAZZC）属于C类（一般缺陷），部位：条装/条盒杂项。\n判定标准：条盒（含透明纸）表面皱褶线长度≥30mm或皱纹累 积面积≥900mm2或伤及小包\n单位扣分：条C类 10 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒轧皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TAZZC"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒轧破】\n条盒轧破（代码 TAZPB）属于B类（较重缺陷），部位：条装/条盒杂项。\n判定标准：条盒（含透明纸）表面破损长度≥30mm或有孔洞直 径≥5mm\n单位扣分：条B类 30 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒轧破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TAZPB"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒内部粘连】\n条盒内部粘连（代码 THNNC）属于C类（一般缺陷），部位：条装/条盒杂项。\n判定标准：条盒长边或横头粘连小包\n单位扣分：条C类 10 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒内部粘连",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THNNC"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒缺包】\n条盒缺包（代码 TBQBA）属于A类（严重缺陷），部位：条装/条盒杂项。\n判定标准：条内实装小包数量少于产品内控标准要求的数量\n单位扣分：条A类 100 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒缺包",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TBQBA"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒小包错装混装】\n条盒小包错装混装（代码 TBCPA）属于A类（严重缺陷），部位：条装/条盒杂项。\n判定标准：甲牌号大条内错装混装乙牌号小包，或同牌号大条 和小包的客户码不同\n单位扣分：条A类 100 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒小包错装混装",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TBCPA"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒外夹杂】\n条盒外夹杂（代码 TAWZC）属于C类（一般缺陷），部位：条装/条盒杂项。\n判定标准：条盒透明纸内部或外部夹有符合C区规定的废纸、 胶块、拼接胶带或烟末等杂物\n单位扣分：条C类 10 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒外夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TAWZC"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 条盒内夹杂】\n条盒内夹杂（代码 TANZC）属于C类（一般缺陷），部位：条装/条盒杂项。\n判定标准：条盒纸内部夹有符合C区规定的的废纸、胶块等杂 物\n单位扣分：条C类 10 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 条盒内夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TANZC"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 透明纸吸附条盒纸（内 含水雾或水渍）】\n透明纸吸附条盒纸（内 含水雾或水渍）（代码 THXTC）属于C类（一般缺陷），部位：条装/条盒杂项。\n判定标准：条盒纸正反两面（不包括长边和横头）与透明纸的 累积吸附面积（缺陷分布外沿框定的平行于长短边 的矩形面积）≥900mm2\n单位扣分：条C类 10 分，判定标准约第 5 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 5,
+      "section_title": "条盒杂项 / 透明纸吸附条盒纸（内 含水雾或水渍）",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THXTC"
+    }
+  },
+  {
+    "text": "【条盒杂项 / 盒条关联错误】\n盒条关联错误（代码 TAGCB）属于B类（较重缺陷），部位：条装/条盒杂项。\n判定标准：盒条关联列表中不存在抽取的盒装二维码，或无法 读取关联信息\n单位扣分：条B类 30 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "条盒杂项 / 盒条关联错误",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TAGCB"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线无】\n拉线无（代码 TLWWB）属于B类（较重缺陷），部位：条装/拉线。\n判定标准：透明纸上无拉线粘结\n单位扣分：条B类 30 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLWWB"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线残缺】\n拉线残缺（代码 TLCQC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：透明纸上拉线不完整，未粘结长度≥10mm\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLCQC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线错用】\n拉线错用（代码 TLCYC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：甲牌号卷烟成品中错用乙牌号拉线\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLCYC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线倒置】\n拉线倒置（代码 TLDZC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：拉线位置（在尾部）错误\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线倒置",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLDZC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线搭口错位】\n拉线搭口错位（代码 TLDKC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：拉线内外端头垂直拉线方向无重合且间距d≥2mm\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线搭口错位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLDKC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线高低】\n拉线高低（代码 TLGDD）属于D类（轻微缺陷），部位：条装/拉线。\n判定标准：拉线中心距临近横头过远或过近，硬盒：＞60mm 或＜50mm；软盒：＞55mm或＜45mm\n单位扣分：条D类 5 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线高低",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLGDD"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线撕拉不畅】\n拉线撕拉不畅（代码 TLSLC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：拉线拉不开或拉断或拉线头反向烫死\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线撕拉不畅",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLSLC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线切口切偏】\n拉线切口切偏（代码 TLQKC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：切口切偏，拉线头被切断\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线切口切偏",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TLQKC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线宽度不符】\n拉线宽度不符（代码 TFLKC）属于C类（一般缺陷），部位：条装/拉线。\n判定标准：宽度偏差大于0.5mm（设计值2.5mm）\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线宽度不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFLKC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线印刷缺陷】\n拉线印刷缺陷（代码 TFLYD）属于D类（轻微缺陷），部位：条装/拉线。\n判定标准：有字或隐字拉线印刷不完整、或同批存在明显色差\n单位扣分：条D类 5 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "拉线 / 拉线印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFLYD"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸无】\n透明纸无（代码 TTWWB）属于B类（较重缺陷），部位：条装/透明纸。\n判定标准：条盒纸外无透明纸包装\n单位扣分：条B类 30 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTWWB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸多】\n透明纸多（代码 TTDYC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：条盒纸外透明纸＞1张\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTDYC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸残缺】\n透明纸残缺（代码 TTCQB）属于B类（较重缺陷），部位：条装/透明纸。\n判定标准：透明纸不完整累积面积≥100mm2\n单位扣分：条B类 30 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTCQB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸破】\n透明纸破（代码 TTZPB）属于B类（较重缺陷），部位：条装/透明纸。\n判定标准：透明纸虽完整但有撕裂长度≥10mm的破损或有最 大直径≥10mm的孔洞\n单位扣分：条B类 30 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTZPB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸烫破】\n透明纸烫破（代码 TTTPB）属于B类（较重缺陷），部位：条装/透明纸。\n判定标准：烫损直径≥10mm\n单位扣分：条B类 30 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸烫破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTTPB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸皱】\n透明纸皱（代码 TTZZC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：透明纸非热封面皱褶线长度及在所在面分布面积 符合C区规定\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTZZC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸烫皱】\n透明纸烫皱（代码 TTTZC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：热封底面（不含横头交界10mm区域）有长度≥10mm 的皱褶线且累积面积≥3/4面积\n单位扣分：条C类 10 分，判定标准约第 6 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 6,
+      "section_title": "透明纸 / 透明纸烫皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTTZC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸热封不牢】\n透明纸热封不牢（代码 TTRKC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：透明纸（包括端部和背（侧）边外搭口）粘结不牢 长度≥60mm或露出条盒纸≥8mm\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸热封不牢",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTRKC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸松紧】\n透明纸松紧（代码 TTSJC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：拉紧后多余长度≥4mm或过紧导致条盒纸正面凹陷 深度≥2mm\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸松紧",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTSJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸污】\n透明纸污（代码 TTZWC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥1处\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTZWC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸划痕】\n透明纸划痕（代码 TTHHC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：表面因摩擦留有长度≥50mm且宽度≥0.5mm的划伤 痕迹且≥5条\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸划痕",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTHHC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸折角】\n透明纸折角（代码 TTZJC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：透明纸折角长度≥10mm的个数≥2个\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸折角",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTZJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸出角】\n透明纸出角（代码 TTCJC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：透明纸折叠处超出条盒平面的长度≥2mm\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸出角",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTCJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸长短】\n透明纸长短（代码 TTCDC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：一端透明纸搭口宽度≤3mm\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸长短",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTCDC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸热封变色】\n透明纸热封变色（代码 TTRBD）属于D类（轻微缺陷），部位：条装/透明纸。\n判定标准：透明纸因热封而出现肉眼可辨的明显色差\n单位扣分：条D类 5 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸热封变色",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTRBD"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸拼接】\n透明纸拼接（代码 TTPJC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：透明纸含有拼接段\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸拼接",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TTPJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸材料缺陷】\n透明纸材料缺陷（代码 TFTWC）属于C类（一般缺陷），部位：条装/透明纸。\n判定标准：来料有折皱、暴筋、气泡\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "透明纸 / 透明纸材料缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFTWC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志错用】\n免税烟标志错用（代码 TMSCA）属于A类（严重缺陷），部位：条装/免税烟 标志。\n判定标准：甲客商卷烟成品中错用乙客商免税烟标志\n单位扣分：条A类 100 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "免税烟 标志 / 免税烟标志错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSCA"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志无】\n免税烟标志无（代码 TMSWB）属于B类（较重缺陷），部位：条装/免税烟 标志。\n判定标准：条透明纸免税烟标志粘结处无免税烟标志\n单位扣分：条B类 30 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "免税烟 标志 / 免税烟标志无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSWB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志信息不全】\n免税烟标志信息不全（代码 TMSBB）属于B类（较重缺陷），部位：条装/免税烟 标志。\n判定标准：卷烟成品免税烟标志数字码位等特征信息辨识不 清\n单位扣分：条B类 30 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "免税烟 标志 / 免税烟标志信息不全",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSBB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志污】\n免税烟标志污（代码 TMSUC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥3处\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "免税烟 标志 / 免税烟标志污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSUC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志残缺】\n免税烟标志残缺（代码 TMSQB）属于B类（较重缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志不完整，缺损≥1/4总面积\n单位扣分：条B类 30 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "免税烟 标志 / 免税烟标志残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSQB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志破】\n免税烟标志破（代码 TMSPC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志虽完整但有长度≥2mm的撕破、裂缝或 有面积≥3mm2的孔洞或破损\n单位扣分：条C类 10 分，判定标准约第 7 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 7,
+      "section_title": "免税烟 标志 / 免税烟标志破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSPC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志擦伤】\n免税烟标志擦伤（代码 TMSID）属于D类（轻微缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志表面有露底\n单位扣分：条D类 5 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSID"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志翘折】\n免税烟标志翘折（代码 TMSZC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志向内折进或向外翘起的斜线长度≥ 10mm，或两个粘结面都没粘牢\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志翘折",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSZC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志多】\n免税烟标志多（代码 TMSYC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：粘结处免税烟标志＞1张\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSYC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志皱】\n免税烟标志皱（代码 TMSFC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志表面有长度≥10mm的皱褶（线）或有≥ 1/2所在面面积的皱纹\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSFC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志反倒】\n免税烟标志反倒（代码 TMSDB）属于B类（较重缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志内外面反向\n单位扣分：条B类 30 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志反倒",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSDB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志偏位】\n免税烟标志偏位（代码 TMSLC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志四角在长边或短边方向距标准位距离 差≥3mm\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSLC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志凸出】\n免税烟标志凸出（代码 TMSTC）属于C类（一般缺陷），部位：条装/免税烟 标志。\n判定标准：免税烟标志凸出长度≥2mm\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "免税烟 标志 / 免税烟标志凸出",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TMSTC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸无】\n条盒纸无（代码 THWWA）属于A类（严重缺陷），部位：条装/条盒纸。\n判定标准：条盒无条盒纸\n单位扣分：条A类 100 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THWWA"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸残缺】\n条盒纸残缺（代码 THCQB）属于B类（较重缺陷），部位：条装/条盒纸。\n判定标准：条盒纸不完整，有直径或长度≥1mm的洞或缺角\n单位扣分：条B类 30 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THCQB"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸破】\n条盒纸破（代码 THPSB）属于B类（较重缺陷），部位：条装/条盒纸。\n判定标准：条盒纸虽完整但有撕裂长度≥5mm的破裂或有直径 ≥1mm的孔洞\n单位扣分：条B类 30 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THPSB"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸错用】\n条盒纸错用（代码 THCYA）属于A类（严重缺陷），部位：条装/条盒纸。\n判定标准：甲牌号卷烟成品中错用乙牌号条盒纸，或标注有效 期、生产日期、生产批号等信息不符合要求\n单位扣分：条A类 100 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THCYA"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸反包】\n条盒纸反包（代码 THFBA）属于A类（严重缺陷），部位：条装/条盒纸。\n判定标准：条盒纸印刷面在条盒内部\n单位扣分：条A类 100 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸反包",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THFBA"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸皱】\n条盒纸皱（代码 THZZC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：条盒纸表面有长度≥15mm皱褶\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THZZC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸压痕】\n条盒纸压痕（代码 THYHC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：表面有深度≥0.2mm且长度≥20mm的轧压痕迹， 或长度大于所在面长边1/2长度的轧压痕迹\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸压痕",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THYHC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸擦伤】\n条盒纸擦伤（代码 THCSC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：擦露底纸长度≥6mm\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THCSC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸污】\n条盒纸污（代码 THWZC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥1处\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THWZC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸多】\n条盒纸多（代码 THDYC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：条盒纸＞1张\n单位扣分：条C类 10 分，判定标准约第 8 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 8,
+      "section_title": "条盒纸 / 条盒纸多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THDYC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸折叠不到位】\n条盒纸折叠不到位（代码 THZDC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：条盒纸长边超出临近端面距离≥1mm或短边已超 出临近端面并露出小盒或内舌外露\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸折叠不到位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THZDC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸爆墨】\n条盒纸爆墨（代码 THBMC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：表面油墨爆裂长度（或直径）及数目符合C区规定\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸爆墨",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THBMC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸粘接不牢】\n条盒纸粘接不牢（代码 THBKC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：透明纸拉掉后条盒纸长边或短边完全爆开\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸粘接不牢",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THBKC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸翘折】\n条盒纸翘折（代码 THQZC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：条盒纸向内或向外有斜线摺角≥5mm,斜线参考图 中红虚线\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸翘折",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "THQZC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸色差】\n条盒纸色差（代码 TFHCC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：严重色差，或△E≥4.0\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸色差",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFHCC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸外观缺陷】\n条盒纸外观缺陷（代码 TFHWC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：文字、图案严重模糊或残缺不全\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸外观缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFHWC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸印刷缺陷】\n条盒纸印刷缺陷（代码 TFHYC）属于C类（一般缺陷），部位：条装/条盒纸。\n判定标准：印刷污点长度（或直径）≥5mm的≥3处；或者透 明纸撕除后条盒纸脱色面积≥400mm2\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFHYC"
+    }
+  },
+  {
+    "text": "【条盒纸 / 条盒纸样式不符】\n条盒纸样式不符（代码 TFHSA）属于A类（严重缺陷），部位：条装/条盒纸。\n判定标准：文字、图案错印、漏印\n单位扣分：条A类 100 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "条盒纸 / 条盒纸样式不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TFHSA"
+    }
+  },
+  {
+    "text": "【钢印 / 钢印错无】\n钢印错无（代码 TGWWC）属于C类（一般缺陷），部位：条装/钢印。\n判定标准：钢印错用或无钢印\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "钢印 / 钢印错无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TGWWC"
+    }
+  },
+  {
+    "text": "【钢印 / 钢印缺或糊】\n钢印缺或糊（代码 TGQHD）属于D类（轻微缺陷），部位：条装/钢印。\n判定标准：钢印缺或糊而无法辨识\n单位扣分：条D类 5 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "钢印 / 钢印缺或糊",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TGQHD"
+    }
+  },
+  {
+    "text": "【钢印 / 钢印刻破】\n钢印刻破（代码 TGKPC）属于C类（一般缺陷），部位：条装/钢印。\n判定标准：刻破字符导致无法辨识\n单位扣分：条C类 10 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "钢印 / 钢印刻破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "TGKPC"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒轧皱】\n小盒轧皱（代码 HAZZB）属于B类（较重缺陷），部位：盒装/小盒杂项。\n判定标准：小盒（包含透明纸在内的两种包装材料及以上）表 面有最大直径（或长度）≥10mm的皱褶（线）\n单位扣分：盒B类 50 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "小盒杂项 / 小盒轧皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAZZB"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒轧破】\n小盒轧破（代码 HAZPB）属于B类（较重缺陷），部位：盒装/小盒杂项。\n判定标准：小盒（包含透明纸在内的两种包装材料及以上）表\n单位扣分：盒B类 50 分，判定标准约第 9 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 9,
+      "section_title": "小盒杂项 / 小盒轧破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAZPB"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒外部粘连】\n小盒外部粘连（代码 HAWLC）属于C类（一般缺陷），部位：盒装/小盒杂项。\n判定标准：小盒粘结在一起，轻拉不开或拉开后产生破裂\n单位扣分：盒C类 10 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "小盒杂项 / 小盒外部粘连",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAWLC"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒内部未粘牢】\n小盒内部未粘牢（代码 HANJB）属于B类（较重缺陷），部位：盒装/小盒杂项。\n判定标准：两种及以上包装材料（商标纸、框架纸、内衬纸） 之间无胶水或材料成型明显错位，或有胶水点但可 以被轻拉扯出\n单位扣分：盒B类 50 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "小盒杂项 / 小盒内部未粘牢",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HANJB"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒外夹杂】\n小盒外夹杂（代码 HAJZB）属于B类（较重缺陷），部位：盒装/小盒杂项。\n判定标准：小盒透明纸内部或外部夹有长度≥5mm纸屑、胶块、 拼接胶带等杂物≥2处，或有≥20点的烟末或纸灰\n单位扣分：盒B类 50 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "小盒杂项 / 小盒外夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAJZB"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒内夹杂】\n小盒内夹杂（代码 HANZB）属于B类（较重缺陷），部位：盒装/小盒杂项。\n判定标准：小盒商标纸内夹有长度≥5mm的纸屑、胶块、拼接 胶带等杂物\n单位扣分：盒B类 50 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "小盒杂项 / 小盒内夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HANZB"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 小盒外形不方正】\n小盒外形不方正（代码 HAWXC）属于C类（一般缺陷），部位：盒装/小盒杂项。\n判定标准：小盒上部与下部宽度之差≥3mm\n单位扣分：盒C类 10 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "小盒杂项 / 小盒外形不方正",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAWXC"
+    }
+  },
+  {
+    "text": "【小盒杂项 / 透明纸吸附商标纸（内 含水雾或水渍）】\n透明纸吸附商标纸（内 含水雾或水渍）（代码 HAXFC）属于C类（一般缺陷），部位：盒装/小盒杂项。\n判定标准：透明纸与商标纸的正反面（不包括长边、顶部、底 部）累积吸附面积（缺陷分布外沿框定的平行于长 短边的矩形面积）≥200mm2\n单位扣分：盒C类 10 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "小盒杂项 / 透明纸吸附商标纸（内 含水雾或水渍）",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAXFC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线无】\n拉线无（代码 HLCHB）属于B类（较重缺陷），部位：盒装/拉线。\n判定标准：透明纸上无拉线粘结\n单位扣分：盒B类 50 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLCHB"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线错用】\n拉线错用（代码 HLCYC）属于C类（一般缺陷），部位：盒装/拉线。\n判定标准：甲牌号卷烟成品中错用乙牌号拉线\n单位扣分：盒C类 10 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLCYC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线残缺】\n拉线残缺（代码 HLCQB）属于B类（较重缺陷），部位：盒装/拉线。\n判定标准：透明纸上拉线不完整，未粘结长度≥10mm\n单位扣分：盒B类 50 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLCQB"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线皱】\n拉线皱（代码 HLLZC）属于C类（一般缺陷），部位：盒装/拉线。\n判定标准：拉线皱褶连续长度≥10mm且≥10处\n单位扣分：盒C类 10 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLLZC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线字体反向】\n拉线字体反向（代码 HLZFD）属于D类（轻微缺陷），部位：盒装/拉线。\n判定标准：拉线印刷字体顺序颠倒\n单位扣分：盒D类 5 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线字体反向",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLZFD"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线倒置】\n拉线倒置（代码 HLDZB）属于B类（较重缺陷），部位：盒装/拉线。\n判定标准：拉线位置（在底部）错误\n单位扣分：盒B类 50 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线倒置",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLDZB"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线搭口错位】\n拉线搭口错位（代码 HLDKC）属于C类（一般缺陷），部位：盒装/拉线。\n判定标准：拉线内外端头垂直拉线方向无重合，间距d≥1mm\n单位扣分：盒C类 10 分，判定标准约第 10 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 10,
+      "section_title": "拉线 / 拉线搭口错位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLDKC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线切口切偏】\n拉线切口切偏（代码 HLQKC）属于C类（一般缺陷），部位：盒装/拉线。\n判定标准：切口切偏，拉线头被切断\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "拉线 / 拉线切口切偏",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLQKC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线高低】\n拉线高低（代码 HLGDD）属于D类（轻微缺陷），部位：盒装/拉线。\n判定标准：拉线上沿距离商标纸顶部的长度d过大或过小， 硬盒：d＞27mm或d＜22mm 软盒：d＞7mm或d＜2mm\n单位扣分：盒D类 5 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "拉线 / 拉线高低",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLGDD"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线撕拉不畅】\n拉线撕拉不畅（代码 HLSLB）属于B类（较重缺陷），部位：盒装/拉线。\n判定标准：拉线拉不开或拉线拉断\n单位扣分：盒B类 50 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "拉线 / 拉线撕拉不畅",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HLSLB"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线宽度不符】\n拉线宽度不符（代码 HFLKC）属于C类（一般缺陷），部位：盒装/拉线。\n判定标准：宽度偏差大于0.5mm（设计值2.5mm）\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "拉线 / 拉线宽度不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFLKC"
+    }
+  },
+  {
+    "text": "【拉线 / 拉线印刷缺陷】\n拉线印刷缺陷（代码 HFLYD）属于D类（轻微缺陷），部位：盒装/拉线。\n判定标准：有字或隐字拉线印刷不完整、或同批存在明显色差\n单位扣分：盒D类 5 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "拉线 / 拉线印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFLYD"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸无】\n透明纸无（代码 HTWWA）属于A类（严重缺陷），部位：盒装/透明纸。\n判定标准：商标纸外无透明纸包装\n单位扣分：盒A类 200 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTWWA"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸残缺】\n透明纸残缺（代码 HTCQA）属于A类（严重缺陷），部位：盒装/透明纸。\n判定标准：透明纸不完整面积≥100mm2或露出商标纸面积≥ 100mm2\n单位扣分：盒A类 200 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTCQA"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸多】\n透明纸多（代码 HTDYC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：商标纸外透明纸＞1张\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTDYC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸破】\n透明纸破（代码 HTPSB）属于B类（较重缺陷），部位：盒装/透明纸。\n判定标准：透明纸虽完整但有长度≥10mm的撕破、裂缝或有最 大直径≥5mm的孔洞\n单位扣分：盒B类 50 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTPSB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸烫破】\n透明纸烫破（代码 HTTPB）属于B类（较重缺陷），部位：盒装/透明纸。\n判定标准：烫损最大直径≥10mm\n单位扣分：盒B类 50 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸烫破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTTPB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸皱】\n透明纸皱（代码 HTZZC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：透明纸非热封面皱褶线长度及在所在面分布面积 符合C区规定\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTZZC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸烫皱】\n透明纸烫皱（代码 HTTZC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：热封面皱褶（线）长度≥20mm或面积≥3/4所在面 面积\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸烫皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTTZC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸热封变色】\n透明纸热封变色（代码 HTBSC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：热封后，透明纸明显色差面积≥1/2热封面积\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸热封变色",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTBSC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸热封不牢】\n透明纸热封不牢（代码 HTRKC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：透明纸（包括上下端和长侧边外搭口）粘结不牢长 度≥5mm\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸热封不牢",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTRKC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸松紧】\n透明纸松紧（代码 HTSJC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：拉紧后多余长度≥3mm或过紧导致商标纸正面或侧 面凹陷深度≥1mm\n单位扣分：盒C类 10 分，判定标准约第 11 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 11,
+      "section_title": "透明纸 / 透明纸松紧",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTSJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸污】\n透明纸污（代码 HTWZC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥3mm\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTWZC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸划痕】\n透明纸划痕（代码 HTHHC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：表面因摩擦留有长度≥50mm或宽度≥0.5mm的划伤 痕迹≥3条\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸划痕",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTHHC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸超平面】\n透明纸超平面（代码 HTCMC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：透明纸长侧边超出小盒平面≥2mm\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸超平面",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTCMC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸倒包】\n透明纸倒包（代码 HTDHB）属于B类（较重缺陷），部位：盒装/透明纸。\n判定标准：拉线处于小盒下部\n单位扣分：盒B类 50 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸倒包",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTDHB"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸折角】\n透明纸折角（代码 HTZJC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：透明纸折角长度及数目符合C区规定或露出商标纸 ＜100mm2\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸折角",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTZJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸出角】\n透明纸出角（代码 HTCJC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：透明纸折叠处超出小盒平面的长度≥2mm\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸出角",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTCJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸长短】\n透明纸长短（代码 HTCDC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：两端透明纸搭口重叠较小者的宽度d≤4mm（细支≤ 2mm）\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸长短",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTCDC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸拼接】\n透明纸拼接（代码 HTPJC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：透明纸含有拼接段\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸拼接",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HTPJC"
+    }
+  },
+  {
+    "text": "【透明纸 / 透明纸材料缺陷】\n透明纸材料缺陷（代码 HFTWC）属于C类（一般缺陷），部位：盒装/透明纸。\n判定标准：来料有折皱、暴筋、气泡\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "透明纸 / 透明纸材料缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFTWC"
+    }
+  },
+  {
+    "text": "【印花 / 印花错用】\n印花错用（代码 HYCYB）属于B类（较重缺陷），部位：盒装/印花。\n判定标准：甲牌号卷烟成品中错用乙牌号印花\n单位扣分：盒B类 50 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYCYB"
+    }
+  },
+  {
+    "text": "【印花 / 印花无】\n印花无（代码 HYWWA）属于A类（严重缺陷），部位：盒装/印花。\n判定标准：软包或软包硬化产品印花粘结处无印花\n单位扣分：盒A类 200 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYWWA"
+    }
+  },
+  {
+    "text": "【印花 / 印花污】\n印花污（代码 HYWZC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥1处\n单位扣分：盒C类 10 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYWZC"
+    }
+  },
+  {
+    "text": "【印花 / 印花残缺】\n印花残缺（代码 HYCQB）属于B类（较重缺陷），部位：盒装/印花。\n判定标准：印花不完整，缺损≥1/4总面积\n单位扣分：盒B类 50 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYCQB"
+    }
+  },
+  {
+    "text": "【印花 / 印花破】\n印花破（代码 HYPSB）属于B类（较重缺陷），部位：盒装/印花。\n判定标准：印花虽完整但有长度≥2mm的撕破、裂缝或有面积 ≥3mm2的孔洞或破损\n单位扣分：盒B类 50 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYPSB"
+    }
+  },
+  {
+    "text": "【印花 / 印花擦伤】\n印花擦伤（代码 HYCSD）属于D类（轻微缺陷），部位：盒装/印花。\n判定标准：印花表面有露底\n单位扣分：盒D类 5 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYCSD"
+    }
+  },
+  {
+    "text": "【印花 / 印花翘折】\n印花翘折（代码 HYQZB）属于B类（较重缺陷），部位：盒装/印花。\n判定标准：印花向内折进或向外翘起的斜线长度≥10mm，或前 后两个粘结面都没粘牢\n单位扣分：盒B类 50 分，判定标准约第 12 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 12,
+      "section_title": "印花 / 印花翘折",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYQZB"
+    }
+  },
+  {
+    "text": "【印花 / 印花多】\n印花多（代码 HYDYC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：粘结处印花＞1张\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYDYC"
+    }
+  },
+  {
+    "text": "【印花 / 印花皱】\n印花皱（代码 HYZZC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：印花表面有长度≥10mm的皱褶（线）或有≥1/2所 在面面积的皱纹\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYZZC"
+    }
+  },
+  {
+    "text": "【印花 / 印花反倒】\n印花反倒（代码 HYFDC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：印花与小盒粘结时内外反向\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花反倒",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYFDC"
+    }
+  },
+  {
+    "text": "【印花 / 印花偏位】\n印花偏位（代码 HYWPC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：印花四个角在长边方向距小盒顶部最大距离差≥ 6mm；印花四个角在短边方向距小盒临近侧边最大 距离差≥4mm（或露出商标纸胶水位）\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYWPC"
+    }
+  },
+  {
+    "text": "【印花 / 印花凸出】\n印花凸出（代码 HYTCC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：印花凸出长度≥2mm\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花凸出",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYTCC"
+    }
+  },
+  {
+    "text": "【印花 / 印花吐胶】\n印花吐胶（代码 HYTJC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：印花胶水溢出长度及条数符合C区规定\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花吐胶",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYTJC"
+    }
+  },
+  {
+    "text": "【印花 / 印花裁切偏位】\n印花裁切偏位（代码 HYCPC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：印花裁切边与印刷边框、图形或字体间距＜0.5mm （印刷边框、图形或字体不完整）\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花裁切偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYCPC"
+    }
+  },
+  {
+    "text": "【印花 / 印花印刷缺陷】\n印花印刷缺陷（代码 HFYYC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：文字、图案严重模糊、残缺不全，或印刷偏位≥ 0.5mm\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFYYC"
+    }
+  },
+  {
+    "text": "【印花 / 印花色差】\n印花色差（代码 HFYCC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：严重色差，或△E≥4.0\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花色差",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFYCC"
+    }
+  },
+  {
+    "text": "【印花 / 印花式样不符】\n印花式样不符（代码 HFYSC）属于C类（一般缺陷），部位：盒装/印花。\n判定标准：文字、图案错印、漏印\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFYSC"
+    }
+  },
+  {
+    "text": "【印花 / 印花毛刺】\n印花毛刺（代码 HYMCD）属于D类（轻微缺陷），部位：盒装/印花。\n判定标准：印花裁切后有毛刺\n单位扣分：盒D类 5 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "印花 / 印花毛刺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HYMCD"
+    }
+  },
+  {
+    "text": "【税票 / 税票错用】\n税票错用（代码 HSPCA）属于A类（严重缺陷），部位：盒装/税票。\n判定标准：甲牌号卷烟成品中错用乙牌号税票\n单位扣分：盒A类 200 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "税票 / 税票错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPCA"
+    }
+  },
+  {
+    "text": "【税票 / 税票无】\n税票无（代码 HSPWB）属于B类（较重缺陷），部位：盒装/税票。\n判定标准：卷烟成品税票粘结处无税票\n单位扣分：盒B类 50 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "税票 / 税票无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPWB"
+    }
+  },
+  {
+    "text": "【税票 / 税票粘结不符】\n税票粘结不符（代码 HSPNB）属于B类（较重缺陷），部位：盒装/税票。\n判定标准：盒盖打开税票无破损\n单位扣分：盒B类 50 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "税票 / 税票粘结不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPNB"
+    }
+  },
+  {
+    "text": "【税票 / 税码不全】\n税码不全（代码 HSPBB）属于B类（较重缺陷），部位：盒装/税票。\n判定标准：卷烟成品税票税码辨识不清\n单位扣分：盒B类 50 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "税票 / 税码不全",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPBB"
+    }
+  },
+  {
+    "text": "【税票 / 税票污】\n税票污（代码 HSPUC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥3处\n单位扣分：盒C类 10 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "税票 / 税票污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPUC"
+    }
+  },
+  {
+    "text": "【税票 / 税票残缺】\n税票残缺（代码 HSPQB）属于B类（较重缺陷），部位：盒装/税票。\n判定标准：税票不完整，缺损≥1/4总面积\n单位扣分：盒B类 50 分，判定标准约第 13 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 13,
+      "section_title": "税票 / 税票残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPQB"
+    }
+  },
+  {
+    "text": "【税票 / 税票破】\n税票破（代码 HSPPC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：税票虽完整但有长度≥2mm的撕破、裂缝或有面积 ≥3mm2的孔洞或破损\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPPC"
+    }
+  },
+  {
+    "text": "【税票 / 税票擦伤】\n税票擦伤（代码 HSPID）属于D类（轻微缺陷），部位：盒装/税票。\n判定标准：税票表面有露底\n单位扣分：盒D类 5 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPID"
+    }
+  },
+  {
+    "text": "【税票 / 税票翘折】\n税票翘折（代码 HSPZC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：税票向内折进或向外翘起的斜线长度≥10mm，或两 个粘结面都没粘牢\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票翘折",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPZC"
+    }
+  },
+  {
+    "text": "【税票 / 税票多】\n税票多（代码 HSPYC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：粘结处税票＞1张\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPYC"
+    }
+  },
+  {
+    "text": "【税票 / 税票皱】\n税票皱（代码 HSPFC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：税票表面有长度≥10mm的皱褶（线）或有≥1/2所 在面面积的皱纹\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPFC"
+    }
+  },
+  {
+    "text": "【税票 / 税票反倒】\n税票反倒（代码 HSPDB）属于B类（较重缺陷），部位：盒装/税票。\n判定标准：税票与小盒粘结时内外面反向\n单位扣分：盒B类 50 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票反倒",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPDB"
+    }
+  },
+  {
+    "text": "【税票 / 税票偏位】\n税票偏位（代码 HSPLC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：税票四角在长边或短边方向距标准位距离差≥3mm\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPLC"
+    }
+  },
+  {
+    "text": "【税票 / 税票凸出】\n税票凸出（代码 HSPTC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：税票凸出长度≥2mm\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票凸出",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPTC"
+    }
+  },
+  {
+    "text": "【税票 / 税票吐胶】\n税票吐胶（代码 HSPJC）属于C类（一般缺陷），部位：盒装/税票。\n判定标准：税票胶水溢点数大于3点且总长度大于10mm\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "税票 / 税票吐胶",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPJC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志错用】\n免税烟标志错用（代码 HMSCA）属于A类（严重缺陷），部位：盒装/免税烟 标志。\n判定标准：甲客商卷烟成品中错用乙客商免税烟标志\n单位扣分：盒A类 200 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSCA"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志无】\n免税烟标志无（代码 HMSWB）属于B类（较重缺陷），部位：盒装/免税烟 标志。\n判定标准：小盒免税烟标志粘结处无免税烟标志\n单位扣分：盒B类 50 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSWB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志信息不全】\n免税烟标志信息不全（代码 HMSBB）属于B类（较重缺陷），部位：盒装/免税烟 标志。\n判定标准：卷烟成品免税烟标志数字码位等特征信息辨识不 清\n单位扣分：盒B类 50 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志信息不全",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSBB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志污】\n免税烟标志污（代码 HMSUC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥3处\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSUC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志残缺】\n免税烟标志残缺（代码 HMSQB）属于B类（较重缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志不完整，缺损≥1/4总面积\n单位扣分：盒B类 50 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSQB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志破】\n免税烟标志破（代码 HMSPC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志虽完整但有长度≥2mm的撕破、裂缝（工 艺设计切口除外）或有面积≥3mm2的孔洞或破损\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSPC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志擦伤】\n免税烟标志擦伤（代码 HMSID）属于D类（轻微缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志表面有露底\n单位扣分：盒D类 5 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSID"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志翘折】\n免税烟标志翘折（代码 HMSZC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志向内折进或向外翘起的斜线长度≥\n单位扣分：盒C类 10 分，判定标准约第 14 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 14,
+      "section_title": "免税烟 标志 / 免税烟标志翘折",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSZC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志多】\n免税烟标志多（代码 HMSYC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：粘结处免税烟标志＞1张\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "免税烟 标志 / 免税烟标志多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSYC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志皱】\n免税烟标志皱（代码 HMSFC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志表面有长度≥10mm的皱褶（线）或有≥ 1/2所在面面积的皱纹\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "免税烟 标志 / 免税烟标志皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSFC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志反倒】\n免税烟标志反倒（代码 HMSDB）属于B类（较重缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志内外面反向\n单位扣分：盒B类 50 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "免税烟 标志 / 免税烟标志反倒",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSDB"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志偏位】\n免税烟标志偏位（代码 HMSLC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志四角在长边或短边方向距标准位距离 差≥3mm\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "免税烟 标志 / 免税烟标志偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSLC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志凸出】\n免税烟标志凸出（代码 HMSTC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志凸出长度≥2mm\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "免税烟 标志 / 免税烟标志凸出",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSTC"
+    }
+  },
+  {
+    "text": "【免税烟 标志 / 免税烟标志吐胶】\n免税烟标志吐胶（代码 HMSJC）属于C类（一般缺陷），部位：盒装/免税烟 标志。\n判定标准：免税烟标志胶水溢点数大于3点且总长度大于10mm\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "免税烟 标志 / 免税烟标志吐胶",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HMSJC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸无】\n框架纸无（代码 HKWWB）属于B类（较重缺陷），部位：盒装/框架纸。\n判定标准：小盒内无框架纸\n单位扣分：盒B类 50 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKWWB"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸残缺】\n框架纸残缺（代码 HKCQB）属于B类（较重缺陷），部位：盒装/框架纸。\n判定标准：可视框架纸不完整面积≥100mm2\n单位扣分：盒B类 50 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKCQB"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸破】\n框架纸破（代码 HKPSC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：可视框架纸虽完整但有长度≥5mm的撕破、裂缝或 有面积≥3mm2且＜5mm2的孔洞或破损\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKPSC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸露】\n框架纸露（代码 HKLCC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：框架纸露于商标纸外\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸露",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKLCC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸错用】\n框架纸错用（代码 HKCYC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：甲牌号卷烟成品中错用乙牌号框架纸\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKCYC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸反】\n框架纸反（代码 HFKFC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：成型后框架纸内外面反向\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸反",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFKFC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸皱】\n框架纸皱（代码 HKZZC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：可视框架纸表面有长度≥10mm的皱褶（线）或有≥ 1/2可视面积的皱纹\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKZZC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸污】\n框架纸污（代码 HKWZC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径） ≥5mm的≥2处\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKWZC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸擦伤】\n框架纸擦伤（代码 HKCSC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：可视擦露底纸长度及数目符合C区规定\n单位扣分：盒C类 10 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKCSC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸拼接】\n框架纸拼接（代码 HKPJB）属于B类（较重缺陷），部位：盒装/框架纸。\n判定标准：框架纸含有拼接段\n单位扣分：盒B类 50 分，判定标准约第 15 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 15,
+      "section_title": "框架纸 / 框架纸拼接",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKPJB"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸毛刺】\n框架纸毛刺（代码 HKMCD）属于D类（轻微缺陷），部位：盒装/框架纸。\n判定标准：框架纸裁切后有毛刺\n单位扣分：盒D类 5 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "框架纸 / 框架纸毛刺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKMCD"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸卡口】\n框架纸卡口（代码 HKKKC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：单铝包框架纸，两折切虚线的距离≤52mm（新中支 ≤47mm）；双铝包框架纸，两折切虚线的距离≤ 62mm；或者有一边折切虚线位置的卡纸外表面未切 断长度≥5mm；或者有一边折切虚线位置的上端达 到卡纸上边沿\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "框架纸 / 框架纸卡口",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKKKC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸卡边】\n框架纸卡边（代码 HKKBD）属于D类（轻微缺陷），部位：盒装/框架纸。\n判定标准：盒盖反复开合20次内产生卡纸侧边与盒盖内耳卡 顿损伤而不能正常盖合\n单位扣分：盒D类 5 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "框架纸 / 框架纸卡边",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKKBD"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸偏位】\n框架纸偏位（代码 HKWPC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：框架纸正面露出长度与中心值差值≥2mm；或者两 侧面宽度差≥3mm\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "框架纸 / 框架纸偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HKWPC"
+    }
+  },
+  {
+    "text": "【框架纸 / 框架纸式样不符】\n框架纸式样不符（代码 HFKSC）属于C类（一般缺陷），部位：盒装/框架纸。\n判定标准：无花纹（压纹）\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "框架纸 / 框架纸式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFKSC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸无】\n商标纸无（代码 HSWWA）属于A类（严重缺陷），部位：盒装/商标纸。\n判定标准：小盒无商标纸\n单位扣分：盒A类 200 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSWWA"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸残缺】\n商标纸残缺（代码 HSCQB）属于B类（较重缺陷），部位：盒装/商标纸。\n判定标准：商标纸成型后缺损面积≥25mm2\n单位扣分：盒B类 50 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSCQB"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸破】\n商标纸破（代码 HSPSB）属于B类（较重缺陷），部位：盒装/商标纸。\n判定标准：商标纸虽完整但有长度≥10mm的撕破、裂缝或有面 积≥3mm2且＜5mm2的孔洞或破损\n单位扣分：盒B类 50 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSPSB"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸错用】\n商标纸错用（代码 HSCYA）属于A类（严重缺陷），部位：盒装/商标纸。\n判定标准：甲牌号卷烟成品中错用乙牌号商标纸，或标注有效 期、生产日期、生产批号等信息不符合要求\n单位扣分：盒A类 200 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSCYA"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸反包】\n商标纸反包（代码 HSFBA）属于A类（严重缺陷），部位：盒装/商标纸。\n判定标准：商标纸印刷面在小盒内部\n单位扣分：盒A类 200 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸反包",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSFBA"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸皱】\n商标纸皱（代码 HSZZC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：商标纸表面不平整，有长度≥10mm的皱褶（线）或 有≥1/2所在面面积的皱纹\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSZZC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸压痕】\n商标纸压痕（代码 HSYHC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：表面有深度≥0.2mm且长度≥3mm的轧压痕迹\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸压痕",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSYHC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸擦伤】\n商标纸擦伤（代码 HSCSC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：擦伤或露底纸长度≥6mm\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSCSC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸污】\n商标纸污（代码 HSWZC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：污迹（油渍、污渍、水渍、胶渍）长度（或直径）\n单位扣分：盒C类 10 分，判定标准约第 16 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 16,
+      "section_title": "商标纸 / 商标纸污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSWZC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸多】\n商标纸多（代码 HSDYC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：小盒商标纸＞1张\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSDYC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸爆墨】\n商标纸爆墨（代码 HSBMC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：表面油墨爆裂长度≥5mm且≥3点\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸爆墨",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSBMC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸爆壳】\n商标纸爆壳（代码 HSBKB）属于B类（较重缺陷），部位：盒装/商标纸。\n判定标准：透明纸拉掉后硬包小耳朵或软包长侧边爆开，或未 爆开但盒盖打开后小耳朵爆开\n单位扣分：盒B类 50 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸爆壳",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSBKB"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸斜角露白】\n商标纸斜角露白（代码 HSXLC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：斜角露框架纸最大宽度≥2mm\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸斜角露白",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSXLC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸翘边】\n商标纸翘边（代码 HSQBB）属于B类（较重缺陷），部位：盒装/商标纸。\n判定标准：商标纸折角线（含斜角反翘）≥15mm\n单位扣分：盒B类 50 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸翘边",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSQBB"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸折叠不到位】\n商标纸折叠不到位（代码 HSZDB）属于B类（较重缺陷），部位：盒装/商标纸。\n判定标准：硬盒：盒盖舌头没有完全折入盒盖；盒盖舌头折线 与正面开启线距离（重叠）≥2mm或盒盖两侧耳开 线离底部的距离差≥2mm； 软盒：商标纸长边与临近底面距离≥4mm；商标纸 底部折叠错位或露铝纸；商标纸底部露白最大宽度 (前后折叠方向）≥2mm；滚包（商标不居中）\n单位扣分：盒B类 50 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸折叠不到位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSZDB"
+    }
+  },
+  {
+    "text": "【商标纸 / 盒盖粘连】\n盒盖粘连（代码 HSGNB）属于B类（较重缺陷），部位：盒装/商标纸。\n判定标准：盒盖与衬纸或框架纸粘结，拉开后有破损\n单位扣分：盒B类 50 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 盒盖粘连",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSGNB"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸长短壳】\n商标纸长短壳（代码 HSCDC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：软盒商标纸侧面重叠处商标纸高低≥2mm或软盒商 标纸低于铝纸上边沿的距离≥3mm\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸长短壳",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HSCDC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸印刷缺陷】\n商标纸印刷缺陷（代码 HFSYC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：印刷污点长度（或直径）及数目符合C 区规定\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFSYC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸光油缺陷】\n商标纸光油缺陷（代码 HFSGC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：表面上光明显起泡\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸光油缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFSGC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸外观缺陷】\n商标纸外观缺陷（代码 HFSWC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：文字、图案严重模糊或残缺不全\n单位扣分：盒C类 10 分，判定标准约第 17 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 17,
+      "section_title": "商标纸 / 商标纸外观缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFSWC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸色差】\n商标纸色差（代码 HFSCC）属于C类（一般缺陷），部位：盒装/商标纸。\n判定标准：严重色差，或△E≥4.0\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸 / 商标纸色差",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFSCC"
+    }
+  },
+  {
+    "text": "【商标纸 / 商标纸式样不符】\n商标纸式样不符（代码 HFSSA）属于A类（严重缺陷），部位：盒装/商标纸。\n判定标准：文字、图案错印、漏印\n单位扣分：盒A类 200 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸 / 商标纸式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFSSA"
+    }
+  },
+  {
+    "text": "【商标纸/内 衬纸 / 钢印错无】\n钢印错无（代码 HGWWC）属于C类（一般缺陷），部位：盒装/商标纸/内 衬纸。\n判定标准：小盒（内衬纸）无钢印或者错用钢印\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸/内 衬纸 / 钢印错无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HGWWC"
+    }
+  },
+  {
+    "text": "【商标纸/内 衬纸 / 钢印残缺】\n钢印残缺（代码 HGCQC）属于C类（一般缺陷），部位：盒装/商标纸/内 衬纸。\n判定标准：硬盒：字符线条不完整导致无法辨识\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸/内 衬纸 / 钢印残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HGCQC"
+    }
+  },
+  {
+    "text": "【商标纸/内 衬纸 / 钢印糊】\n钢印糊（代码 HGHHC）属于C类（一般缺陷），部位：盒装/商标纸/内 衬纸。\n判定标准：硬盒：因模糊导致无法辨识\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸/内 衬纸 / 钢印糊",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HGHHC"
+    }
+  },
+  {
+    "text": "【商标纸/内 衬纸 / 钢印刻破】\n钢印刻破（代码 HGKPC）属于C类（一般缺陷），部位：盒装/商标纸/内 衬纸。\n判定标准：刻破字符导致无法辨识\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸/内 衬纸 / 钢印刻破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HGKPC"
+    }
+  },
+  {
+    "text": "【商标纸/内 衬纸 / 钢印位置（倒置/偏/多）】\n钢印位置（倒置/偏/多）（代码 HGWZC）属于C类（一般缺陷），部位：盒装/商标纸/内 衬纸。\n判定标准：倒置或多、少字符或偏位导致钢印信息不完整\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "商标纸/内 衬纸 / 钢印位置（倒置/偏/多）",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HGWZC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸无】\n内衬纸无（代码 HCWWB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：盒包装无内衬纸\n单位扣分：盒B类 50 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCWWB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸残缺】\n内衬纸残缺（代码 HCCQB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：可视范围内衬纸不完整≥100mm2\n单位扣分：盒B类 50 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCCQB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸破】\n内衬纸破（代码 HCPSB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：可视内衬纸虽完整但有长度≥5mm的撕破、裂缝或 有面积≥3mm2且＜25mm2的孔洞或破损\n单位扣分：盒B类 50 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCPSB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸错用】\n内衬纸错用（代码 HCCYB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：甲牌号卷烟成品中错用乙牌号内衬纸\n单位扣分：盒B类 50 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸错用",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCCYB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸皱】\n内衬纸皱（代码 HCZZC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：可视内衬纸皱褶（线）长度或所占所在面面积符合 C区规定\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCZZC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸式样不符】\n内衬纸式样不符（代码 HFCSC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：文字、图案错印、漏印\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFCSC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸色差】\n内衬纸色差（代码 HFCCC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：严重色差，或△E≥4.0\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸色差",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFCCC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸压花后墨色脱落】\n内衬纸压花后墨色脱落（代码 HFCWC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：压花后明显露底\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸压花后墨色脱落",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFCWC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸爆墨】\n内衬纸爆墨（代码 HFCMC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：可视表面油墨爆裂长度≥5mm且≥3点\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸爆墨",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HFCMC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸污】\n内衬纸污（代码 HCWZC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：内外面污迹（油渍、污渍、水渍、胶渍）长度（或 直径）≥5mm的≥1处\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCWZC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸轧花缺】\n内衬纸轧花缺（代码 HCYQC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：可视缺失面积≥100 mm2\n单位扣分：盒C类 10 分，判定标准约第 18 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 18,
+      "section_title": "内衬纸 / 内衬纸轧花缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCYQC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸轧花不清晰（淡、 糊、不匀）】\n内衬纸轧花不清晰（淡、 糊、不匀）（代码 HCYHC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：打开盒盖可见范围内：若轧花糊区域和周围衬纸色 泽相近，则单点≥16mm2或多点面积和≥100mm2判轧 花不清晰；若轧花糊区域和周围衬纸色泽相差较 大，则单点≥5mm2判轧花不清晰\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸轧花不清晰（淡、 糊、不匀）",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCYHC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 厂徽无】\n厂徽无（代码 HCCHB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：没有应有的厂徽\n单位扣分：盒B类 50 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 厂徽无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCCHB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 厂徽残缺】\n厂徽残缺（代码 HCHQC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：厂徽不完整，缺失≥1/2个厂徽\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 厂徽残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCHQC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 厂徽不清晰】\n厂徽不清晰（代码 HCBQC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：厂徽标志模糊，面积≥1/2个厂徽\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 厂徽不清晰",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCBQC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 厂徽位置】\n厂徽位置（代码 HCHPC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：左右≥1个厂徽被框架纸遮盖或上部超出铝纸折线 或下部被框架纸遮盖\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 厂徽位置",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCHPC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸拼接】\n内衬纸拼接（代码 HCPJB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：内衬纸含有拼接段\n单位扣分：盒B类 50 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸拼接",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCPJB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸长短】\n内衬纸长短（代码 HCCDC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：顶部衬纸≥21mm或≤10mm；中支、细支顶部衬纸≥ 10mm或≤6mm\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸长短",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCCDC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸折叠不到位】\n内衬纸折叠不到位（代码 HCZJB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：顶部折角不到位且露烟支\n单位扣分：盒B类 50 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸折叠不到位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCZJB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸撕片未切断】\n内衬纸撕片未切断（代码 HCFQC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：应切断的长边未切断，≥1/2长边长度\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸撕片未切断",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCFQC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸擦伤】\n内衬纸擦伤（代码 HCCSC）属于C类（一般缺陷），部位：盒装/内衬纸。\n判定标准：打开盒盖或移除印花后，可视内衬纸擦伤或露底纸 长度≥10mm\n单位扣分：盒C类 10 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸擦伤",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCCSC"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸搭接无重叠】\n内衬纸搭接无重叠（代码 HCDJB）属于B类（较重缺陷），部位：盒装/内衬纸。\n判定标准：内衬纸分切长度不足、无搭接\n单位扣分：盒B类 50 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸搭接无重叠",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCDJB"
+    }
+  },
+  {
+    "text": "【内衬纸 / 内衬纸印字利群切割】\n内衬纸印字利群切割（代码 HCLQD）属于D类（轻微缺陷），部位：盒装/内衬纸。\n判定标准：普通直包撕片上端印字利群切割而字体不完整\n单位扣分：盒D类 5 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "内衬纸 / 内衬纸印字利群切割",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HCLQD"
+    }
+  },
+  {
+    "text": "【烟支填装 / 缺支】\n缺支（代码 HJQYA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：1包内烟支数量＜20支（指20支装），有滤嘴无 烟支也判为缺支\n单位扣分：盒A类 200 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "烟支填装 / 缺支",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HJQYA"
+    }
+  },
+  {
+    "text": "【烟支填装 / 倒支】\n倒支（代码 HJDZB）属于B类（较重缺陷），部位：盒装/烟支填装。\n判定标准：烟支滤嘴端位于小盒底部\n单位扣分：盒B类 50 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "烟支填装 / 倒支",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HJDZB"
+    }
+  },
+  {
+    "text": "【烟支填装 / 多支】\n多支（代码 HADYA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：1包内烟支＞20支（指20支装）\n单位扣分：盒A类 200 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "烟支填装 / 多支",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HADYA"
+    }
+  },
+  {
+    "text": "【烟支填装 / 烟支排列不齐】\n烟支排列不齐（代码 HJPLD）属于D类（轻微缺陷），部位：盒装/烟支填装。\n判定标准：未按7-6-7方式整齐排列\n单位扣分：盒D类 5 分，判定标准约第 19 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 19,
+      "section_title": "烟支填装 / 烟支排列不齐",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HJPLD"
+    }
+  },
+  {
+    "text": "【烟支填装 / 错支】\n错支（代码 HJCPA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：纸箱、条盒、小盒均为甲牌号，烟支却为（或混有） 乙牌号\n单位扣分：盒A类 200 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 错支",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HJCPA"
+    }
+  },
+  {
+    "text": "【烟支填装 / 短支】\n短支（代码 HADZA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：比标准长度短5mm以上（包括5mm），有烟支无滤 嘴也判为短支\n单位扣分：盒A类 200 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 短支",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HADZA"
+    }
+  },
+  {
+    "text": "【烟支填装 / 残支】\n残支（代码 HACZA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：烟支不完整，破裂长度≥5mm\n单位扣分：盒A类 200 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 残支",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HACZA"
+    }
+  },
+  {
+    "text": "【烟支填装 / 轧坏烟】\n轧坏烟（代码 HAGDB）属于B类（较重缺陷），部位：盒装/烟支填装。\n判定标准：烟支虽完整，但有损坏\n单位扣分：盒B类 50 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 轧坏烟",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HAGDB"
+    }
+  },
+  {
+    "text": "【烟支填装 / 小盒烟支粘连】\n小盒烟支粘连（代码 HANLB）属于B类（较重缺陷），部位：盒装/烟支填装。\n判定标准：烟支之间或烟支与铝纸粘接\n单位扣分：盒B类 50 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 小盒烟支粘连",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HANLB"
+    }
+  },
+  {
+    "text": "【烟支填装 / 滤嘴脱落】\n滤嘴脱落（代码 HALTA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：滤嘴和烟支脱离\n单位扣分：盒A类 200 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 滤嘴脱落",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HALTA"
+    }
+  },
+  {
+    "text": "【烟支填装 / 烟支缩头】\n烟支缩头（代码 HASTB）属于B类（较重缺陷），部位：盒装/烟支填装。\n判定标准：整盒烟支端部有≥1mm的空陷\n单位扣分：盒B类 50 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 烟支缩头",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HASTB"
+    }
+  },
+  {
+    "text": "【烟支填装 / 烟支粘末】\n烟支粘末（代码 HANMD）属于D类（轻微缺陷），部位：盒装/烟支填装。\n判定标准：滤嘴端部粘有≥10点（20支总计）的烟末\n单位扣分：盒D类 5 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 烟支粘末",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HANMD"
+    }
+  },
+  {
+    "text": "【烟支填装 / 虫烟】\n虫烟（代码 HACYA）属于A类（严重缺陷），部位：盒装/烟支填装。\n判定标准：小盒内有虫或异物或烟支有虫蛀\n单位扣分：盒A类 200 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "烟支填装 / 虫烟",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "HACYA"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 空头】\n空头（代码 JKKTB）属于B类（较重缺陷），部位：烟支/卷烟端面。\n判定标准：卷烟端面空陷深度≥5mm且空陷截面积≥2/3端面或烟丝 全部下陷≥3mm\n单位扣分：外观B类 20 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 空头",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JKKTB"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 触头】\n触头（代码 JACTC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：烟支端面受挤压变形≥1/3圆周且深度≥2mm\n单位扣分：外观C类 8 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 触头",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JACTC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 吐丝】\n吐丝（代码 JATSC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：在烟支切口截面以外烟丝长度≥4mm的≥1条或长度≥2mm 且＜4mm的≥2条\n单位扣分：外观C类 8 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 吐丝",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JATSC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 滤嘴缩头】\n滤嘴缩头（代码 JZSTC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：整个滤嘴截面下陷深度≥1mm\n单位扣分：外观C类 8 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 滤嘴缩头",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZSTC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 切口不齐】\n切口不齐（代码 JQBQD）属于D类（轻微缺陷），部位：烟支/卷烟端面。\n判定标准：卷烟或滤嘴端面切口锯齿状或有毛渣\n单位扣分：外观D类 2 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 切口不齐",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JQBQD"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 切口斜】\n切口斜（代码 JQXXC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：卷烟端面不平齐,高低差距≥2mm\n单位扣分：外观C类 8 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 切口斜",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JQXXC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 切口破】\n切口破（代码 JQPSC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：卷烟端面切口平齐但切口处卷烟纸或水松纸有划破或撕 破,长度≥3mm且＜5mm\n单位扣分：外观C类 8 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 切口破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JQPSC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 棉线露出】\n棉线露出（代码 JZMLC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：薄荷滤嘴内部棉线在切口截面以外,长度≥2mm\n单位扣分：外观C类 8 分，判定标准约第 20 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 20,
+      "section_title": "卷烟端面 / 棉线露出",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZMLC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 胶孔】\n胶孔（代码 JZJKB）属于B类（较重缺陷），部位：烟支/卷烟端面。\n判定标准：滤嘴端面有孔洞,孔面积≥2mm2\n单位扣分：外观B类 20 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 胶孔",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZJKB"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 沟槽不均匀】\n沟槽不均匀（代码 JZGCD）属于D类（轻微缺陷），部位：烟支/卷烟端面。\n判定标准：沟槽滤棒沟槽孔径大小不一\n单位扣分：外观D类 2 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 沟槽不均匀",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZGCD"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 滤嘴中空深度不符】\n滤嘴中空深度不符（代码 JFZKC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：中空深度≤2mm或≥（2×标准值）mm\n单位扣分：外观C类 8 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 滤嘴中空深度不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFZKC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 滤嘴污】\n滤嘴污（代码 JZWZB）属于B类（较重缺陷），部位：烟支/卷烟端面。\n判定标准：污迹总面积≥1 mm2\n单位扣分：外观B类 20 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 滤嘴污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZWZB"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 端面夹杂】\n端面夹杂（代码 JQJZC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：烟支端面有非烟草类杂物夹入\n单位扣分：外观C类 8 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 端面夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JQJZC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 滤嘴生丝】\n滤嘴生丝（代码 JZSSC）属于C类（一般缺陷），部位：烟支/卷烟端面。\n判定标准：滤嘴端面有白色的丝束白点（丝束开松不全）且点数≥3 点\n单位扣分：外观C类 8 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 滤嘴生丝",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZSSC"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 中空滤嘴形状不符】\n中空滤嘴形状不符（代码 JFXZB）属于B类（较重缺陷），部位：烟支/卷烟端面。\n判定标准：滤嘴端面丝束断层或开裂\n单位扣分：外观B类 20 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 中空滤嘴形状不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFXZB"
+    }
+  },
+  {
+    "text": "【卷烟端面 / 孔洞】\n孔洞（代码 JZKDB）属于B类（较重缺陷），部位：烟支/卷烟端面。\n判定标准：滤嘴端面有非胶孔的孔洞，长边直径≥1mm\n单位扣分：外观B类 20 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟端面 / 孔洞",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZKDB"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 卷烟搭口夹杂】\n卷烟搭口夹杂（代码 JDJZC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟搭口夹有非烟末类杂物,或夹有烟末总长度≥4mm（包 括水松纸与烟支接合处）\n单位扣分：外观C类 8 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟搭口 / 卷烟搭口夹杂",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDJZC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 烟支搭口宽窄不一】\n烟支搭口宽窄不一（代码 JDKZC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟纸的搭接重叠宽度长短不相同,长短差≥2mm\n单位扣分：外观C类 8 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟搭口 / 烟支搭口宽窄不一",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDKZC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 卷烟搭口翘褶】\n卷烟搭口翘褶（代码 JDBPB）属于B类（较重缺陷），部位：烟支/卷烟搭口。\n判定标准：水松纸搭口翘褶，露出卷烟纸、成型纸最宽长度≥1/4滤 棒圆周\n单位扣分：外观B类 20 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟搭口 / 卷烟搭口翘褶",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDBPB"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 爆口】\n爆口（代码 JDBKA）属于A类（严重缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟经90°扭转,烟支搭口处爆开的长度≥1/4烟支长度\n单位扣分：外观A类 120 分，判定标准约第 21 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 21,
+      "section_title": "卷烟搭口 / 爆口",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDBKA"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 豁口】\n豁口（代码 JDHKB）属于B类（较重缺陷），部位：烟支/卷烟搭口。\n判定标准：搭口脱胶,脱胶长度≥5mm\n单位扣分：外观B类 20 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 豁口",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDHKB"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 烟支搭口焦黄】\n烟支搭口焦黄（代码 JDTJC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：烟支搭口焦黄总长度≥10mm\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 烟支搭口焦黄",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDTJC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 搭口皱】\n搭口皱（代码 JDZZC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟搭口或搭口边缘有皱纹, 皱纹总长度及凹陷深度符合 C区规定\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 搭口皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDZZC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 搭口污】\n搭口污（代码 JDWZC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟搭口有胶水渍、烟灰等污迹,污迹总面积≥6 mm2\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 搭口污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDWZC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 搭口破】\n搭口破（代码 JDPSC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟在卷制成型时搭口被划破、撕破，长度≥3mm且＜5mm\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 搭口破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDPSC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 漏气】\n漏气（代码 JALQB）属于B类（较重缺陷），部位：烟支/卷烟搭口。\n判定标准：滤棒与烟支接装不牢固，掰开后烟支顶部仍有一定宽度的 卷烟纸保持原来的切口形状,此宽度卷烟纸上光滑且无胶 水痕迹\n单位扣分：外观B类 20 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 漏气",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JALQB"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 水松纸粘贴不齐】\n水松纸粘贴不齐（代码 JSBQC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：水松纸搭口粘结时上下有差牙，长短差≥2mm\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 水松纸粘贴不齐",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSBQC"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 水松纸标示错位】\n水松纸标示错位（代码 JSDBD）属于D类（轻微缺陷），部位：烟支/卷烟搭口。\n判定标准：印于水松纸上的牌别字体图案在水松纸分切处，搓接后出 现牌别字体图案明显少笔划或多笔划\n单位扣分：外观D类 2 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 水松纸标示错位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSDBD"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 水松纸分切】\n水松纸分切（代码 JSFQB）属于B类（较重缺陷），部位：烟支/卷烟搭口。\n判定标准：水松纸分切宽度太短，其宽度≤3/4倍的滤棒圆周\n单位扣分：外观B类 20 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 水松纸分切",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSFQB"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 卷烟纸分切】\n卷烟纸分切（代码 JPFQD）属于D类（轻微缺陷），部位：烟支/卷烟搭口。\n判定标准：卷烟纸分切切口不平齐，有锯齿形或毛渣\n单位扣分：外观D类 2 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 卷烟纸分切",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JPFQD"
+    }
+  },
+  {
+    "text": "【卷烟搭口 / 卷烟纸搭口粘贴位 置错误】\n卷烟纸搭口粘贴位 置错误（代码 JDCWC）属于C类（一般缺陷），部位：烟支/卷烟搭口。\n判定标准：搭口粘贴处的卷烟纸搭接方向错误\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟搭口 / 卷烟纸搭口粘贴位 置错误",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JDCWC"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印刻破】\n钢印刻破（代码 JGKPB）属于B类（较重缺陷），部位：烟支/卷烟钢印。\n判定标准：钢印刻破卷烟纸,卷烟纸破开长度≥3mm且＜5mm\n单位扣分：外观B类 20 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟钢印 / 钢印刻破",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGKPB"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印错无】\n钢印错无（代码 JGYCB）属于B类（较重缺陷），部位：烟支/卷烟钢印。\n判定标准：牌号钢印用错或无\n单位扣分：外观B类 20 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟钢印 / 钢印错无",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGYCB"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印残缺】\n钢印残缺（代码 JGCQC）属于C类（一般缺陷），部位：烟支/卷烟钢印。\n判定标准：钢印图文线条不完整,且已不能识别钢印内容\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟钢印 / 钢印残缺",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGCQC"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印模糊】\n钢印模糊（代码 JGMHC）属于C类（一般缺陷），部位：烟支/卷烟钢印。\n判定标准：钢印图文线条不清晰,且已不能识别钢印内容\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟钢印 / 钢印模糊",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGMHC"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印污点】\n钢印污点（代码 JGWDC）属于C类（一般缺陷），部位：烟支/卷烟钢印。\n判定标准：钢印图案文字线条上染有油墨,墨线长度≥1mm\n单位扣分：外观C类 8 分，判定标准约第 22 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 22,
+      "section_title": "卷烟钢印 / 钢印污点",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGWDC"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印颜色不符】\n钢印颜色不符（代码 JGYSC）属于C类（一般缺陷），部位：烟支/卷烟钢印。\n判定标准：钢印色彩与用料标准不符（钢印油墨用错）\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟钢印 / 钢印颜色不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGYSC"
+    }
+  },
+  {
+    "text": "【卷烟钢印 / 钢印位置不对】\n钢印位置不对（代码 JGWZC）属于C类（一般缺陷），部位：烟支/卷烟钢印。\n判定标准：牌号、完税钢印与水松纸间距d1≤0mm或d1≥19mm；或套 色钢印间距d2≤0mm，或内置钢印外露于卷烟表面\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟钢印 / 钢印位置不对",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JGWZC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 破烟】\n破烟（代码 JPPSC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：卷烟表面有破裂（不包括钢印刻破和搭口破），长度≥2mm 且＜5mm\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 破烟",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JPPSC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 卷烟纸皱】\n卷烟纸皱（代码 JPZYC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：卷烟纸表面有总长度及凹陷深度符合C区规定\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 卷烟纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JPZYC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸皱】\n水松纸皱（代码 JSZTC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：水松纸表面有总长度及凹陷深度符合C区规定\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸皱",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSZTC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 卷烟表面污】\n卷烟表面污（代码 JAWZC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：卷烟表面有油渍、水渍、油墨、胶渍等污渍（不包括搭口 处）污迹总面积≥6 mm2\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 卷烟表面污",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAWZC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸式样不符】\n水松纸式样不符（代码 JFSSC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：文字、图案错印、漏印\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸式样不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFSSC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸色差】\n水松纸色差（代码 JFSCC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：严重色差，或△E≥2.5\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸色差",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFSCC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸拖墨】\n水松纸拖墨（代码 JFSTC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：拖墨总面积≥6mm2\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸拖墨",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFSTC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸印刷缺陷】\n水松纸印刷缺陷（代码 JFSYC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：文字、图案严重模糊或残缺不全\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸印刷缺陷",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFSYC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸分切偏位】\n水松纸分切偏位（代码 JFSFC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：图案、文字距边偏差≥1mm\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸分切偏位",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFSFC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 卷烟纸外观不符】\n卷烟纸外观不符（代码 JFJWB）属于B类（较重缺陷），部位：烟支/卷烟表面。\n判定标准：卷烟纸罗纹缺失\n单位扣分：外观B类 20 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 卷烟纸外观不符",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFJWB"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 布带印】\n布带印（代码 JPBDC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：由布带造成的烟支上明显针眼\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 布带印",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JPBDC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 滤嘴挤压变形】\n滤嘴挤压变形（代码 JZBXD）属于D类（轻微缺陷），部位：烟支/卷烟表面。\n判定标准：滤嘴受挤压变形明显（不包括端面挤压变形），或滤嘴端受 挤压明显变形\n单位扣分：外观D类 2 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 滤嘴挤压变形",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZBXD"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸起泡】\n水松纸起泡（代码 JSQPC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：贯通整个滤嘴的长条泡状\n单位扣分：外观C类 8 分，判定标准约第 23 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 23,
+      "section_title": "卷烟表面 / 水松纸起泡",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSQPC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸长短】\n水松纸长短（代码 JSCDC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：水松纸长度与标准水松纸长度差≥1mm\n单位扣分：外观C类 8 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟表面 / 水松纸长短",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSCDC"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 卷烟纸多】\n卷烟纸多（代码 JPDYB）属于B类（较重缺陷），部位：烟支/卷烟表面。\n判定标准：带有盘与盘之间拼接卷烟纸的卷烟\n单位扣分：外观B类 20 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟表面 / 卷烟纸多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JPDYB"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸多】\n水松纸多（代码 JSDYB）属于B类（较重缺陷），部位：烟支/卷烟表面。\n判定标准：带有盘与盘之间拼接水松纸的卷烟，或带有盘内来料拼接 水松纸的卷烟,或带有非拼接产生的多张水松纸的卷烟\n单位扣分：外观B类 20 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟表面 / 水松纸多",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSDYB"
+    }
+  },
+  {
+    "text": "【卷烟表面 / 水松纸擦痕】\n水松纸擦痕（代码 JSCHC）属于C类（一般缺陷），部位：烟支/卷烟表面。\n判定标准：水松纸表面有露出底色的划痕，总长度≥1周或≥2/3滤嘴 长\n单位扣分：外观C类 8 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟表面 / 水松纸擦痕",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JSCHC"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 杂物】\n杂物（代码 JAZWB）属于B类（较重缺陷），部位：烟支/卷烟内部。\n判定标准：卷烟内有塑料、铁器等非烟草类杂物\n单位扣分：外观B类 20 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 杂物",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAZWB"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 烟支凹陷（软点）】\n烟支凹陷（软点）（代码 JKAXD）属于D类（轻微缺陷），部位：烟支/卷烟内部。\n判定标准：手摸烟支明显感觉烟支部分区域偏软\n单位扣分：外观D类 2 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 烟支凹陷（软点）",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JKAXD"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 竹节烟】\n竹节烟（代码 JAZJD）属于D类（轻微缺陷），部位：烟支/卷烟内部。\n判定标准：手摸烟支感觉有明显的松紧节\n单位扣分：外观D类 2 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 竹节烟",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAZJD"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 滤嘴软】\n滤嘴软（代码 JZSRC）属于C类（一般缺陷），部位：烟支/卷烟内部。\n判定标准：手摸滤嘴明显感觉偏软\n单位扣分：外观C类 8 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 滤嘴软",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZSRC"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 滤嘴夹烟末】\n滤嘴夹烟末（代码 JZJMD）属于D类（轻微缺陷），部位：烟支/卷烟内部。\n判定标准：滤嘴水松纸与滤棒之间有可见烟末\n单位扣分：外观D类 2 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 滤嘴夹烟末",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZJMD"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 滤嘴内无爆珠】\n滤嘴内无爆珠（代码 JFBZB）属于B类（较重缺陷），部位：烟支/卷烟内部。\n判定标准：滤嘴内部没有指定数量和要求的爆珠\n单位扣分：外观B类 20 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 滤嘴内无爆珠",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JFBZB"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 滤嘴内爆珠破损】\n滤嘴内爆珠破损（代码 JZBZB）属于B类（较重缺陷），部位：烟支/卷烟内部。\n判定标准：滤嘴内部爆珠不完整\n单位扣分：外观B类 20 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 滤嘴内爆珠破损",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZBZB"
+    }
+  },
+  {
+    "text": "【卷烟内部 / 装接间隙（皮老虎）】\n装接间隙（皮老虎）（代码 JZPHC）属于C类（一般缺陷），部位：烟支/卷烟内部。\n判定标准：滤嘴与烟支的结合处有间隙,距离≥3mm\n单位扣分：外观C类 8 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "卷烟内部 / 装接间隙（皮老虎）",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JZPHC"
+    }
+  },
+  {
+    "text": "【其他 / 错牌混牌】\n错牌混牌（代码 JACHB）属于B类（较重缺陷），部位：烟支/其他。\n判定标准：烟支卷烟材料错用\n单位扣分：杂项B类 30 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 错牌混牌",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JACHB"
+    }
+  },
+  {
+    "text": "【其他 / 重量】\n重量（代码 JAZLC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 重量",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAZLC"
+    }
+  },
+  {
+    "text": "【其他 / 圆周】\n圆周（代码 JAYZC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 圆周",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAYZC"
+    }
+  },
+  {
+    "text": "【其他 / 吸阻】\n吸阻（代码 JAXZC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 吸阻",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAXZC"
+    }
+  },
+  {
+    "text": "【其他 / 长度】\n长度（代码 JACDC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 长度",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JACDC"
+    }
+  },
+  {
+    "text": "【其他 / 总通风度】\n总通风度（代码 JAZTC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 总通风度",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAZTC"
+    }
+  },
+  {
+    "text": "【其他 / 嘴通风度】\n嘴通风度（代码 JALTC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 嘴通风度",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JALTC"
+    }
+  },
+  {
+    "text": "【其他 / 硬度】\n硬度（代码 JAYDC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值超过上下限且超限值＞允差的50%\n单位扣分：物测C类 12 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 硬度",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAYDC"
+    }
+  },
+  {
+    "text": "【其他 / 含水率】\n含水率（代码 JASFB）属于B类（较重缺陷），部位：烟支/其他。\n判定标准：含水率≤10.5%或含水率≥13.5%\n单位扣分：杂项B类 30 分，判定标准约第 24 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 24,
+      "section_title": "其他 / 含水率",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JASFB"
+    }
+  },
+  {
+    "text": "【其他 / 含末率】\n含末率（代码 JAHMB）属于B类（较重缺陷），部位：烟支/其他。\n判定标准：检测值超过上限且超限值＞上限值的50%\n单位扣分：杂项B类 30 分，判定标准约第 25 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 25,
+      "section_title": "其他 / 含末率",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAHMB"
+    }
+  },
+  {
+    "text": "【其他 / 端部落丝量】\n端部落丝量（代码 JADLC）属于C类（一般缺陷），部位：烟支/其他。\n判定标准：检测值≥15mg\n单位扣分：杂项C类 10 分，判定标准约第 25 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 25,
+      "section_title": "其他 / 端部落丝量",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JADLC"
+    }
+  },
+  {
+    "text": "【其他 / 熄火】\n熄火（代码 JAXHA）属于A类（严重缺陷），部位：烟支/其他。\n判定标准：卷烟点燃后，烟支连续阴燃的长度＜40mm\n单位扣分：杂项A类 200 分，判定标准约第 25 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 25,
+      "section_title": "其他 / 熄火",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAXHA"
+    }
+  },
+  {
+    "text": "【其他 / 引燃强度】\n引燃强度（代码 JAYRA）属于A类（严重缺陷），部位：烟支/其他。\n判定标准：卷烟熄灭测试（CET）通过率≤75%\n单位扣分：杂项A类 200 分，判定标准约第 25 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 25,
+      "section_title": "其他 / 引燃强度",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAYRA"
+    }
+  },
+  {
+    "text": "【其他 / 压实端位置】\n压实端位置（代码 JAYSB）属于B类（较重缺陷），部位：烟支/其他。\n判定标准：检测值的绝对值＞8mm\n单位扣分：外观B类 20 分，判定标准约第 25 页。",
+    "metadata": {
+      "doc_name": "卷烟外在质量缺陷判定",
+      "page_number": 25,
+      "section_title": "其他 / 压实端位置",
+      "source": "defect_library.json",
+      "chunk_type": "defect",
+      "code": "JAYSB"
+    }
+  }
+]

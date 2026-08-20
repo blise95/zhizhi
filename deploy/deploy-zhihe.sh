@@ -43,6 +43,40 @@ fi
 log "安装智合依赖（走清华 PyPI 镜像）"
 "${VENV}/bin/python" -m pip install -q -r "$REQ" -i "$PIP_MIRROR"
 
+DOC_RATING="${DOC_RATING:-${AI_DIR}/docs/卷烟外在质量分级及评级规定.pdf}"
+DOC_DEFECT="${DOC_DEFECT:-${AI_DIR}/docs/卷烟外在质量缺陷判定.pdf}"
+VECTOR_STORE_PATH="${VECTOR_STORE_PATH:-${ZHIZHI_HOME}/zhihe-data/vector_store}"
+KNOWLEDGE_CHUNKS_PATH="${KNOWLEDGE_CHUNKS_PATH:-${ZHIZHI_HOME}/zhihe-data/knowledge_chunks.json}"
+export DOC_RATING DOC_DEFECT VECTOR_STORE_PATH KNOWLEDGE_CHUNKS_PATH
+export EMBEDDING_PROVIDER="${EMBEDDING_PROVIDER:-zhipu}"
+export ZHIPU_EMBEDDING_MODEL="${ZHIPU_EMBEDDING_MODEL:-embedding-2}"
+export LLM_PROVIDER="${LLM_PROVIDER:-zhipu}"
+export ZHIPU_API_KEY ZHIPU_BASE_URL ZHIPU_CHAT_MODEL
+
+if [ ! -f "$DOC_RATING" ] || [ ! -f "$DOC_DEFECT" ]; then
+  die "缺少企业标准 PDF，请确认仓库包含 ai-assistant/docs/ 下两份文件后再执行 zhizhi-zhihe"
+fi
+
+INDEX_FILE="${VECTOR_STORE_PATH}/index.json.gz"
+need_index=1
+if [ "${FORCE_REINDEX:-0}" != "1" ] && [ -f "$INDEX_FILE" ]; then
+  need_index=0
+  if [ "$DOC_RATING" -nt "$INDEX_FILE" ] || [ "$DOC_DEFECT" -nt "$INDEX_FILE" ]; then
+    need_index=1
+  fi
+fi
+
+if [ "$need_index" = "1" ]; then
+  log "构建质量知识向量库（智谱 embedding，写入 $VECTOR_STORE_PATH）"
+  mkdir -p "$VECTOR_STORE_PATH"
+  (
+    cd "$AI_DIR"
+    "${VENV}/bin/python" scripts/index_documents.py --require-vector --force
+  )
+else
+  log "向量库已存在且文档未更新，跳过重建（FORCE_REINDEX=1 可强制重建）"
+fi
+
 log "安装 systemd 服务"
 cp -f "${SCRIPT_DIR}/systemd/zhizhi-zhihe.service" /etc/systemd/system/zhizhi-zhihe.service
 systemctl daemon-reload

@@ -105,6 +105,10 @@ def build_zhizhi_graph(
             return "retrieve"  # 先检索知识，再去查数据
         if qtype == "physical_standard":
             return "query_data"  # 通过标准库回答
+        if qtype == "rating_standard":
+            return "query_data"  # 通过 5.3.1 分值线回答
+        if qtype == "defect_standard":
+            return "query_data"  # 通过缺陷判定标准库回答
         return "fallback"  # out_of_scope
 
     workflow.add_conditional_edges(

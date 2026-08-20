@@ -30,8 +30,8 @@ const SUGGESTIONS = [
   { label: '哪个机台需要重点关注？', icon: Server },
   { label: '帮我分析近期质量趋势', icon: TrendingUp },
   { label: '当前主要缺陷是什么？', icon: Activity },
-  { label: '摩登（细支）的物测指标合格吗？', icon: TrendingUp },
-  { label: '最近质量为什么下降？', icon: AlertCircle },
+  { label: '缺支属于什么等级？', icon: AlertCircle },
+  { label: '小盒透明纸皱怎么判定？', icon: Activity },
 ];
 
 /**

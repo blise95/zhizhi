@@ -66,6 +66,11 @@ class MockLLM:
             return self._business_answer(question, business)
         if qtype == "physical_standard":
             return business.get("scenario_answer", qa.answer_physical_standard_question(question))
+        if qtype == "rating_standard":
+            return business.get("scenario_answer", qa.answer_rating_standard_question(question))
+        if qtype == "defect_standard":
+            from core.defect_standard import answer_defect_question
+            return business.get("scenario_answer", answer_defect_question(question))
         if qtype == "combined":
             k = self._knowledge_answer(question, knowledge_block)
             b = self._business_answer(question, business)
@@ -177,13 +182,27 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
         if has_standard:
             return {"question_type": "physical_standard", "scenario": "physical_standard"}
 
+    # 缺陷判定标准：名称、代码、A/B/C/D 等级定义
+    from core.defect_standard import looks_like_defect_question
+    if looks_like_defect_question(question):
+        return {"question_type": "defect_standard", "scenario": "defect_standard"}
+
+    # 5.3.1 外在质量评级：不依赖向量库，直接走结构化规则
+    from core.rating_standard import looks_like_batch_rating_question, looks_like_rating_question
+    if looks_like_batch_rating_question(question):
+        return {"question_type": "combined", "scenario": "batch_rating"}
+    if looks_like_rating_question(question):
+        rate_only = any(k in q for k in ["优质率", "优等品率", "一等品率", "二等品率", "合格率"])
+        if not rate_only:
+            return {"question_type": "rating_standard", "scenario": "rating_standard"}
+
     # 具体场景识别
     scenario = qa.detect_scenario(question)
 
     # 系统提示分类
     system_prompt = """你是智合AI助手的问题分类器。请判断用户问题属于以下哪一类，只输出 JSON：
 {
-  "type": "knowledge" | "business" | "combined" | "physical_standard" | "out_of_scope",
+    "type": "knowledge" | "business" | "combined" | "physical_standard" | "rating_standard" | "defect_standard" | "out_of_scope",
   "reason": "简短理由"
 }
 分类说明：
@@ -191,6 +210,8 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
 - business：涉及当前系统中的真实质量数据，例如"今天质量怎么样""哪个机台需要关注""最近哪个牌号质量下降"。
 - combined：需要结合文档知识和系统数据才能回答，例如"本月优质率为什么下降""为什么质量变差"。
 - physical_standard：询问烟支物测指标的标准值、范围、合格判定，例如"某牌号重量标准是多少"。
+- rating_standard：询问外在质量评级分值线，例如"累计扣分50分属于什么等级""优等品是多少分"。
+- defect_standard：询问缺陷判定、缺陷代码、A/B/C/D等级定义，例如"缺支属于什么等级""透明纸皱怎么判定"。
 - out_of_scope：与质量管控系统、质量标准、烟支物测完全无关。
 """
     messages = [
@@ -302,6 +323,13 @@ def query_business_data(state: Dict[str, Any], provider: BusinessDataProvider) -
             scenario_answer = qa.answer_physical_deviation(physical_records, brand)
         elif scenario == "physical_standard":
             scenario_answer = qa.answer_physical_standard_question(question)
+        elif scenario == "rating_standard":
+            scenario_answer = qa.answer_rating_standard_question(question)
+        elif scenario == "defect_standard":
+            from core.defect_standard import answer_defect_question
+            scenario_answer = answer_defect_question(question)
+        elif scenario == "batch_rating":
+            scenario_answer = qa.answer_batch_rating(filtered_process, question)
         elif scenario == "quality_decline":
             scenario_answer = qa.answer_quality_decline(filtered_process, physical_records)
 
@@ -339,6 +367,13 @@ def check_sufficiency(state: Dict[str, Any]) -> Dict[str, Any]:
     if qtype == "physical_standard" or scenario == "physical_standard":
         return {"is_sufficient": True}
 
+    # 5.3.1 评级规则本身即可回答
+    if qtype == "rating_standard" or scenario == "rating_standard":
+        return {"is_sufficient": True}
+
+    if qtype == "defect_standard" or scenario == "defect_standard":
+        return {"is_sufficient": True}
+
     # 知识问题只看知识库
     if qtype == "knowledge":
         return {"is_sufficient": len(knowledge) > 0}
@@ -374,6 +409,21 @@ def generate_answer(state: Dict[str, Any]) -> Dict[str, Any]:
                 "question": question,
                 "question_type": qtype,
                 "scenario": scenario,
+                "used_data": business,
+                "knowledge_count": len(knowledge),
+            },
+        }
+
+    from core.defect_standard import answer_defect_question, looks_like_defect_question, search_defects
+    if looks_like_defect_question(question) or search_defects(question, 1):
+        return {
+            "answer": answer_defect_question(question),
+            "sources": knowledge,
+            "reasoning": f"问题类型：{qtype}，场景：defect_standard；依据缺陷判定标准库回答。",
+            "analysis_log": {
+                "question": question,
+                "question_type": qtype,
+                "scenario": "defect_standard",
                 "used_data": business,
                 "knowledge_count": len(knowledge),
             },
@@ -459,6 +509,13 @@ def fallback_answer(state: Dict[str, Any]) -> Dict[str, Any]:
         answer = "当前系统中暂无相关质量记录，暂时无法基于系统数据进行判断。请在系统中录入过程质量或烟支物测数据后再提问。"
     elif scenario in ["physical_deviation", "physical_standard"]:
         answer = "当前系统暂未配置该牌号的对应标准或没有相关检测数据，暂时无法进行标准符合性判断。"
+    elif scenario == "rating_standard":
+        answer = qa.answer_rating_standard_question(state.get("question", ""))
+    elif scenario == "defect_standard":
+        from core.defect_standard import answer_defect_question
+        answer = answer_defect_question(state.get("question", ""))
+    elif scenario == "batch_rating":
+        answer = "当前系统中暂无检验批次，暂时无法对照具体批次说明评级原因。" + "\n\n" + qa.answer_rating_standard_question(state.get("question", ""))
     else:
         answer = "根据当前质量文档及系统数据，暂未找到该问题的充分依据，暂时无法给出准确结论。"
 

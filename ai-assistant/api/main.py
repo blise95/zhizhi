@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 import config
-from core.retriever import EmptyRetriever
+from core.retriever import DefectKeywordRetriever, HybridRetriever, DocumentChunkRetriever
 from core.business_data import BusinessDataProvider
 from core.ai_logger import log_ask
 from core.physical_standard import (
@@ -27,6 +27,16 @@ from core.physical_standard import (
     calc_deviation as calc_physical_deviation,
     format_standard as format_physical_standard,
     format_range as format_physical_range,
+)
+from core.rating_standard import (
+    explain_score,
+    format_rating_rules,
+    rate_by_score,
+)
+from core.defect_standard import (
+    answer_defect_question,
+    search_defects,
+    get_all_defects,
 )
 from graph.graph import ZhiZhiAssistant
 
@@ -53,15 +63,25 @@ _assistant: Optional[ZhiZhiAssistant] = None
 def get_assistant() -> ZhiZhiAssistant:
     global _assistant
     if _assistant is None:
-        retriever: Any = EmptyRetriever()
-        vs_path = config.VECTOR_STORE_PATH
-        if vs_path.exists() and any(vs_path.iterdir()):
+        retriever: Any = HybridRetriever(DefectKeywordRetriever(), DocumentChunkRetriever())
+        vs = None
+        try:
+            from core.vectorstore import QualityVectorStore
+            vs = QualityVectorStore(config.VECTOR_STORE_PATH)
+        except Exception:
+            vs = None
+        if vs is not None and vs.exists():
             try:
-                from core.vectorstore import QualityVectorStore
                 from core.retriever import QualityRetriever
-                retriever = QualityRetriever(QualityVectorStore(vs_path))
+                vs.load()
+                retriever = HybridRetriever(
+                    DefectKeywordRetriever(),
+                    DocumentChunkRetriever(),
+                    QualityRetriever(vs),
+                )
             except Exception as exc:
-                print(f"[zhihe] 向量库加载失败，仅使用业务数据问答: {exc}")
+                print(f"[zhihe] 向量库加载失败，改用标准库+文档关键词检索: {exc}")
+                retriever = HybridRetriever(DefectKeywordRetriever(), DocumentChunkRetriever())
         provider = BusinessDataProvider()
         _assistant = ZhiZhiAssistant(retriever, provider)
     return _assistant
@@ -94,6 +114,10 @@ class PhysicalCheckRequest(BaseModel):
     value: float
 
 
+class RatingCheckRequest(BaseModel):
+    score: float
+
+
 @app.get("/")
 def root():
     return {"message": "智合 AI 问答模块已启动", "version": "2.0.0"}
@@ -101,7 +125,9 @@ def root():
 
 @app.get("/health")
 def health():
-    vector_store_exists = config.VECTOR_STORE_PATH.exists() and any(config.VECTOR_STORE_PATH.iterdir())
+    from core.vectorstore import QualityVectorStore
+    vs = QualityVectorStore(config.VECTOR_STORE_PATH)
+    vector_store_exists = vs.exists()
     llm_cfg = {"provider": config.LLM_PROVIDER}
     try:
         if config.LLM_PROVIDER == "zhipu":
@@ -250,6 +276,53 @@ def check_physical_standard(req: PhysicalCheckRequest):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/rating-rules")
+def get_rating_rules():
+    """返回 5.3.1 外在质量评级分值线。"""
+    return {
+        "rule": format_rating_rules(),
+        "qualified_max": 200,
+        "grades": [
+            {"label": "优等品", "min": None, "max": 18, "condition": "≤18"},
+            {"label": "一等品", "min": 18, "max": 100, "condition": "＞18且≤100"},
+            {"label": "二等品", "min": 100, "max": 200, "condition": "＞100且≤200"},
+            {"label": "不合格品", "min": 200, "max": None, "condition": "＞200"},
+        ],
+    }
+
+
+@app.post("/rating-check")
+def check_rating(req: RatingCheckRequest):
+    """按累计扣分判定优等/一等/二等/不合格。"""
+    rated = rate_by_score(req.score)
+    return {
+        "score": req.score,
+        **rated,
+        "explanation": explain_score(req.score),
+    }
+
+
+@app.get("/defects")
+def list_defects():
+    """返回缺陷判定标准库条目数与名称。"""
+    items = get_all_defects()
+    names = sorted({i.get("name") for i in items if i.get("name")})
+    return {"count": len(items), "names": names}
+
+
+@app.get("/defects/search")
+def search_defect_api(q: str):
+    """按名称或代码检索缺陷判定标准。"""
+    if not q or not q.strip():
+        raise HTTPException(status_code=400, detail="q 不能为空")
+    hits = search_defects(q.strip(), limit=10)
+    return {
+        "question": q.strip(),
+        "answer": answer_defect_question(q.strip()),
+        "hits": hits,
+    }
 
 
 if __name__ == "__main__":
