@@ -25,6 +25,36 @@ _INDICATOR_KEY_MAP = {
     "ventilation": ["ventilation", "通风度"],
 }
 
+# 系统内部牌号 value → 标准库中文牌号名（与前端 BRAND_VALUE_TO_STANDARD_NAME 对齐）
+_BRAND_VALUE_TO_STANDARD_NAME = {
+    "modern-eu": "摩登（中东-EU）",
+    "normal-red-djibouti": "摩登（普通红吉布提）",
+    "normal-red-intl": "摩登（普通红国际）",
+    "normal-silver-intl": "摩登（普通银国际）",
+    "slim": "摩登（细支）",
+    "slim-gold": "摩登（细支金）",
+    "ultra-slim": "摩登（超细支）",
+    "ultra-gold": "摩登（超细金）",
+    "ultra-silver": "摩登（超细银）",
+    "ultra-black": "摩登（超细黑）",
+    "ultra-white": "摩登（超细白）",
+    "ultra-white-97": "摩登（97超细白）",
+}
+
+
+def resolve_brand_name(brand: str) -> Optional[str]:
+    """将内部 value 或中文名解析为标准库牌号 key"""
+    if not brand:
+        return None
+    lib = _load_library()
+    standards = lib.get("standards", {})
+    if brand in standards:
+        return brand
+    mapped = _BRAND_VALUE_TO_STANDARD_NAME.get(brand)
+    if mapped and mapped in standards:
+        return mapped
+    return None
+
 
 def _load_library() -> Dict[str, Any]:
     global _library
@@ -66,7 +96,10 @@ def normalize_indicator_key(name: str) -> Optional[str]:
 
 def get_brand_standards(brand: str) -> Optional[Dict[str, Any]]:
     lib = _load_library()
-    return lib.get("standards", {}).get(brand)
+    key = resolve_brand_name(brand)
+    if not key:
+        return None
+    return lib.get("standards", {}).get(key)
 
 
 def get_indicator_standard(brand: str, indicator: str) -> Optional[Dict[str, Any]]:

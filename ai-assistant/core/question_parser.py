@@ -346,7 +346,7 @@ class QuestionParser:
     def _extract_brands(self, p: ParsedQuestion):
         """提取牌号"""
         q = p.raw  # 用原始文本，保留完整牌号名
-        for brand in self._known_brands:
+        for brand in sorted(self._known_brands, key=len, reverse=True):
             if brand in q:
                 p.brands.append(brand)
                 p.matched_keywords.append(f"牌号:{brand}")
@@ -364,9 +364,12 @@ class QuestionParser:
             "ultra-silver": "摩登（超细银）",
             "ultra-black": "摩登（超细黑）",
             "ultra-white-97": "摩登（97超细白）",
+            "ultra-white": "摩登（超细白）",
         }
-        for alias, full_name in value_aliases.items():
+        for alias, full_name in sorted(value_aliases.items(), key=lambda x: len(x[0]), reverse=True):
             if alias.lower() in p.normalized or alias in p.raw:
+                if alias == "ultra-white" and "ultra-white-97" in p.normalized:
+                    continue
                 if full_name not in p.brands:
                     p.brands.append(full_name)
                     p.matched_keywords.append(f"牌号别名:{alias}")
@@ -379,9 +382,15 @@ class QuestionParser:
             "吉布提": "摩登（普通红吉布提）",
             "国际红": "摩登（普通红国际）",
             "国际银": "摩登（普通银国际）",
+            "97超细白": "摩登（97超细白）",
+            "超细白": "摩登（超细白）",
         }
-        for short, full in short_names.items():
+        for short, full in sorted(short_names.items(), key=lambda x: len(x[0]), reverse=True):
             if short in q and full not in p.brands:
+                if short == "超细白" and "97超细白" in q:
+                    continue
+                if short == "超细" and "超细白" in q:
+                    continue
                 p.brands.append(full)
                 p.matched_keywords.append(f"牌号简称:{short}")
 

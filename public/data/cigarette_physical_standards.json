@@ -1,7 +1,7 @@
 {
   "metadata": {
     "source": "烟支物测指标标准.xlsx",
-    "totalBrands": 11,
+    "totalBrands": 12,
     "indicators": [
       "长度",
       "烟支圆周",
@@ -9,7 +9,7 @@
       "重量",
       "通风度"
     ],
-    "updatedAt": "2026-08-15"
+    "updatedAt": "2026-08-20"
   },
   "standards": {
     "摩登（中东-EU）": {
@@ -646,6 +646,71 @@
             "max": 480.0,
             "unit": "mg",
             "raw": "430±50"
+          }
+        },
+        "ventilation": {
+          "name": "通风度",
+          "unit": "%",
+          "standard": {
+            "value": 52.0,
+            "tolerance": 10.0,
+            "min": 42.0,
+            "max": 62.0,
+            "unit": "%",
+            "raw": "52±10"
+          }
+        }
+      }
+    },
+    "摩登（超细白）": {
+      "brand": "摩登（超细白）",
+      "indicators": {
+        "length": {
+          "name": "长度",
+          "unit": "mm",
+          "standard": {
+            "value": 84.0,
+            "tolerance": 0.5,
+            "min": 83.5,
+            "max": 84.5,
+            "unit": "mm",
+            "raw": "84.0±0.5"
+          }
+        },
+        "circumference": {
+          "name": "烟支圆周",
+          "unit": "mm",
+          "standard": {
+            "value": 16.96,
+            "tolerance": 0.2,
+            "min": 16.76,
+            "max": 17.16,
+            "unit": "mm",
+            "raw": "16.96±0.2"
+          }
+        },
+        "drawResistance": {
+          "name": "吸阻",
+          "unit": "pa",
+          "standard": {
+            "value": 135.0,
+            "tolerance": 20.0,
+            "min": 115.0,
+            "max": 155.0,
+            "unit": "pa",
+            "raw": "135±20"
+          }
+        },
+        "weight": {
+          "name": "重量",
+          "unit": "mg",
+          "standard": {
+            "value": 456.0,
+            "tolerance": 70.0,
+            "min": 386.0,
+            "max": 526.0,
+            "unit": "mg",
+            "raw": "456±70"
           }
         },
         "ventilation": {

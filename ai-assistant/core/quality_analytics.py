@@ -631,7 +631,7 @@ def answer_physical_standard_question(question: str) -> str:
 
     # 提取牌号
     brand = None
-    for b in get_all_brands():
+    for b in sorted(get_all_brands(), key=len, reverse=True):
         if b in question:
             brand = b
             break
@@ -991,7 +991,7 @@ def _answer_by_scenario(
         return answer_machine_ranking(process_records, best=False)
     elif scenario == "brand_trend":
         brand = None
-        for b in get_all_brands():
+        for b in sorted(get_all_brands(), key=len, reverse=True):
             if b in question:
                 brand = b
                 break
@@ -1000,7 +1000,7 @@ def _answer_by_scenario(
         return answer_quality_decline(process_records, physical_records)
     elif scenario == "physical_deviation":
         brand = None
-        for b in get_all_brands():
+        for b in sorted(get_all_brands(), key=len, reverse=True):
             if b in question:
                 brand = b
                 break

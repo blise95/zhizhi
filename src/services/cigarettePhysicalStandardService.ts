@@ -50,6 +50,7 @@ export const BRAND_VALUE_TO_STANDARD_NAME: Record<string, string> = {
   'ultra-gold': '摩登（超细金）',
   'ultra-silver': '摩登（超细银）',
   'ultra-black': '摩登（超细黑）',
+  'ultra-white': '摩登（超细白）',
   'ultra-white-97': '摩登（97超细白）',
 };
 

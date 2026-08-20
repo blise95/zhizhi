@@ -252,7 +252,7 @@ def retrieve_knowledge(state: Dict[str, Any], retriever: Any) -> Dict[str, Any]:
 
 def _extract_brand_from_question(question: str) -> Optional[str]:
     """从问题中提取牌号"""
-    for b in qa.get_all_brands():
+    for b in sorted(qa.get_all_brands(), key=len, reverse=True):
         if b in question:
             return b
     # 内部 value 别名
@@ -268,9 +268,13 @@ def _extract_brand_from_question(question: str) -> Optional[str]:
         "ultra-silver": "摩登（超细银）",
         "ultra-black": "摩登（超细黑）",
         "ultra-white-97": "摩登（97超细白）",
+        "ultra-white": "摩登（超细白）",
     }
-    for val, name in value_map.items():
-        if val.lower() in question.lower() or name.replace("摩登（", "").replace("）", "") in question:
+    for val, name in sorted(value_map.items(), key=lambda x: len(x[0]), reverse=True):
+        short = name.replace("摩登（", "").replace("）", "")
+        if val.lower() in question.lower() or short in question:
+            if short == "超细白" and "97超细白" in question:
+                continue
             return name
     return None
 

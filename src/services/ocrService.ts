@@ -226,6 +226,7 @@ function mapBrand(value?: string): string | undefined {
     '超细银': 'ultra-silver',
     '超细黑': 'ultra-black',
     '97超细白': 'ultra-white-97',
+    '超细白': 'ultra-white',
   };
   for (const [key, val] of Object.entries(brandMap)) {
     if (value.includes(key)) return val;

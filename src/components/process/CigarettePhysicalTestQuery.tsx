@@ -61,6 +61,7 @@ import {
   formatStandardValue,
   formatStandardRange,
   resolveBrandName,
+  sameBrand,
   type PhysicalIndicatorKey,
 } from '@/services/cigarettePhysicalStandardService';
 
@@ -92,6 +93,7 @@ const BRANDS = [
   { value: 'ultra-gold', label: '摩登（超细金）' },
   { value: 'ultra-silver', label: '摩登（超细银）' },
   { value: 'ultra-black', label: '摩登（超细黑）' },
+  { value: 'ultra-white', label: '摩登（超细白）' },
   { value: 'ultra-white-97', label: '摩登（97超细白）' },
 ];
 
@@ -213,9 +215,9 @@ export function CigarettePhysicalTestQuery() {
       data = data.filter(r => r.productionPoint === filters.productionPoint);
     }
 
-    // 牌号筛选
+    // 牌号筛选（兼容内部 value 与中文名）
     if (filters.brand) {
-      data = data.filter(r => r.brand === filters.brand);
+      data = data.filter(r => sameBrand(r.brand, filters.brand));
     }
 
     // 班别筛选

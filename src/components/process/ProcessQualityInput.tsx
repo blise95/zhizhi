@@ -94,6 +94,7 @@ const OPTIONS = {
     { value: 'ultra-gold', label: '摩登（超细金）' },
     { value: 'ultra-silver', label: '摩登（超细银）' },
     { value: 'ultra-black', label: '摩登（超细黑）' },
+    { value: 'ultra-white', label: '摩登（超细白）' },
     { value: 'ultra-white-97', label: '摩登（97超细白）' },
   ],
 };
