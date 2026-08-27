@@ -230,7 +230,7 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
         return {"question_type": qtype, "scenario": scenario}
     except Exception:
         # 兜底：根据关键词判断
-        data_keywords = ["率", "多少", "哪个机台", "哪个品牌", "哪个牌号", "趋势", "排名", "批次", "本月", "本周", "今天", "最近", "重点关注", "下降"]
+        data_keywords = ["率", "多少", "哪个机台", "哪个品牌", "哪个牌号", "趋势", "排名", "批次", "本月", "本周", "今天", "今日", "最近", "过去", "近期", "重点关注", "下降", "质量怎么样", "质量如何"]
         knowledge_keywords = ["是什么", "属于", "等级", "扣分", "判定", "规则", "依据", "定义"]
         has_data = any(k in q for k in data_keywords)
         has_knowledge = any(k in q for k in knowledge_keywords)
@@ -240,6 +240,8 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
             return {"question_type": "business", "scenario": scenario}
         elif has_knowledge:
             return {"question_type": "knowledge", "scenario": "knowledge"}
+        if scenario and scenario not in ("out_of_scope", "knowledge", ""):
+            return {"question_type": "business" if scenario != "combined" else "combined", "scenario": scenario}
         return {"question_type": "out_of_scope", "scenario": "out_of_scope"}
 
 

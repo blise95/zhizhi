@@ -35,6 +35,36 @@ TIME_SYNONYMS: Dict[str, List[str]] = {
     "today_quality_status": [],  # 特殊：单独处理"今天质量"类表达
 }
 
+# 「过去七天」类相对天数（须在「最近」之前匹配，避免被当成 30 天）
+_CN_DAY_NUM = {
+    "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5,
+    "六": 6, "七": 7, "八": 8, "九": 9, "十": 10,
+    "十五": 15, "二十": 20, "三十": 30,
+}
+
+
+def _cn_to_int(token: str) -> Optional[int]:
+    if token.isdigit():
+        n = int(token)
+        return n if 1 <= n <= 90 else None
+    return _CN_DAY_NUM.get(token)
+
+
+def match_relative_days(text: str) -> Optional[Tuple[int, str]]:
+    """识别「过去七天 / 近7天 / 最近一周」等，返回 (天数, 原文片段)。"""
+    if not text:
+        return None
+    compact = re.sub(r"\s+", "", text.lower())
+    week = re.search(r"(过去|近|最近)一?周", compact)
+    if week:
+        return 7, week.group(0)
+    days = re.search(r"(过去|近|最近|前)(\d+|[一二两三四五六七八九十]+)天", compact)
+    if days:
+        n = _cn_to_int(days.group(2))
+        if n:
+            return n, days.group(0)
+    return None
+
 # 质量状态/指标同义词 → 系统字段映射
 INDICATOR_SYNONYMS: Dict[str, List[str]] = {
     # 过程质量指标
@@ -72,10 +102,11 @@ INTENT_KEYWORDS: Dict[str, List[str]] = {
     # 查询类
     "query_today": [
         "今天", "今日", "当天", "本日",
-        # 注意："怎么样"/"如何"/"咋样"/"怎样" 不在此处，避免与机台/牌号查询冲突
+        # 注意："怎么样"/"如何"/"咋样"/"怎样" 不单独作为机台/牌号查询冲突词
         # 它们通过 quality_status 间接关联
         "质量情况", "质量状况", "质量表现",
         "整体质量", "总体质量",
+        "质量怎么样", "质量如何", "质量咋样", "质量怎样",
     ],
     "query_machine_focus": [
         "重点关注", "需要关注", "关注", "注意", "重点机台",
@@ -272,6 +303,15 @@ class QuestionParser:
         q = p.normalized
         today = datetime.now().date()
 
+        relative = match_relative_days(p.raw) or match_relative_days(q)
+        if relative:
+            n_days, expr = relative
+            p.time_intent = "last_n_days"
+            p.time_expressions.append(expr)
+            start = (today - timedelta(days=n_days - 1)).isoformat()
+            p.date_from, p.date_to = start, today.isoformat()
+            return
+
         # 精确时间词匹配
         for time_key, synonyms in TIME_SYNONYMS.items():
             for syn in synonyms:
@@ -460,6 +500,7 @@ class QuestionParser:
         if not scores:
             p.primary_intent = "combined"
             p.intent_confidence = 0.1
+            self._apply_intent_rules(p, q)
             return
 
         # 排序得分
@@ -532,15 +573,18 @@ class QuestionParser:
             p.secondary_intents.remove("rate_query")
             # rate_query 作为附加信息保留在 indicators 中即可
 
-        # 规则4：如果只有时间词+质量状态词（无其他特定意图），统一为 today_quality
-        # 但如果已提取到机台/牌号等实体，不强制覆盖
+        # 规则4：时间词 + 质量状态词（无其他特定意图），统一为 today_quality
+        # 答案函数会按 date_from/date_to 描述「今日 / 过去七天」等，不限于当天
         quality_status_kws = ["质量情况", "质量状况", "质量状态", "质量表现", "质量水平",
                                "整体质量", "整体情况", "整体状况", "整体表现", "总体质量",
-                               "总体情况", "总体状况", "总体表现"]
+                               "总体情况", "总体状况", "总体表现",
+                               "质量怎么样", "质量如何", "质量咋样", "质量怎样"]
         has_entity = bool(p.machines or p.brands or p.shifts)
-        if (p.time_intent in ["today", "today"] and
-            any(k in q for k in quality_status_kws) and
-            p.primary_intent in ["combined", "rate_query"] and
+        has_quality_ask = any(k in q for k in quality_status_kws) or (
+            "质量" in q and any(w in q for w in ["怎么样", "如何", "咋样", "怎样"])
+        )
+        if (p.time_intent and has_quality_ask and
+            p.primary_intent in ["combined", "rate_query", "today_quality"] and
             not has_entity):
             p.primary_intent = "today_quality"
             p.intent_confidence = 0.88
@@ -553,7 +597,10 @@ class QuestionParser:
                 p.intent_confidence = 0.87
 
         # 规则6：如果有时间词 + 指标查询（如"今天的合格率"），保持 time+indicator 组合意图
-        if p.time_intent in ["today", "yesterday", "this_week", "this_month"]:
+        if p.time_intent in [
+            "today", "yesterday", "this_week", "last_week",
+            "this_month", "last_month", "last_n_days", "recent",
+        ]:
             if p.indicators and p.primary_intent in ["rate_query", "combined"]:
                 # 有时间+具体指标，升级为 today_quality（答案函数会根据 indicators 调整内容）
                 if not has_entity:
@@ -678,6 +725,8 @@ if __name__ == "__main__":
         "今天质量表现怎么样？",
         "今天质量好吗？",
         "今日质量状况",
+        "过去七天的质量怎么样",
+        "近7天质量如何",
         "哪个机台需要重点关注？",
         "哪台机器质量最差？",
         "质量最好的机台是哪个？",

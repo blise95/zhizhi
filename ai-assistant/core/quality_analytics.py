@@ -88,6 +88,16 @@ def _extract_date_range_fallback(question: str) -> Tuple[Optional[str], Optional
     today = datetime.now().date()
     q = question.lower()
 
+    try:
+        from core.question_parser import match_relative_days
+        relative = match_relative_days(question)
+        if relative:
+            n_days, _ = relative
+            start = (today - timedelta(days=n_days - 1)).isoformat()
+            return start, today.isoformat()
+    except Exception:
+        pass
+
     if any(k in q for k in ["今天", "今日", "当天"]):
         d = today.isoformat()
         return d, d
@@ -1031,30 +1041,54 @@ def _answer_by_scenario(
 
 # ---------- 各场景智能答案实现 ----------
 
+def _time_label(parsed) -> str:
+    if getattr(parsed, "time_expressions", None):
+        return parsed.time_expressions[0]
+    labels = {
+        "today": "今日",
+        "yesterday": "昨日",
+        "this_week": "本周",
+        "last_week": "上周",
+        "this_month": "本月",
+        "last_month": "上月",
+        "last_n_days": "该时段",
+        "recent": "近期",
+        "specific_month": "该月",
+    }
+    return labels.get(getattr(parsed, "time_intent", "") or "", "当前周期")
+
+
+def _time_range_text(parsed) -> str:
+    date_from = getattr(parsed, "date_from", None)
+    date_to = getattr(parsed, "date_to", None)
+    if date_from and date_to:
+        if date_from == date_to:
+            return f"（{date_from}）"
+        return f"（{date_from} ~ {date_to}）"
+    return ""
+
+
+def _quality_status_from_defect_rate(defect_rate: float) -> str:
+    if defect_rate > 20:
+        return "异常"
+    if defect_rate > 10:
+        return "需关注"
+    if defect_rate > 5:
+        return "稳定"
+    return "良好"
+
+
 def _smart_answer_today(parsed, process_records: List[Dict[str, Any]]) -> str:
-    """智能今日质量回答（适配不同表达方式）"""
+    """按时段回答质量概况（今日 / 过去七天 / 本周等）"""
+    time_word = _time_label(parsed)
+    range_text = _time_range_text(parsed)
     summary = summarize_process_quality(process_records)
     if summary["total_batches"] == 0:
-        # 根据用户用词调整回复
-        time_word = "今天"
-        for te in parsed.time_expressions:
-            if te in ["今天", "今日", "当天", "本日"]:
-                time_word = te
-                break
-        return f"{time_word}系统暂未录入质量检验记录，无法评估{time_word}质量状况。"
+        return f"{time_word}{range_text}系统暂未录入质量检验记录，无法评估该时段质量状况。"
 
     top = top_defects(process_records, 3)
     top_text = "、".join(f"{d['name']}({d['count']}次)" for d in top) if top else "暂无"
-
-    status = "正常"
-    if summary["defect_rate"] > 20:
-        status = "异常"
-    elif summary["defect_rate"] > 10:
-        status = "需关注"
-    elif summary["defect_rate"] > 5:
-        status = "稳定"
-    else:
-        status = "良好"
+    status = _quality_status_from_defect_rate(summary["defect_rate"])
 
     # 检查用户是否问了特定指标
     ind_answers = []
@@ -1076,7 +1110,7 @@ def _smart_answer_today(parsed, process_records: List[Dict[str, Any]]) -> str:
         )
 
     base = (
-        f"今日系统共录入 {summary['total_batches']} 批过程质量检验记录，"
+        f"{time_word}{range_text}系统共录入 {summary['total_batches']} 批过程质量检验记录，"
         f"涉及机台 {', '.join(summary['machines']) if summary['machines'] else '无'}，"
         f"牌号 {', '.join(summary['brands']) if summary['brands'] else '无'}。\n"
         f"缺陷批次 {summary['defect_batches']} 批，缺陷率 {summary['defect_rate']:.2f}%，整体状态：{status}。"

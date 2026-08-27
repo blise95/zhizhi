@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, User, Sparkles, Activity, Server, AlertCircle, TrendingUp, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { fetchProcessQualityRecords, listTypedRecords, RECORD_TYPE } from '@/services/qualityData';
+import { answerLocalQualityQuestion } from '@/lib/zhiheLocalAnswer';
+import type { ProcessQualityRecord } from '@/utils/analysisUtils';
 
 interface ChatMessage {
   id: string;
@@ -26,6 +28,7 @@ const ICON_SIZE = 64;
 
 const SUGGESTIONS = [
   { label: '今日质量怎么样？', icon: Activity },
+  { label: '过去七天质量怎么样？', icon: TrendingUp },
   { label: '最近有哪些质量异常？', icon: AlertCircle },
   { label: '哪个机台需要重点关注？', icon: Server },
   { label: '帮我分析近期质量趋势', icon: TrendingUp },
@@ -363,7 +366,7 @@ export function ZhiZhiFloatingChat() {
       setLoading(true);
 
       try {
-        let processRecords: unknown[] = [];
+        let processRecords: ProcessQualityRecord[] = [];
         let physicalRecords: unknown[] = [];
         try {
           const [processRows, physicalRows] = await Promise.all([
@@ -376,31 +379,47 @@ export function ZhiZhiFloatingChat() {
           // 读取失败不影响提问
         }
 
-        const res = await fetch(`${API_BASE_URL}/ask`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            question,
-            context: {
-              process_records: processRecords,
-              physical_records: physicalRecords,
-            },
-          }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({ detail: '请求失败' }));
-          throw new Error(err.detail || `HTTP ${res.status}`);
+        try {
+          const res = await fetch(`${API_BASE_URL}/ask`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              question,
+              context: {
+                process_records: processRecords,
+                physical_records: physicalRecords,
+              },
+            }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({ detail: '请求失败' }));
+            throw new Error(err.detail || `HTTP ${res.status}`);
+          }
+          const data = await res.json();
+          const assistantMessage: ChatMessage = {
+            id: `a-${Date.now()}`,
+            role: 'assistant',
+            content: data.answer || '暂无回答',
+            sources: [],
+            reasoning: '',
+          };
+          setMessages((prev) => [...prev, assistantMessage]);
+          return;
+        } catch (apiErr: unknown) {
+          const local = answerLocalQualityQuestion(question, processRecords);
+          if (local) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: `a-${Date.now()}`,
+                role: 'assistant',
+                content: local,
+              },
+            ]);
+            return;
+          }
+          throw apiErr;
         }
-        const data = await res.json();
-        const assistantMessage: ChatMessage = {
-          id: `a-${Date.now()}`,
-          role: 'assistant',
-          content: data.answer || '暂无回答',
-          // 前台不展示来源/引用等技术信息
-          sources: [],
-          reasoning: '',
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
       } catch (err: unknown) {
         setMessages((prev) => [
           ...prev,
