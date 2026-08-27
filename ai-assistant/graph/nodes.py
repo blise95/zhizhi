@@ -19,6 +19,41 @@ from core.business_data import BusinessDataProvider
 from core import quality_analytics as qa
 
 
+GREETING_ANSWER = (
+    "您好，我是智合，质量管控系统的智能助手。\n"
+    "可以问我今天或某天的质量情况、生产了哪些牌号、当天有几个样本，"
+    "也可以问缺陷判定和评级规则，例如「缺支属于什么等级」。"
+)
+
+
+def looks_like_greeting(question: str) -> bool:
+    """寒暄、在线确认、自我介绍，不当成超范围问题。"""
+    raw = (question or "").strip()
+    if not raw:
+        return False
+    compact = re.sub(r"\s+", "", raw)
+    compact = re.sub(r"[，。！？,.!?～~]+", "", compact)
+    if not compact:
+        return False
+    quality_hints = [
+        "质量", "缺陷", "牌号", "机台", "样本", "评级", "扣分",
+        "检验", "物测", "合格", "优等", "批次",
+    ]
+    if any(k in compact for k in quality_hints):
+        return False
+    greetings = [
+        "你好", "您好", "嗨", "哈喽", "hello", "hi", "hey",
+        "在吗", "在不在", "还在吗", "在么",
+        "早上好", "下午好", "晚上好",
+        "你是谁", "你叫什么", "介绍一下", "你能做什么", "你会什么",
+        "谢谢", "感谢", "多谢",
+    ]
+    q_lower = compact.lower()
+    if not any(g.lower() in q_lower for g in greetings):
+        return False
+    return len(compact) <= 24
+
+
 class MockLLM:
     """本地演示 LLM：无需外部模型，直接基于检索结果与系统数据生成结构化回答"""
 
@@ -77,6 +112,8 @@ class MockLLM:
             if k.startswith("根据当前知识库") and not k.startswith("根据当前知识库中的两个质量文档，暂未找到"):
                 return f"{k}\n\n{b}"
             return b or k
+        if qtype == "greeting":
+            return GREETING_ANSWER
         return "该问题不在智合的回答范围内。智合只回答与卷烟质量管理、质量评级、缺陷判定及当前系统质量数据相关的问题。"
 
     def _knowledge_answer(self, question: str, knowledge_block: str) -> str:
@@ -163,6 +200,9 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
     question = state["question"]
     q = question.lower()
 
+    if looks_like_greeting(question):
+        return {"question_type": "greeting", "scenario": "greeting"}
+
     # 先通过关键词判断是否为烟支物测标准/偏离问题
     physical_keywords = [
         "烟支", "物测", "长度", "圆周", "吸阻", "重量", "通风度",
@@ -202,7 +242,7 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
     # 系统提示分类
     system_prompt = """你是智合AI助手的问题分类器。请判断用户问题属于以下哪一类，只输出 JSON：
 {
-    "type": "knowledge" | "business" | "combined" | "physical_standard" | "rating_standard" | "defect_standard" | "out_of_scope",
+    "type": "knowledge" | "business" | "combined" | "physical_standard" | "rating_standard" | "defect_standard" | "greeting" | "out_of_scope",
   "reason": "简短理由"
 }
 分类说明：
@@ -212,7 +252,8 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
 - physical_standard：询问烟支物测指标的标准值、范围、合格判定，例如"某牌号重量标准是多少"。
 - rating_standard：询问外在质量评级分值线，例如"累计扣分50分属于什么等级""优等品是多少分"。
 - defect_standard：询问缺陷判定、缺陷代码、A/B/C/D等级定义，例如"缺支属于什么等级""透明纸皱怎么判定"。
-- out_of_scope：与质量管控系统、质量标准、烟支物测完全无关。
+- greeting：打招呼、问在不在、你是谁、谢谢。例如"你好""在吗"。
+- out_of_scope：与质量管控、寒暄完全无关（天气、股票、闲聊八卦等）。打招呼不要标成 out_of_scope。
 """
     messages = [
         SystemMessage(content=system_prompt),
@@ -227,6 +268,10 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
             content = content.split("```")[1].split("```")[0].strip()
         result = json.loads(content)
         qtype = result.get("type", "combined")
+        if qtype == "out_of_scope" and looks_like_greeting(question):
+            return {"question_type": "greeting", "scenario": "greeting"}
+        if qtype == "greeting":
+            return {"question_type": "greeting", "scenario": "greeting"}
         return {"question_type": qtype, "scenario": scenario}
     except Exception:
         # 兜底：根据关键词判断
@@ -515,7 +560,9 @@ def fallback_answer(state: Dict[str, Any]) -> Dict[str, Any]:
     qtype = state.get("question_type", "combined")
     scenario = state.get("scenario", "combined")
 
-    if qtype == "out_of_scope" or scenario == "out_of_scope":
+    if qtype == "greeting" or scenario == "greeting":
+        answer = GREETING_ANSWER
+    elif qtype == "out_of_scope" or scenario == "out_of_scope":
         answer = "该问题不在智合的回答范围内。智合只回答与卷烟质量管理、质量评级、缺陷判定及当前系统质量数据相关的问题。"
     elif scenario in ["today_quality", "machine_focus", "machine_best", "machine_worst", "brand_trend", "brand_list", "sample_count", "quality_decline"]:
         answer = "当前系统中暂无相关质量记录，暂时无法基于系统数据进行判断。请在系统中录入过程质量或烟支物测数据后再提问。"

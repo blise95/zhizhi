@@ -225,10 +225,24 @@ function productionSamples(records: ProcessQualityRecord[]) {
   return samples;
 }
 
+export function looksLikeGreeting(question: string): boolean {
+  const compact = question.replace(/\s+/g, '').replace(/[，。！？,.!?～~]+/g, '');
+  if (!compact) return false;
+  if (/质量|缺陷|牌号|机台|样本|评级|扣分|检验|物测|合格|优等|批次/.test(compact)) return false;
+  if (!/你好|您好|嗨|哈喽|hello|hi|hey|在吗|在不在|还在吗|在么|早上好|下午好|晚上好|你是谁|你叫什么|介绍一下|你能做什么|你会什么|谢谢|感谢|多谢/i.test(compact)) {
+    return false;
+  }
+  return compact.length <= 24;
+}
+
+const GREETING_ANSWER =
+  '您好，我是智合，质量管控系统的智能助手。\n可以问我今天或某天的质量情况、生产了哪些牌号、当天有几个样本，也可以问缺陷判定和评级规则，例如「缺支属于什么等级」。';
+
 export function answerLocalQualityQuestion(
   question: string,
   processRecords: ProcessQualityRecord[]
 ): string | null {
+  if (looksLikeGreeting(question)) return GREETING_ANSWER;
   if (!looksLikeQualityDataQuestion(question)) return null;
 
   const range = parseLocalDateRange(question);

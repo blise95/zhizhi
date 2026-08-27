@@ -109,6 +109,8 @@ def build_zhizhi_graph(
             return "query_data"  # 通过 5.3.1 分值线回答
         if qtype == "defect_standard":
             return "query_data"  # 通过缺陷判定标准库回答
+        if qtype == "greeting":
+            return "fallback"
         return "fallback"  # out_of_scope
 
     workflow.add_conditional_edges(
