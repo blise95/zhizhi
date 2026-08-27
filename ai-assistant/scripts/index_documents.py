@@ -143,6 +143,8 @@ def main():
             print("   请到 https://open.bigmodel.cn/usercenter/apikeys 重新创建 Key，")
             print("   写入 /opt/zhizhi/conf/zhihe.env 的 ZHIPU_API_KEY（不要加引号、不要有空格），")
             print("   然后执行：FORCE_REINDEX=1 zhizhi-zhihe")
+        if "1214" in err or "不得超过64" in err:
+            print("   原因：智谱 Embedding 单次最多 64 条。请更新代码后执行：FORCE_REINDEX=1 zhizhi-zhihe")
         if args.require_vector:
             sys.exit(1)
         print("   结构化缺陷问答仍可用。")

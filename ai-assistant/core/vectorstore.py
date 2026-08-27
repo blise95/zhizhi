@@ -44,6 +44,7 @@ def create_embeddings() -> Embeddings:
         api_key=cfg["api_key"],
         base_url=cfg["base_url"],
         check_embedding_ctx_length=False,
+        chunk_size=config.EMBEDDING_BATCH_SIZE,
     )
 
 
@@ -84,8 +85,15 @@ class QualityVectorStore:
     def build(self, chunks: List[Dict[str, Any]]) -> "QualityVectorStore":
         texts = [c.get("text") or "" for c in chunks]
         metadatas = [c.get("metadata") or {} for c in chunks]
-        print(f"正在生成 {len(texts)} 条 Embedding…")
-        vectors = self._ensure_embeddings().embed_documents(texts)
+        batch_size = config.EMBEDDING_BATCH_SIZE
+        print(f"正在生成 {len(texts)} 条 Embedding（每批最多 {batch_size} 条）…")
+        embeddings = self._ensure_embeddings()
+        vectors: List[List[float]] = []
+        total = len(texts)
+        for start in range(0, total, batch_size):
+            end = min(start + batch_size, total)
+            print(f"  {start + 1}-{end}/{total}")
+            vectors.extend(embeddings.embed_documents(texts[start:end]))
         if len(vectors) != len(texts):
             raise RuntimeError(f"Embedding 条数不匹配：{len(vectors)} vs {len(texts)}")
 
