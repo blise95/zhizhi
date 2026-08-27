@@ -145,6 +145,9 @@ def main():
             print("   然后执行：FORCE_REINDEX=1 zhizhi-zhihe")
         if "1214" in err or "不得超过64" in err:
             print("   原因：智谱 Embedding 单次最多 64 条。请更新代码后执行：FORCE_REINDEX=1 zhizhi-zhihe")
+        if "1210" in err:
+            print("   原因：某条文本超过 embedding-2 的 512 tokens，或整批超过 8K tokens。")
+            print("   请更新代码后执行：FORCE_REINDEX=1 zhizhi-zhihe")
         if args.require_vector:
             sys.exit(1)
         print("   结构化缺陷问答仍可用。")

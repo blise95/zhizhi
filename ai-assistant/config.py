@@ -34,8 +34,10 @@ BUSINESS_API_URL = os.getenv("BUSINESS_API_URL", "")
 EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "auto").lower()
 FASTEMBED_MODEL = os.getenv("FASTEMBED_MODEL", "BAAI/bge-small-zh-v1.5")
 ZHIPU_EMBEDDING_MODEL = os.getenv("ZHIPU_EMBEDDING_MODEL", "embedding-2")
-# 智谱 embedding-2 单次 input 最多 64 条
+# 智谱 embedding-2：单条 ≤512 tokens，数组最多 64 条，数组总长 ≤8K tokens
 EMBEDDING_BATCH_SIZE = max(1, min(int(os.getenv("EMBEDDING_BATCH_SIZE", "64")), 64))
+EMBEDDING_MAX_CHARS = max(32, int(os.getenv("EMBEDDING_MAX_CHARS", "480")))
+EMBEDDING_MAX_BATCH_CHARS = max(EMBEDDING_MAX_CHARS, int(os.getenv("EMBEDDING_MAX_BATCH_CHARS", "6000")))
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_EMBEDDING_MODEL = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")

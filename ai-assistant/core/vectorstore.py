@@ -48,6 +48,56 @@ def create_embeddings() -> Embeddings:
     )
 
 
+def _prepare_embed_text(text: str, max_chars: int) -> str:
+    """去掉空字节，截到 embedding-2 单条 512 tokens 以内。"""
+    cleaned = (text or "").replace("\x00", " ").strip()
+    if not cleaned:
+        return "空白"
+    if len(cleaned) <= max_chars:
+        return cleaned
+    return cleaned[:max_chars]
+
+
+def _pack_embed_batches(texts: List[str], batch_size: int, max_batch_chars: int) -> List[List[str]]:
+    """按条数和总字符数打包，避免数组总 tokens 超过 8K。"""
+    batches: List[List[str]] = []
+    current: List[str] = []
+    current_chars = 0
+    for text in texts:
+        item_len = len(text)
+        too_many = len(current) >= batch_size
+        too_long = current and current_chars + item_len > max_batch_chars
+        if current and (too_many or too_long):
+            batches.append(current)
+            current = []
+            current_chars = 0
+        current.append(text)
+        current_chars += item_len
+    if current:
+        batches.append(current)
+    return batches
+
+
+def _embed_batch(embeddings: Embeddings, batch: List[str]) -> List[List[float]]:
+    try:
+        return embeddings.embed_documents(batch)
+    except Exception as batch_err:
+        if len(batch) == 1:
+            text = batch[0]
+            for limit in (240, 120, 60):
+                try:
+                    return embeddings.embed_documents([text[:limit]])
+                except Exception:
+                    continue
+            print(f"  跳过无法向量化的片段（{len(text)} 字）：{text[:40]!r}…")
+            return embeddings.embed_documents(["（跳过）"])
+        print(f"  本批失败（{batch_err}），改为逐条重试")
+        vectors: List[List[float]] = []
+        for item in batch:
+            vectors.extend(_embed_batch(embeddings, [item]))
+        return vectors
+
+
 def _cosine(a: List[float], b: List[float]) -> float:
     if not a or not b or len(a) != len(b):
         return 0.0
@@ -85,15 +135,21 @@ class QualityVectorStore:
     def build(self, chunks: List[Dict[str, Any]]) -> "QualityVectorStore":
         texts = [c.get("text") or "" for c in chunks]
         metadatas = [c.get("metadata") or {} for c in chunks]
-        batch_size = config.EMBEDDING_BATCH_SIZE
-        print(f"正在生成 {len(texts)} 条 Embedding（每批最多 {batch_size} 条）…")
+        prepared = [_prepare_embed_text(t, config.EMBEDDING_MAX_CHARS) for t in texts]
+        batches = _pack_embed_batches(
+            prepared, config.EMBEDDING_BATCH_SIZE, config.EMBEDDING_MAX_BATCH_CHARS
+        )
+        print(
+            f"正在生成 {len(texts)} 条 Embedding"
+            f"（单条≤{config.EMBEDDING_MAX_CHARS}字，每批总长≤{config.EMBEDDING_MAX_BATCH_CHARS}字）…"
+        )
         embeddings = self._ensure_embeddings()
         vectors: List[List[float]] = []
-        total = len(texts)
-        for start in range(0, total, batch_size):
-            end = min(start + batch_size, total)
-            print(f"  {start + 1}-{end}/{total}")
-            vectors.extend(embeddings.embed_documents(texts[start:end]))
+        done = 0
+        for batch in batches:
+            done += len(batch)
+            print(f"  {done - len(batch) + 1}-{done}/{len(texts)}")
+            vectors.extend(_embed_batch(embeddings, batch))
         if len(vectors) != len(texts):
             raise RuntimeError(f"Embedding 条数不匹配：{len(vectors)} vs {len(texts)}")
 
