@@ -89,12 +89,16 @@ def _extract_date_range_fallback(question: str) -> Tuple[Optional[str], Optional
     q = question.lower()
 
     try:
-        from core.question_parser import match_relative_days
+        from core.question_parser import match_relative_days, match_specific_date
         relative = match_relative_days(question)
         if relative:
             n_days, _ = relative
             start = (today - timedelta(days=n_days - 1)).isoformat()
             return start, today.isoformat()
+        specific = match_specific_date(question, today)
+        if specific:
+            iso, _ = specific
+            return iso, iso
     except Exception:
         pass
 
@@ -264,6 +268,57 @@ def brand_comparison(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "defect_rate": agg["defect_rate"],
         })
     return sorted(result, key=lambda x: x["defect_rate"])
+
+
+_SHIFT_NAMES = ("早班", "中班", "晚班", "白班", "夜班", "甲班", "乙班", "丙班")
+
+
+def get_shift_label(record: Dict[str, Any]) -> str:
+    """班次：优先早/中/晚班（前端 shiftGroup），否则用班组。"""
+    sg = str(record.get("shiftGroup") or "").strip()
+    sh = str(record.get("shift") or "").strip()
+    for v in (sg, sh):
+        if not v:
+            continue
+        if any(n in v for n in _SHIFT_NAMES):
+            return v
+        if v in ("早", "中", "晚", "白", "夜"):
+            return v + "班"
+    return sg or sh or "未分班"
+
+
+def _shift_sort_key(name: str) -> Tuple[int, str]:
+    for i, n in enumerate(_SHIFT_NAMES):
+        if n in name:
+            return (i, name)
+    return (99, name)
+
+
+def production_samples(records: List[Dict[str, Any]]) -> List[Dict[str, str]]:
+    """生产样本：同一班次同一牌号只计 1 个。"""
+    seen = set()
+    samples: List[Dict[str, str]] = []
+    for r in records:
+        brand = str(r.get("brand") or "").strip()
+        if not brand:
+            continue
+        shift = get_shift_label(r)
+        key = (shift, brand)
+        if key in seen:
+            continue
+        seen.add(key)
+        samples.append({"shift": shift, "brand": brand})
+    samples.sort(key=lambda s: (_shift_sort_key(s["shift"]), s["brand"]))
+    return samples
+
+
+def group_brands_by_shift(records: List[Dict[str, Any]]) -> Dict[str, List[str]]:
+    grouped: Dict[str, List[str]] = {}
+    for item in production_samples(records):
+        grouped.setdefault(item["shift"], [])
+        if item["brand"] not in grouped[item["shift"]]:
+            grouped[item["shift"]].append(item["brand"])
+    return grouped
 
 
 def brand_trend(records: List[Dict[str, Any]], brand: Optional[str] = None) -> Dict[str, Any]:
@@ -628,6 +683,47 @@ def answer_brand_trend(process_records: List[Dict[str, Any]], brand: Optional[st
     return "\n".join(lines)
 
 
+def answer_brand_list(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """回答某天生产了哪些牌号。"""
+    time_word = _time_label(parsed)
+    range_text = _time_range_text(parsed)
+    grouped = group_brands_by_shift(process_records)
+    if not grouped:
+        return f"{time_word}{range_text}系统暂无过程质量检验记录，无法判断生产了哪些牌号。"
+
+    unique_brands: List[str] = []
+    for brands in grouped.values():
+        for b in brands:
+            if b not in unique_brands:
+                unique_brands.append(b)
+
+    lines = [f"{time_word}{range_text}生产牌号共 {len(unique_brands)} 个：{'、'.join(unique_brands)}。"]
+    lines.append("分班明细：")
+    for shift in sorted(grouped.keys(), key=_shift_sort_key):
+        lines.append(f"- {shift}：{'、'.join(grouped[shift])}")
+    return "\n".join(lines)
+
+
+def answer_sample_count(parsed, process_records: List[Dict[str, Any]]) -> str:
+    """样本数 = 班次 × 牌号去重。同班次同牌号只计 1。"""
+    time_word = _time_label(parsed)
+    range_text = _time_range_text(parsed)
+    samples = production_samples(process_records)
+    if not samples:
+        return f"{time_word}{range_text}系统暂无过程质量检验记录，样本数为 0。"
+
+    grouped = group_brands_by_shift(process_records)
+    lines = [
+        f"{time_word}{range_text}共 {len(samples)} 个样本。",
+        "口径：同一班次同一牌号只计 1 个样本（例如早班 7 条超细白记录仍算 1 个样本）。",
+        "明细：",
+    ]
+    for shift in sorted(grouped.keys(), key=_shift_sort_key):
+        brands = grouped[shift]
+        lines.append(f"- {shift}：{'、'.join(brands)}（{len(brands)} 个样本）")
+    return "\n".join(lines)
+
+
 def answer_physical_standard_question(question: str) -> str:
     """回答物测标准问题（兼容旧逻辑）"""
     from core.physical_standard import (
@@ -885,6 +981,15 @@ def _detect_scenario_fallback(question: str) -> str:
     if any(k in q for k in ["质量最差", "最差的机台", "最坏"]):
         return "machine_worst"
 
+    # 样本数
+    if any(k in q for k in ["样本数", "几个样本", "多少样本", "有几个样本"]):
+        return "sample_count"
+
+    # 生产了哪些牌号
+    if any(k in q for k in ["什么牌号", "哪些牌号", "生成了什么", "生产了什么", "生产了哪些"]):
+        if not any(k in q for k in ["趋势", "下降", "对比"]):
+            return "brand_list"
+
     # 质量下降原因
     if any(k in q for k in ["为什么下降", "质量为什么", "下降原因", "为什么变差", "质量下降", "变差了", "恶化"]):
         return "quality_decline"
@@ -962,6 +1067,10 @@ def smart_answer(
         return _smart_answer_machine_ranking(parsed, process_records, best=best)
     elif scenario == "brand_trend":
         return _smart_answer_brand_trend(parsed, process_records)
+    elif scenario == "brand_list":
+        return answer_brand_list(parsed, process_records)
+    elif scenario == "sample_count":
+        return answer_sample_count(parsed, process_records)
     elif scenario == "quality_decline":
         return answer_quality_decline(process_records, physical_records)
     elif scenario == "physical_deviation":
@@ -1006,6 +1115,12 @@ def _answer_by_scenario(
                 brand = b
                 break
         return answer_brand_trend(process_records, brand)
+    elif scenario == "brand_list":
+        parsed = get_parsed_question(question)
+        return answer_brand_list(parsed, process_records) if parsed else "当前无法解析该日期的牌号问题。"
+    elif scenario == "sample_count":
+        parsed = get_parsed_question(question)
+        return answer_sample_count(parsed, process_records) if parsed else "当前无法解析该日期的样本问题。"
     elif scenario == "quality_decline":
         return answer_quality_decline(process_records, physical_records)
     elif scenario == "physical_deviation":
@@ -1054,6 +1169,7 @@ def _time_label(parsed) -> str:
         "last_n_days": "该时段",
         "recent": "近期",
         "specific_month": "该月",
+        "specific_date": "当天",
     }
     return labels.get(getattr(parsed, "time_intent", "") or "", "当前周期")
 

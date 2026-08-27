@@ -50,6 +50,41 @@ def _cn_to_int(token: str) -> Optional[int]:
     return _CN_DAY_NUM.get(token)
 
 
+def match_specific_date(text: str, today=None) -> Optional[Tuple[str, str]]:
+    """识别「8月23号 / 8.23 / 2026-08-23」等具体日期，返回 (ISO日期, 原文)。"""
+    if not text:
+        return None
+    today = today or datetime.now().date()
+    compact = re.sub(r"\s+", "", text)
+
+    patterns = [
+        r"(?P<expr>(?P<y>\d{4})[-年/](?P<m>\d{1,2})[-月/](?P<d>\d{1,2})[日号]?)",
+        r"(?P<expr>(?P<m>\d{1,2})月(?P<d>\d{1,2})[日号]?)",
+        r"(?P<expr>(?<![\d.])(?P<m>\d{1,2})[./-](?P<d>\d{1,2})(?![\d.]))",
+    ]
+    for pattern in patterns:
+        m = re.search(pattern, compact)
+        if not m:
+            continue
+        month = int(m.group("m"))
+        day = int(m.group("d"))
+        if not (1 <= month <= 12 and 1 <= day <= 31):
+            continue
+        year_raw = m.groupdict().get("y")
+        year = int(year_raw) if year_raw else today.year
+        try:
+            parsed = datetime(year, month, day).date()
+        except ValueError:
+            continue
+        if not year_raw and parsed > today:
+            try:
+                parsed = datetime(year - 1, month, day).date()
+            except ValueError:
+                continue
+        return parsed.isoformat(), m.group("expr")
+    return None
+
+
 def match_relative_days(text: str) -> Optional[Tuple[int, str]]:
     """识别「过去七天 / 近7天 / 最近一周」等，返回 (天数, 原文片段)。"""
     if not text:
@@ -126,9 +161,18 @@ INTENT_KEYWORDS: Dict[str, List[str]] = {
         "质量最差", "最差的机台", "排名靠后", "问题最多",
     ],
     "query_brand_trend": [
-        "牌号", "品牌", "趋势", "变化", "走势",
+        "趋势", "变化", "走势",
         "下降", "上升", "波动", "有没有下降", "质量趋势",
-        "摩登", "细支", "超细", "中东", "吉布提", "国际",
+        "牌号趋势", "品牌趋势",
+    ],
+    "query_brand_list": [
+        "什么牌号", "哪些牌号", "哪几个牌号", "有哪些牌号",
+        "生成了什么", "生产了什么", "生产了哪些", "出了什么牌号",
+        "做了什么牌号", "当天牌号", "生产牌号",
+    ],
+    "query_sample_count": [
+        "样本数", "几个样本", "多少样本", "有几个样本",
+        "样本有几", "多少个样本",
     ],
     "query_quality_decline": [
         "为什么下降", "下降原因", "为什么变差", "质量下降",
@@ -310,6 +354,14 @@ class QuestionParser:
             p.time_expressions.append(expr)
             start = (today - timedelta(days=n_days - 1)).isoformat()
             p.date_from, p.date_to = start, today.isoformat()
+            return
+
+        specific = match_specific_date(p.raw, today) or match_specific_date(q, today)
+        if specific:
+            iso, expr = specific
+            p.time_intent = "specific_date"
+            p.time_expressions.append(expr)
+            p.date_from, p.date_to = iso, iso
             return
 
         # 精确时间词匹配
@@ -518,6 +570,8 @@ class QuestionParser:
             "query_machine_best": "machine_best",
             "query_machine_worst": "machine_worst",
             "query_brand_trend": "brand_trend",
+            "query_brand_list": "brand_list",
+            "query_sample_count": "sample_count",
             "query_quality_decline": "quality_decline",
             "query_physical_deviation": "physical_deviation",
             "query_physical_standard": "physical_standard",
@@ -543,6 +597,21 @@ class QuestionParser:
 
     def _apply_intent_rules(self, p: ParsedQuestion, q: str):
         """应用特殊意图规则（处理边界情况和优先级）"""
+
+        # 规则0：样本数（班次×牌号去重）优先于泛质量问答
+        if any(k in q for k in ["样本数", "几个样本", "多少样本", "有几个样本", "多少个样本", "样本有几"]):
+            if p.primary_intent != "sample_count":
+                p.secondary_intents.append(p.primary_intent)
+            p.primary_intent = "sample_count"
+            p.intent_confidence = 0.94
+
+        # 规则0.5：询问当天生产了哪些牌号，不是牌号质量对比
+        elif any(k in q for k in ["什么牌号", "哪些牌号", "哪几个牌号", "有哪些牌号", "生成了什么", "生产了什么", "生产了哪些", "出了什么牌号"]):
+            if not any(k in q for k in ["趋势", "下降", "对比", "缺陷率"]):
+                if p.primary_intent != "brand_list":
+                    p.secondary_intents.append(p.primary_intent)
+                p.primary_intent = "brand_list"
+                p.intent_confidence = 0.93
 
         # 规则1：如果同时有"为什么"+质量下降相关词，优先为 quality_decline
         has_reason = any(k in q for k in ["为什么", "为啥", "原因", "怎么回事", "为何"])
@@ -599,7 +668,7 @@ class QuestionParser:
         # 规则6：如果有时间词 + 指标查询（如"今天的合格率"），保持 time+indicator 组合意图
         if p.time_intent in [
             "today", "yesterday", "this_week", "last_week",
-            "this_month", "last_month", "last_n_days", "recent",
+            "this_month", "last_month", "last_n_days", "recent", "specific_date",
         ]:
             if p.indicators and p.primary_intent in ["rate_query", "combined"]:
                 # 有时间+具体指标，升级为 today_quality（答案函数会根据 indicators 调整内容）
@@ -727,6 +796,8 @@ if __name__ == "__main__":
         "今日质量状况",
         "过去七天的质量怎么样",
         "近7天质量如何",
+        "8月23号生成了什么牌号",
+        "8.23当天有几个样本数",
         "哪个机台需要重点关注？",
         "哪台机器质量最差？",
         "质量最好的机台是哪个？",

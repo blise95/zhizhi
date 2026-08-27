@@ -66,6 +66,26 @@ export function parseLocalDateRange(question: string, now = new Date()): LocalDa
     }
   }
 
+  const ymd = compact.match(/(\d{4})[-年/](\d{1,2})[-月/](\d{1,2})[日号]?/);
+  const md = compact.match(/(\d{1,2})月(\d{1,2})[日号]?/)
+    || compact.match(/(?<![\d.])(\d{1,2})[./-](\d{1,2})(?![\d.])/);
+  const dateHit = ymd || md;
+  if (dateHit) {
+    const year = ymd ? Number(dateHit[1]) : now.getFullYear();
+    const month = ymd ? Number(dateHit[2]) : Number(dateHit[1]);
+    const day = ymd ? Number(dateHit[3]) : Number(dateHit[2]);
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      const d = new Date(year, month - 1, day);
+      if (d.getMonth() === month - 1) {
+        if (!ymd && d.getTime() > now.getTime()) {
+          d.setFullYear(year - 1);
+        }
+        const iso = isoDate(d);
+        return { from: iso, to: iso, label: dateHit[0] };
+      }
+    }
+  }
+
   if (/(今天|今日|当天|本日)/.test(compact)) {
     const label = compact.includes('今日') ? '今日' : compact.includes('当天') ? '当天' : '今天';
     return { from: today, to: today, label };
@@ -108,7 +128,7 @@ const KNOWLEDGE_ONLY =
   /属于什么等级|怎么判定|如何判定|判定标准|缺陷代码|分值线|扣分表|A类缺陷|B类缺陷|C类缺陷|D类缺陷/;
 
 const DATA_HINT =
-  /质量|缺陷|优质率|合格率|批次|机台|趋势|异常|牌号|怎么样|如何/;
+  /质量|缺陷|优质率|合格率|批次|机台|趋势|异常|牌号|怎么样|如何|样本/;
 
 export function looksLikeQualityDataQuestion(question: string): boolean {
   if (KNOWLEDGE_ONLY.test(question) && !/(今天|今日|本周|本月|过去|最近|近期).*(缺陷|质量|批次)/.test(question)) {
@@ -179,6 +199,32 @@ function machineFocusLines(ratings: BatchRating[]): string[] {
   ];
 }
 
+function shiftLabel(record: ProcessQualityRecord): string {
+  const group = (record.shiftGroup || '').trim();
+  const team = (record.shift || '').trim();
+  const names = ['早班', '中班', '晚班', '白班', '夜班'];
+  for (const v of [group, team]) {
+    if (names.some((n) => v.includes(n))) return v;
+    if (['早', '中', '晚', '白', '夜'].includes(v)) return `${v}班`;
+  }
+  return group || team || '未分班';
+}
+
+function productionSamples(records: ProcessQualityRecord[]) {
+  const seen = new Set<string>();
+  const samples: { shift: string; brand: string }[] = [];
+  records.forEach((r) => {
+    const brand = (r.brand || '').trim();
+    if (!brand) return;
+    const shift = shiftLabel(r);
+    const key = `${shift}::${brand}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    samples.push({ shift, brand });
+  });
+  return samples;
+}
+
 export function answerLocalQualityQuestion(
   question: string,
   processRecords: ProcessQualityRecord[]
@@ -190,6 +236,43 @@ export function answerLocalQualityQuestion(
     const d = (r.inspectionDate || '').slice(0, 10);
     return d && d >= range.from && d <= range.to;
   });
+
+  const askSample = /样本数|几个样本|多少样本|有几个样本/.test(question);
+  const askBrands = /什么牌号|哪些牌号|生成了什么|生产了什么|生产了哪些/.test(question)
+    && !/趋势|下降|对比|缺陷率/.test(question);
+
+  if (askSample || askBrands) {
+    const samples = productionSamples(filtered);
+    if (samples.length === 0) {
+      return `${range.label}${rangeText(range)}系统暂无过程质量检验记录，${askSample ? '样本数为 0' : '无法判断生产了哪些牌号'}。`;
+    }
+    const grouped = new Map<string, string[]>();
+    samples.forEach((s) => {
+      const list = grouped.get(s.shift) || [];
+      if (!list.includes(s.brand)) list.push(s.brand);
+      grouped.set(s.shift, list);
+    });
+    const uniqueBrands = [...new Set(samples.map((s) => s.brand))];
+    if (askSample) {
+      const lines = [
+        `${range.label}${rangeText(range)}共 ${samples.length} 个样本。`,
+        '口径：同一班次同一牌号只计 1 个样本（例如早班 7 条超细白记录仍算 1 个样本）。',
+        '明细：',
+      ];
+      grouped.forEach((brands, shift) => {
+        lines.push(`- ${shift}：${brands.join('、')}（${brands.length} 个样本）`);
+      });
+      return lines.join('\n');
+    }
+    const lines = [
+      `${range.label}${rangeText(range)}生产牌号共 ${uniqueBrands.length} 个：${uniqueBrands.join('、')}。`,
+      '分班明细：',
+    ];
+    grouped.forEach((brands, shift) => {
+      lines.push(`- ${shift}：${brands.join('、')}`);
+    });
+    return lines.join('\n');
+  }
 
   if (filtered.length === 0) {
     return `${range.label}${rangeText(range)}系统暂未录入质量检验记录，无法评估该时段质量状况。`;

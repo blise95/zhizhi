@@ -230,7 +230,7 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
         return {"question_type": qtype, "scenario": scenario}
     except Exception:
         # 兜底：根据关键词判断
-        data_keywords = ["率", "多少", "哪个机台", "哪个品牌", "哪个牌号", "趋势", "排名", "批次", "本月", "本周", "今天", "今日", "最近", "过去", "近期", "重点关注", "下降", "质量怎么样", "质量如何"]
+        data_keywords = ["率", "多少", "哪个机台", "哪个品牌", "哪个牌号", "什么牌号", "哪些牌号", "样本", "样本数", "趋势", "排名", "批次", "本月", "本周", "今天", "今日", "最近", "过去", "近期", "重点关注", "下降", "质量怎么样", "质量如何", "生成了什么", "生产了什么"]
         knowledge_keywords = ["是什么", "属于", "等级", "扣分", "判定", "规则", "依据", "定义"]
         has_data = any(k in q for k in data_keywords)
         has_knowledge = any(k in q for k in knowledge_keywords)
@@ -297,8 +297,8 @@ def query_business_data(state: Dict[str, Any], provider: BusinessDataProvider) -
     date_from, date_to = qa.extract_date_range(question)
     filtered_process = qa.filter_by_date_range(process_records, date_from, date_to)
 
-    # 提取牌号过滤（用于牌号趋势、物测分析）
-    brand = _extract_brand_from_question(question)
+    listing = any(k in question for k in ["什么牌号", "哪些牌号", "生成了什么", "生产了什么", "生产了哪些", "样本数", "几个样本", "多少样本"])
+    brand = None if listing else _extract_brand_from_question(question)
     if brand:
         filtered_process = [r for r in filtered_process if brand in str(r.get("brand", ""))]
 
@@ -325,6 +325,12 @@ def query_business_data(state: Dict[str, Any], provider: BusinessDataProvider) -
             scenario_answer = qa.answer_machine_ranking(filtered_process, best=False)
         elif scenario == "brand_trend":
             scenario_answer = qa.answer_brand_trend(filtered_process, brand)
+        elif scenario == "brand_list":
+            parsed = qa.get_parsed_question(question)
+            scenario_answer = qa.answer_brand_list(parsed, filtered_process) if parsed else ""
+        elif scenario == "sample_count":
+            parsed = qa.get_parsed_question(question)
+            scenario_answer = qa.answer_sample_count(parsed, filtered_process) if parsed else ""
         elif scenario == "physical_deviation":
             scenario_answer = qa.answer_physical_deviation(physical_records, brand)
         elif scenario == "physical_standard":
@@ -511,7 +517,7 @@ def fallback_answer(state: Dict[str, Any]) -> Dict[str, Any]:
 
     if qtype == "out_of_scope" or scenario == "out_of_scope":
         answer = "该问题不在智合的回答范围内。智合只回答与卷烟质量管理、质量评级、缺陷判定及当前系统质量数据相关的问题。"
-    elif scenario in ["today_quality", "machine_focus", "machine_best", "machine_worst", "brand_trend", "quality_decline"]:
+    elif scenario in ["today_quality", "machine_focus", "machine_best", "machine_worst", "brand_trend", "brand_list", "sample_count", "quality_decline"]:
         answer = "当前系统中暂无相关质量记录，暂时无法基于系统数据进行判断。请在系统中录入过程质量或烟支物测数据后再提问。"
     elif scenario in ["physical_deviation", "physical_standard"]:
         answer = "当前系统暂未配置该牌号的对应标准或没有相关检测数据，暂时无法进行标准符合性判断。"
