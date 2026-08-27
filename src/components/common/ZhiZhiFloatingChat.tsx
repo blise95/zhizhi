@@ -640,7 +640,7 @@ export function ZhiZhiFloatingChat() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="输入质量问题…"
+                placeholder="请输入想问的问题"
                 className="flex-1 bg-transparent border-0 outline-none text-xs text-foreground placeholder:text-muted-foreground"
               />
               <button
