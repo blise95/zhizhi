@@ -96,6 +96,7 @@ def _load_items() -> List[Dict[str, Any]]:
                     "standard": (d.get("standard") or "").strip(),
                     "category": (d.get("category") or "").strip().upper(),
                     "source_page": d.get("source_page"),
+                    "appendix": (d.get("appendix") or "").strip(),
                 }
                 item["score_category"] = _infer_score_category(item)
                 item["unit_score"] = get_defect_score(item["category"], item["score_category"])
@@ -171,7 +172,17 @@ def _extract_grade(question: str) -> Optional[str]:
     return None
 
 
-def search_defects(question: str, limit: int = 8) -> List[Dict[str, Any]]:
+_NAME_TAIL_STOP = ("缺陷", "标准", "判定", "等级", "质量", "部位", "代码", "规定")
+
+
+def _add_by_name(name: str, add) -> bool:
+    items = _by_name.get(name) or []
+    for item in items:
+        add(item)
+    return bool(items)
+
+
+def search_defects(question: str, limit: int = 20) -> List[Dict[str, Any]]:
     """按代码、缺陷名称从标准库检索。"""
     _load_items()
     q = (question or "").strip()
@@ -193,21 +204,31 @@ def search_defects(question: str, limit: int = 8) -> List[Dict[str, Any]]:
             add(_by_code[code])
 
     names = get_all_defect_names()
+    compact = re.sub(r"\s+", "", q)
+    matched_name = ""
     for name in names:
         if len(name) >= 2 and name in q:
-            for item in _by_name.get(name, []):
-                add(item)
-            if hits:
-                break
+            matched_name = name
+            _add_by_name(name, add)
+            break
 
-    if not hits:
-        compact = re.sub(r"\s+", "", q)
+    if not matched_name:
         for name in names:
             if len(name) >= 2 and name.replace(" ", "") in compact:
-                for item in _by_name.get(name, []):
-                    add(item)
-                if hits:
-                    break
+                matched_name = name
+                _add_by_name(name, add)
+                break
+
+    if not matched_name:
+        for name in names:
+            if len(name) < 4:
+                continue
+            tail = name[-2:]
+            if tail in _NAME_TAIL_STOP or tail not in compact:
+                continue
+            matched_name = name
+            _add_by_name(name, add)
+            break
 
     if "小盒" in q or ("盒装" in q and "条" not in q):
         boxed = [h for h in hits if (h.get("code") or "").startswith("H")]
@@ -297,6 +318,8 @@ def _location_label(question: str, items: List[Dict[str, Any]]) -> str:
     area = _area_from_question(question)
     area_label = area[1] if area else (AREA_LABELS.get((items[0].get("code") or "")[:1], "") if items else "")
     if area_label and loc:
+        if loc == area_label or loc.startswith(area_label):
+            return loc
         return f"{area_label}/{loc}"
     return loc or area_label or "该部位"
 
@@ -339,18 +362,113 @@ def format_defect_grade(item: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _grades_mentioned(question: str) -> List[str]:
+    q = question or ""
+    found: List[str] = []
+    for grade in "ABCD":
+        if f"{grade}类" in q or f"{grade}区" in q:
+            found.append(grade)
+    return found
+
+
+def _format_grade_items(label: str, name: str, items: List[Dict[str, Any]]) -> str:
+    order = [g for g in "ABCD" if any(i.get("category") == g for i in items)]
+    grade_text = "、".join(
+        f"{g}类（{GRADE_DEFINITIONS.get(g, {}).get('label', '')}）" for g in order
+    )
+    lines = [
+        f"「{label}·{name}」在《卷烟外在质量缺陷判定》中共有 {len(order)} 个等级缺陷：{grade_text}。",
+        "以下为各等级判定内容：",
+    ]
+    for grade in order:
+        info = GRADE_DEFINITIONS.get(grade, {})
+        lines.append(f"\n{grade}类（{info.get('label', '')}）：{info.get('principle', '')}")
+        for item in items:
+            if item.get("category") != grade:
+                continue
+            std = re.sub(r"\s+", " ", item.get("standard") or "").strip()
+            app = item.get("appendix") or ""
+            app_text = f"；{app}" if app else ""
+            lines.append(f"- {item.get('code')}：{std}{app_text}")
+            qty = _quantity_phrases(std)
+            if qty:
+                lines.append(f"  数量门槛：达到 {'、'.join(qty)} 即判定为该等级。")
+            n = _unqualified_count(item.get("unit_score"))
+            if n:
+                lines.append(
+                    f"  单位扣分 {item.get('unit_score')} 分；按 5.3.1 累计扣分＞200 分为不合格，"
+                    f"仅此类时超过 {n} 个即判定不合格。"
+                )
+    return "\n".join(lines)
+
+
+def format_named_grade_catalog(question: str, items: List[Dict[str, Any]]) -> str:
+    """查某一缺陷名称有哪几个等级（如小盒透明纸皱 → C/D）。"""
+    if not items:
+        return ""
+    zones = _grades_mentioned(question)
+    if zones:
+        filtered = [i for i in items if i.get("category") in zones]
+        if filtered:
+            items = filtered
+    name = items[0].get("name") or ""
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    for item in items:
+        prefix = (item.get("code") or " ")[:1]
+        groups.setdefault(prefix, []).append(item)
+    specified = _area_from_question(question)
+    if specified and specified[0] in groups:
+        groups = {specified[0]: groups[specified[0]]}
+    parts: List[str] = []
+    if len(groups) > 1:
+        parts.append("该缺陷在多个部位均有规定，分别如下：")
+    for prefix, group in groups.items():
+        label = _location_label(question, group)
+        if not specified:
+            area = AREA_LABELS.get(prefix, "")
+            loc = group[0].get("location") or ""
+            label = f"{area}/{loc}" if area and loc else (area or loc or label)
+        parts.append(_format_grade_items(label, name, group))
+    return "\n\n".join(parts)
+
+
 def _named_defect_hits(question: str) -> List[Dict[str, Any]]:
     """仅当问题里出现具体缺陷名称/代码时返回，避免把部位名当成缺陷名。"""
-    return search_defects(question, limit=8)
+    return search_defects(question, limit=20)
+
+
+def _same_name_multi_grade(named: List[Dict[str, Any]]) -> bool:
+    names = {i.get("name") for i in named if i.get("name")}
+    if len(names) != 1:
+        return False
+    grades = {i.get("category") for i in named if i.get("category")}
+    areas = {(i.get("code") or " ")[:1] for i in named}
+    return len(named) > 1 or len(grades) > 1 or len(areas) > 1
+
+
+def _wants_named_grades(question: str, named: List[Dict[str, Any]]) -> bool:
+    if not named:
+        return False
+    q = question or ""
+    if _same_name_multi_grade(named) and not _wants_grade_count(q):
+        return True
+    return any(k in q for k in (
+        "哪几个等级", "有哪些等级", "哪些等级", "有哪几个",
+        "分几类", "分几个等级", "分几档", "等级缺陷", "几个等级",
+        "属于什么等级", "什么等级", "怎么判定", "如何判定", "判定标准",
+        "C区", "D区", "A区", "B区",
+    ))
 
 
 def _wants_catalog(question: str, named: List[Dict[str, Any]], located: List[Dict[str, Any]]) -> bool:
+    if _wants_named_grades(question, named):
+        return False
     q = question or ""
     explicit = any(k in q for k in (
         "哪几个等级", "有哪些等级", "哪些等级", "有哪几个", "分几类",
-        "分几个等级", "缺陷标准", "有哪些缺陷",
+        "分几个等级", "分几档", "缺陷标准", "有哪些缺陷",
     ))
-    if explicit and located:
+    if explicit and located and not named:
         return True
     if located and not named and any(k in q for k in ("缺陷", "等级", "标准", "判定")):
         return True
@@ -359,7 +477,14 @@ def _wants_catalog(question: str, named: List[Dict[str, Any]], located: List[Dic
 
 def _wants_grade_count(question: str) -> bool:
     q = question or ""
-    return any(k in q for k in _GRADE_COUNT_HINTS) or ("等级" in q and "哪几个" not in q and "哪些" not in q)
+    if any(k in q for k in (
+        "哪几个", "哪些等级", "属于什么等级", "什么等级", "分几",
+        "怎么判定", "如何判定", "判定标准", "C区", "D区",
+    )):
+        return False
+    return any(k in q for k in _GRADE_COUNT_HINTS) or (
+        "等级" in q and "哪几个" not in q and "哪些" not in q
+    )
 
 
 def looks_like_defect_question(question: str) -> bool:
@@ -367,7 +492,7 @@ def looks_like_defect_question(question: str) -> bool:
     if any(k in q for k in _DATA_DEFECT_HINTS):
         return False
     if any(k in q for k in _TIME_DATA_HINTS) and not any(
-        k in q for k in ("判定", "标准", "缺陷代码", "属于什么等级", "缺陷等级")
+        k in q for k in ("判定", "标准", "缺陷代码", "属于什么等级", "缺陷等级", "分几档", "C区", "D区")
     ):
         return False
     _load_items()
@@ -382,6 +507,7 @@ def looks_like_defect_question(question: str) -> bool:
     if any(k in q for k in [
         "怎么判定", "如何判定", "判定标准", "缺陷判定", "缺陷代码",
         "缺陷标准", "缺陷等级", "哪几个等级", "有哪些等级",
+        "属于什么等级", "分几档", "C区", "D区",
     ]):
         return True
     return False
@@ -394,11 +520,16 @@ def answer_defect_question(question: str) -> str:
     located = search_by_location(q)
     grade = _extract_grade(q)
 
+    if _wants_named_grades(q, named):
+        return format_named_grade_catalog(q, named)
+
     if _wants_catalog(q, named, located) and located:
         return format_location_catalog(q, located)
 
     hits = named or (located if len(located) <= 3 else [])
     if hits:
+        if _same_name_multi_grade(hits) and not _wants_grade_count(q):
+            return format_named_grade_catalog(q, hits)
         if _wants_grade_count(q) or len(hits) == 1:
             if len(hits) == 1:
                 return format_defect_grade(hits[0])

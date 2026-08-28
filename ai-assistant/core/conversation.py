@@ -18,7 +18,7 @@ FOLLOWUP_PREFIX = re.compile(r"^(那|那么|另外|还有|再看|再问|继续)"
 KNOWLEDGE_HINTS = (
     "属于什么等级", "怎么判定", "如何判定", "判定标准", "缺陷代码",
     "分值线", "扣分表", "是什么意思", "什么是", "缺陷等级", "缺陷标准",
-    "哪几个等级",
+    "哪几个等级", "分几档", "C区", "D区",
 )
 DRILL_HINTS = (
     "优质率", "合格率", "缺陷率", "优等品率", "一等品率", "二等品率",
@@ -44,6 +44,16 @@ BRAND_SHORTS = ("细支金", "细支", "超细白", "超细银", "超细", "中�
 GREETING_HINTS = (
     "你好", "您好", "在吗", "在不在", "谢谢", "感谢", "你是谁",
 )
+DEFECT_AREAS = ("小盒", "盒装", "条盒", "条装", "纸箱", "箱装", "烟支")
+DEFECT_ASKS = (
+    "有哪几个等级缺陷", "有哪几个等级", "有哪些等级", "属于什么等级",
+    "怎么判定", "如何判定", "判定标准", "分几档", "分几类",
+    "几个等级", "等级缺陷",
+)
+DEFECT_NAME_PREFIXES = (
+    "透明纸", "拉线", "商标纸", "内衬纸", "条盒纸", "框架纸",
+    "印花", "纸箱", "卷烟纸", "水松纸", "税票",
+)
 
 
 @dataclass
@@ -55,6 +65,82 @@ class ResolvedQuestion:
 
 def _compact(text: str) -> str:
     return re.sub(r"\s+", "", text or "")
+
+
+def _longest_in(text: str, options: tuple) -> str:
+    hits = [item for item in options if item in (text or "")]
+    return max(hits, key=len) if hits else ""
+
+
+def _defect_name_in(text: str) -> str:
+    q = text or ""
+    try:
+        from core.defect_standard import get_all_defect_names
+        for name in get_all_defect_names():
+            if len(name) >= 2 and name in q:
+                return name
+    except Exception:
+        return ""
+    return ""
+
+
+def _expand_defect_fragment(fragment: str, previous_name: str) -> str:
+    rest = (fragment or "").strip()
+    if not rest:
+        return ""
+    try:
+        from core.defect_standard import get_all_defect_names
+        names = get_all_defect_names()
+    except Exception:
+        return ""
+    if rest in names:
+        return rest
+    prefix = next((p for p in DEFECT_NAME_PREFIXES if previous_name.startswith(p)), "")
+    guess = f"{prefix}{rest}" if prefix and not rest.startswith(prefix) else rest
+    if guess in names:
+        return guess
+    for name in names:
+        if len(rest) >= 2 and name.endswith(rest):
+            return name
+    return ""
+
+
+def _defect_context(raw: str) -> Dict[str, str]:
+    q = _compact(raw)
+    return {
+        "area": _longest_in(q, DEFECT_AREAS),
+        "name": _defect_name_in(q),
+        "ask": _longest_in(q, DEFECT_ASKS),
+    }
+
+
+def _resolve_defect_followup(original: str, previous: str) -> str:
+    if not _is_followup_form(original):
+        return ""
+    prev = _defect_context(previous)
+    if not prev["name"] and not prev["ask"]:
+        return ""
+    rest = FOLLOWUP_PREFIX.sub("", _compact(original), count=1)
+    rest = re.sub(r"[呢吗啊呀？?！!。.]+$", "", rest)
+    if not rest:
+        return ""
+    curr_area = _longest_in(rest, DEFECT_AREAS)
+    curr_ask = _longest_in(rest, DEFECT_ASKS)
+    curr_name = _defect_name_in(rest)
+    only_area = bool(curr_area) and rest.replace(curr_area, "").replace(curr_ask, "") == ""
+    if not curr_name and not only_area:
+        fragment = rest
+        for token in (*DEFECT_AREAS, *DEFECT_ASKS):
+            fragment = fragment.replace(token, "")
+        curr_name = _expand_defect_fragment(fragment, prev["name"])
+    area = curr_area or prev["area"]
+    name = prev["name"] if only_area or not curr_name else curr_name
+    ask = curr_ask or prev["ask"] or "有哪几个等级"
+    if not name:
+        return ""
+    if area and name.startswith(area):
+        return f"{name}{ask}"
+    return f"{area}{name}{ask}"
 
 
 def _is_greeting(text: str) -> bool:
@@ -168,6 +254,14 @@ def resolve_question(
     prior_users = _user_turns(history)
     if not prior_users:
         return ResolvedQuestion(original=original, resolved=original)
+
+    defect_resolved = _resolve_defect_followup(original, prior_users[-1])
+    if defect_resolved and defect_resolved != _compact(original):
+        return ResolvedQuestion(
+            original=original,
+            resolved=defect_resolved,
+            inherited={"defect": defect_resolved},
+        )
 
     current = parse_question(original)
     slots = _collect_slots(prior_users)

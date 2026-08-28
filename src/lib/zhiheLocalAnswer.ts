@@ -127,7 +127,7 @@ export function parseLocalDateRange(question: string, now = new Date()): LocalDa
 }
 
 const KNOWLEDGE_ONLY =
-  /属于什么等级|怎么判定|如何判定|判定标准|缺陷代码|分值线|扣分表|A类缺陷|B类缺陷|C类缺陷|D类缺陷|缺陷标准|缺陷等级|哪几个等级|物测标准/;
+  /属于什么等级|怎么判定|如何判定|判定标准|缺陷代码|分值线|扣分表|A类缺陷|B类缺陷|C类缺陷|D类缺陷|缺陷标准|缺陷等级|哪几个等级|分几档|物测标准|C区|D区/;
 
 const DATA_HINT =
   /质量|缺陷|优质率|合格率|批次|机台|趋势|异常|牌号|怎么样|如何|样本/;
@@ -156,9 +156,58 @@ function topicFromPrevious(prev: string): string {
   return '';
 }
 
+const DEFECT_AREAS = ['小盒', '盒装', '条盒', '条装', '纸箱', '箱装', '烟支'] as const;
+const DEFECT_ASKS = [
+  '有哪几个等级缺陷', '有哪几个等级', '有哪些等级', '属于什么等级',
+  '怎么判定', '如何判定', '判定标准', '分几档', '分几类', '几个等级', '等级缺陷',
+];
+const DEFECT_NAME_PREFIXES = [
+  '透明纸', '拉线', '商标纸', '内衬纸', '条盒纸', '框架纸', '印花', '纸箱', '卷烟纸', '水松纸', '税票',
+];
+
+function longestHit(text: string, options: readonly string[]): string {
+  return options.filter((item) => text.includes(item)).sort((a, b) => b.length - a.length)[0] || '';
+}
+
+function resolveDefectFollowup(question: string, previous: string): string {
+  const compact = question.replace(/\s+/g, '');
+  const isFollowup = /^(那|那么|另外|还有|再看|再问|继续)/.test(compact) || compact.endsWith('呢');
+  if (!isFollowup) return '';
+  const prevAsk = longestHit(previous, DEFECT_ASKS);
+  const prevArea = longestHit(previous, DEFECT_AREAS);
+  if (!prevAsk && !DEFECT_NAME_PREFIXES.some((p) => previous.includes(p))) return '';
+  let rest = compact.replace(/^(那|那么|另外|还有|再看|再问|继续)/, '').replace(/[呢吗啊呀？?！!。.]+$/, '');
+  if (!rest) return '';
+  const currArea = longestHit(rest, DEFECT_AREAS);
+  const currAsk = longestHit(rest, DEFECT_ASKS);
+  const onlyArea = Boolean(currArea) && rest.replace(currArea, '').replace(currAsk, '') === '';
+  const area = currArea || prevArea;
+  let nameFragment = rest;
+  DEFECT_AREAS.forEach((token) => { nameFragment = nameFragment.replace(token, ''); });
+  DEFECT_ASKS.forEach((token) => { nameFragment = nameFragment.replace(token, ''); });
+  const prevPrefix = DEFECT_NAME_PREFIXES.find((p) => previous.includes(p)) || '';
+  const prevNameStart = prevPrefix ? previous.indexOf(prevPrefix) : -1;
+  const prevAskAt = prevAsk ? previous.indexOf(prevAsk) : previous.length;
+  const prevName = prevNameStart >= 0 && prevAskAt > prevNameStart
+    ? previous.slice(prevNameStart, prevAskAt)
+    : '';
+  const name = onlyArea
+    ? prevName
+    : (nameFragment && prevPrefix && !nameFragment.startsWith(prevPrefix)
+      ? `${prevPrefix}${nameFragment}`
+      : (nameFragment || prevName));
+  const ask = currAsk || prevAsk || '有哪几个等级';
+  if (!name) return '';
+  if (area && name.startsWith(area)) return `${name}${ask}`;
+  return `${area}${name}${ask}`;
+}
+
 export function resolveFollowupQuestion(question: string, previousUserQuestions: string[]): string {
   const raw = (question || '').trim();
   if (!raw || looksLikeGreeting(raw)) return raw;
+  const prev = [...previousUserQuestions].reverse().find(Boolean) || '';
+  const defectResolved = prev ? resolveDefectFollowup(raw, prev) : '';
+  if (defectResolved) return defectResolved;
   const compact = raw.replace(/\s+/g, '');
   const isFollowup = /^(那|那么|还有|另外|再看|再问|继续)/.test(compact) || compact.endsWith('呢');
 
@@ -173,7 +222,6 @@ export function resolveFollowupQuestion(question: string, previousUserQuestions:
     }
   }
 
-  const prev = [...previousUserQuestions].reverse().find(Boolean) || '';
   const currentHasTopic = FOLLOWUP_TOPIC_MARKERS.test(stripFollowupShell(raw));
   const topic = !currentHasTopic && prev ? topicFromPrevious(prev) : '';
 
