@@ -390,15 +390,6 @@ def _format_grade_items(label: str, name: str, items: List[Dict[str, Any]]) -> s
             app = item.get("appendix") or ""
             app_text = f"；{app}" if app else ""
             lines.append(f"- {item.get('code')}：{std}{app_text}")
-            qty = _quantity_phrases(std)
-            if qty:
-                lines.append(f"  数量门槛：达到 {'、'.join(qty)} 即判定为该等级。")
-            n = _unqualified_count(item.get("unit_score"))
-            if n:
-                lines.append(
-                    f"  单位扣分 {item.get('unit_score')} 分；按 5.3.1 累计扣分＞200 分为不合格，"
-                    f"仅此类时超过 {n} 个即判定不合格。"
-                )
     return "\n".join(lines)
 
 
