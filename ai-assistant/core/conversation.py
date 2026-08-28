@@ -17,7 +17,8 @@ from core.question_parser import parse_question
 FOLLOWUP_PREFIX = re.compile(r"^(那|那么|另外|还有|再看|再问|继续)")
 KNOWLEDGE_HINTS = (
     "属于什么等级", "怎么判定", "如何判定", "判定标准", "缺陷代码",
-    "分值线", "扣分表", "是什么意思", "什么是",
+    "分值线", "扣分表", "是什么意思", "什么是", "缺陷等级", "缺陷标准",
+    "哪几个等级",
 )
 DRILL_HINTS = (
     "优质率", "合格率", "缺陷率", "优等品率", "一等品率", "二等品率",

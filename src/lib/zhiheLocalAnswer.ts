@@ -127,7 +127,7 @@ export function parseLocalDateRange(question: string, now = new Date()): LocalDa
 }
 
 const KNOWLEDGE_ONLY =
-  /属于什么等级|怎么判定|如何判定|判定标准|缺陷代码|分值线|扣分表|A类缺陷|B类缺陷|C类缺陷|D类缺陷/;
+  /属于什么等级|怎么判定|如何判定|判定标准|缺陷代码|分值线|扣分表|A类缺陷|B类缺陷|C类缺陷|D类缺陷|缺陷标准|缺陷等级|哪几个等级|物测标准/;
 
 const DATA_HINT =
   /质量|缺陷|优质率|合格率|批次|机台|趋势|异常|牌号|怎么样|如何|样本/;
