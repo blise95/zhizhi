@@ -105,10 +105,12 @@ export function parseLocalDateRange(question: string, now = new Date()): LocalDa
     const sunday = addDays(monday, 6);
     return { from: isoDate(monday), to: isoDate(sunday), label: '上周' };
   }
-  if (/(本月|这个月)/.test(compact)) {
+  if (/(整个月|这一个月|本月|这个月|全月|整月|当月)/.test(compact)) {
     const from = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-01`;
     const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    return { from, to: isoDate(last), label: '本月' };
+    const to = last.getTime() > now.getTime() ? today : isoDate(last);
+    const label = /整个月|全月|整月/.test(compact) ? '整个月' : '本月';
+    return { from, to, label };
   }
   if (/(上月|上个月)/.test(compact)) {
     const last = new Date(now.getFullYear(), now.getMonth(), 0);
@@ -129,6 +131,64 @@ const KNOWLEDGE_ONLY =
 
 const DATA_HINT =
   /质量|缺陷|优质率|合格率|批次|机台|趋势|异常|牌号|怎么样|如何|样本/;
+
+const FOLLOWUP_TIME_TOKEN =
+  /整个月|这一个月|本月|这个月|全月|整月|当月|上月|上个月|本周|这周|这一周|上周|上一周|今天|今日|昨天|昨日|过去[^\s]{0,8}天|近\d+天|最近一周|最近|近期/;
+
+const FOLLOWUP_TOPIC_MARKERS = /物测|标准|规格|质量|优质率|合格率|缺陷率|缺陷|样本|评级|扣分|偏离|超标|趋势|对比|判定/;
+
+function stripFollowupShell(text: string): string {
+  return text
+    .replace(/\s+/g, '')
+    .replace(/^(那|那么|另外|还有|再看|再问|继续)/, '')
+    .replace(/[呢吗啊呀？?！!。.]+$/, '')
+    .replace(/摩登（[^）]+）/g, '')
+    .replace(/细支金|超细白|超细银|97超细白|细支|超细|中东-EU|中东|吉布提/g, '');
+}
+
+function topicFromPrevious(prev: string): string {
+  const topic = stripFollowupShell(prev).replace(/^\d+号机|^PT\d+/i, '');
+  if (topic.length >= 2 && topic.length <= 12) return topic;
+  if (/物测/.test(prev)) return '物测标准';
+  if (/优质率/.test(prev)) return '优质率';
+  if (/合格率/.test(prev)) return '合格率';
+  if (/质量/.test(prev)) return '质量怎么样';
+  return '';
+}
+
+export function resolveFollowupQuestion(question: string, previousUserQuestions: string[]): string {
+  const raw = (question || '').trim();
+  if (!raw || looksLikeGreeting(raw)) return raw;
+  const compact = raw.replace(/\s+/g, '');
+  const isFollowup = /^(那|那么|还有|另外|再看|再问|继续)/.test(compact) || compact.endsWith('呢');
+
+  let time = '';
+  if (!FOLLOWUP_TIME_TOKEN.test(compact)) {
+    for (let i = previousUserQuestions.length - 1; i >= 0; i -= 1) {
+      const hit = (previousUserQuestions[i] || '').replace(/\s+/g, '').match(FOLLOWUP_TIME_TOKEN);
+      if (hit) {
+        time = hit[0];
+        break;
+      }
+    }
+  }
+
+  const prev = [...previousUserQuestions].reverse().find(Boolean) || '';
+  const currentHasTopic = FOLLOWUP_TOPIC_MARKERS.test(stripFollowupShell(raw));
+  const topic = !currentHasTopic && prev ? topicFromPrevious(prev) : '';
+
+  if (!time && !topic) return raw;
+  if (!isFollowup && !time) return raw;
+  if (!isFollowup && time) {
+    const drill = /优质率|合格率|缺陷率|缺陷|机台|牌号|样本|优等|一等|二等|怎么样|如何|呢|具体|详细/;
+    if (!drill.test(compact) && compact.length > 16) return raw;
+  }
+
+  const rest = raw.replace(/^(那|那么|另外|还有)/, '').replace(/[呢吗啊呀]+$/, '').trim() || raw;
+  const withTime = time && !rest.includes(time) ? `${time}${rest}` : rest;
+  if (topic && !withTime.includes(topic)) return `${withTime}${topic}`;
+  return withTime;
+}
 
 export function looksLikeQualityDataQuestion(question: string): boolean {
   if (KNOWLEDGE_ONLY.test(question) && !/(今天|今日|本周|本月|过去|最近|近期).*(缺陷|质量|批次)/.test(question)) {
@@ -240,20 +300,22 @@ const GREETING_ANSWER =
 
 export function answerLocalQualityQuestion(
   question: string,
-  processRecords: ProcessQualityRecord[]
+  processRecords: ProcessQualityRecord[],
+  previousUserQuestions: string[] = []
 ): string | null {
-  if (looksLikeGreeting(question)) return GREETING_ANSWER;
-  if (!looksLikeQualityDataQuestion(question)) return null;
+  const resolved = resolveFollowupQuestion(question, previousUserQuestions);
+  if (looksLikeGreeting(resolved)) return GREETING_ANSWER;
+  if (!looksLikeQualityDataQuestion(resolved)) return null;
 
-  const range = parseLocalDateRange(question);
+  const range = parseLocalDateRange(resolved);
   const filtered = processRecords.filter((r) => {
     const d = (r.inspectionDate || '').slice(0, 10);
     return d && d >= range.from && d <= range.to;
   });
 
-  const askSample = /样本数|几个样本|多少样本|有几个样本/.test(question);
-  const askBrands = /什么牌号|哪些牌号|生成了什么|生产了什么|生产了哪些/.test(question)
-    && !/趋势|下降|对比|缺陷率/.test(question);
+  const askSample = /样本数|几个样本|多少样本|有几个样本/.test(resolved);
+  const askBrands = /什么牌号|哪些牌号|生成了什么|生产了什么|生产了哪些/.test(resolved)
+    && !/趋势|下降|对比|缺陷率/.test(resolved);
 
   if (askSample || askBrands) {
     const samples = productionSamples(filtered);
@@ -307,6 +369,31 @@ export function answerLocalQualityQuestion(
   const topText = top.length ? top.map((d) => `${d.name}(${d.count}次)`).join('、') : '暂无';
   const status = statusFromDefectRate(defectRate);
 
+  const askExcellent = /优质率|优质品率|优等品率/.test(resolved);
+  const askPass = /合格率|一次合格率/.test(resolved) && !askExcellent;
+  const askDefectRate = /缺陷率/.test(resolved) && !askExcellent && !askPass;
+
+  if (askExcellent || askPass || askDefectRate) {
+    if (askExcellent) {
+      return [
+        `${range.label}${rangeText(range)}共 ${total} 批过程质量检验。`,
+        `按 5.3.1：优质率 ${((excellent / total) * 100).toFixed(1)}%（优等品 ${excellent} 批，累计扣分 ≤ 18 分）。`,
+        `合格率 ${((pass / total) * 100).toFixed(1)}%。一等品 ${first} 批，二等品 ${second} 批，不合格品 ${unqualified} 批。`,
+        '口径：优质率按累计扣分评级，出现外观缺陷不一定拉低优质率。',
+      ].join('\n');
+    }
+    if (askPass) {
+      return [
+        `${range.label}${rangeText(range)}共 ${total} 批过程质量检验。`,
+        `按 5.3.1：合格率 ${((pass / total) * 100).toFixed(1)}%（累计扣分 ≤ 200 分）。`,
+      ].join('\n');
+    }
+    return [
+      `${range.label}${rangeText(range)}共 ${total} 批过程质量检验。`,
+      `缺陷批次 ${defectBatches} 批，缺陷率 ${defectRate.toFixed(2)}%。`,
+    ].join('\n');
+  }
+
   const lines = [
     `${range.label}${rangeText(range)}系统共录入 ${total} 批过程质量检验记录，涉及机台 ${machines.join('、') || '无'}，牌号 ${brands.join('、') || '无'}。`,
     `缺陷批次 ${defectBatches} 批，缺陷率 ${defectRate.toFixed(2)}%，整体状态：${status}。`,
@@ -314,7 +401,7 @@ export function answerLocalQualityQuestion(
     `主要缺陷：${topText}。`,
   ];
 
-  if (/机台|哪台/.test(question)) {
+  if (/机台|哪台/.test(resolved)) {
     lines.push(...machineFocusLines(ratings));
   }
 

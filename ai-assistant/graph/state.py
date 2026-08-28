@@ -7,6 +7,9 @@ from typing import List, Dict, Any, Optional, TypedDict
 class ZhiZhiState(TypedDict, total=False):
     # 用户输入
     question: str
+    original_question: str
+    history: List[Dict[str, Any]]
+    inherited_context: Dict[str, Any]
 
     # 问题分类
     question_type: str  # knowledge / business / combined / physical_standard / out_of_scope

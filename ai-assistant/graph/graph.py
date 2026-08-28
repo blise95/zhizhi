@@ -18,6 +18,7 @@ retrieve query_data  fallback
 说明：
 - 前端在调用 /ask 时传入 context（process_records / physical_records），
   query_data 节点优先使用这些系统真实数据；
+- 同时传入 history，追问会先补上上一轮的时段/牌号/机台再分类；
 - combined 类型先检索知识，再查数据，最后综合分析；
 - 最终答案不暴露技术来源。
 """
@@ -50,6 +51,7 @@ class ZhiZhiAssistant:
         question: str,
         process_records: Optional[List[Dict[str, Any]]] = None,
         physical_records: Optional[List[Dict[str, Any]]] = None,
+        history: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         """提问入口
 
@@ -57,13 +59,24 @@ class ZhiZhiAssistant:
             question: 用户问题
             process_records: 前端传入的过程质量记录（来自 localStorage）
             physical_records: 前端传入的烟支物测记录（来自 localStorage）
+            history: 本轮之前的对话（user/assistant），用于追问补全
         """
+        from core.conversation import resolve_question
+
+        resolved = resolve_question(question, history)
         state: Dict[str, Any] = {
-            "question": question,
+            "question": resolved.resolved,
+            "original_question": resolved.original,
+            "history": history or [],
+            "inherited_context": resolved.inherited,
             "process_records": process_records or [],
             "physical_records": physical_records or [],
         }
         final_state = self.graph.invoke(state)
+        analysis_log = dict(final_state.get("analysis_log") or {})
+        if resolved.inherited or resolved.resolved != resolved.original:
+            analysis_log["resolved_question"] = resolved.resolved
+            analysis_log["inherited_context"] = resolved.inherited
         return {
             "question": question,
             "question_type": final_state.get("question_type"),
@@ -72,7 +85,7 @@ class ZhiZhiAssistant:
             "sources": [],  # 前台不展示来源
             "reasoning": final_state.get("reasoning", ""),
             "business_results": final_state.get("business_results", {}),
-            "analysis_log": final_state.get("analysis_log", {}),
+            "analysis_log": analysis_log,
         }
 
 

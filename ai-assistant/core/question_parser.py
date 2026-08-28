@@ -29,7 +29,7 @@ TIME_SYNONYMS: Dict[str, List[str]] = {
     "yesterday":  ["昨天", "昨日"],
     "this_week":  ["本周", "这周", "这一周"],
     "last_week":  ["上周", "上一周"],
-    "this_month": ["本月", "这个月", "本月度"],
+    "this_month": ["整个月", "这一个月", "这个月", "本月度", "本月", "全月", "整月", "当月"],
     "last_month": ["上月", "上个月", "上月度"],
     "recent":     ["最近", "近期", "近来", "近期以来"],
     "today_quality_status": [],  # 特殊：单独处理"今天质量"类表达
@@ -105,7 +105,8 @@ INDICATOR_SYNONYMS: Dict[str, List[str]] = {
     # 过程质量指标
     "defect_rate":       ["缺陷率", "不合格率", "次品率"],
     "defect_count":      ["缺陷数量", "缺陷数", "缺陷个数", "缺陷总数", "缺陷数目"],
-    "qualified_rate":    ["优质率", "合格率", "一次合格率", "一次通过率", "合格比例", "优质品率"],
+    "excellent_rate":    ["优质率", "优质品率", "优等品率", "优等率"],
+    "qualified_rate":    ["合格率", "一次合格率", "一次通过率", "合格比例"],
     "batch_count":       ["批次", "批次数", "检验批数", "生产批次"],
     "quality_status":    ["质量情况", "质量状况", "质量状态", "质量表现", "质量水平",
                           "整体质量", "整体情况", "整体状况", "整体表现", "总体质量",
@@ -395,6 +396,8 @@ class QuestionParser:
                 end = (start.replace(month=start.month + 1, day=1) - timedelta(days=1))
             else:
                 end = today.replace(month=12, day=31)
+            if end > today:
+                end = today
             p.date_from, p.date_to = start.isoformat(), end.isoformat()
         elif p.time_intent == "last_month":
             first_this = today.replace(day=1)
@@ -668,7 +671,7 @@ class QuestionParser:
         # 规则6：如果有时间词 + 指标查询（如"今天的合格率"），保持 time+indicator 组合意图
         if p.time_intent in [
             "today", "yesterday", "this_week", "last_week",
-            "this_month", "last_month", "last_n_days", "recent", "specific_date",
+            "this_month", "last_month", "last_n_days", "recent", "specific_date", "specific_month",
         ]:
             if p.indicators and p.primary_intent in ["rate_query", "combined"]:
                 # 有时间+具体指标，升级为 today_quality（答案函数会根据 indicators 调整内容）
@@ -815,6 +818,8 @@ if __name__ == "__main__":
         "优等品的分值线是多少？",
         "这个批次为什么是二等品？",
         "整体情况如何",
+        "整个月优质率怎么样",
+        "本月合格率多少",
         "最近缺陷数量多不多",
         "各牌号对比一下",
         "3号机怎么样",

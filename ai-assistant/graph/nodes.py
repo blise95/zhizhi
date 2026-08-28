@@ -253,7 +253,7 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
 - rating_standard：询问外在质量评级分值线，例如"累计扣分50分属于什么等级""优等品是多少分"。
 - defect_standard：询问缺陷判定、缺陷代码、A/B/C/D等级定义，例如"缺支属于什么等级""透明纸皱怎么判定"。
 - greeting：打招呼、问在不在、你是谁、谢谢。例如"你好""在吗"。
-- out_of_scope：与质量管控、寒暄完全无关（天气、股票、闲聊八卦等）。打招呼不要标成 out_of_scope。
+- out_of_scope：与质量管控、寒暄完全无关（天气、股票、闲聊八卦等）。打招呼不要标成 out_of_scope。换牌号/换机台的追问（例如"那摩登（中东-EU）呢"）仍属质量问题，不要标成 out_of_scope。
 """
     messages = [
         SystemMessage(content=system_prompt),
@@ -270,6 +270,13 @@ def classify_question(state: Dict[str, Any]) -> Dict[str, Any]:
         qtype = result.get("type", "combined")
         if qtype == "out_of_scope" and looks_like_greeting(question):
             return {"question_type": "greeting", "scenario": "greeting"}
+        if qtype == "out_of_scope":
+            inherited = state.get("inherited_context") or {}
+            topic = str(inherited.get("topic") or "")
+            if "物测" in question or "物测" in topic or "标准" in topic:
+                return {"question_type": "physical_standard", "scenario": "physical_standard"}
+            if topic:
+                return {"question_type": "business", "scenario": qa.detect_scenario(question)}
         if qtype == "greeting":
             return {"question_type": "greeting", "scenario": "greeting"}
         return {"question_type": qtype, "scenario": scenario}

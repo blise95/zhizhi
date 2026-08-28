@@ -379,12 +379,21 @@ export function ZhiZhiFloatingChat() {
           // 读取失败不影响提问
         }
 
+        const history = messages
+          .filter((m) => !m.error)
+          .slice(-8)
+          .map((m) => ({ role: m.role, content: m.content }));
+        const previousUserQuestions = messages
+          .filter((m) => m.role === 'user')
+          .map((m) => m.content);
+
         try {
           const res = await fetch(`${API_BASE_URL}/ask`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               question,
+              history,
               context: {
                 process_records: processRecords,
                 physical_records: physicalRecords,
@@ -406,7 +415,7 @@ export function ZhiZhiFloatingChat() {
           setMessages((prev) => [...prev, assistantMessage]);
           return;
         } catch (apiErr: unknown) {
-          const local = answerLocalQualityQuestion(question, processRecords);
+          const local = answerLocalQualityQuestion(question, processRecords, previousUserQuestions);
           if (local) {
             setMessages((prev) => [
               ...prev,
@@ -435,7 +444,7 @@ export function ZhiZhiFloatingChat() {
         inputRef.current?.focus();
       }
     },
-    [input, loading]
+    [input, loading, messages]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

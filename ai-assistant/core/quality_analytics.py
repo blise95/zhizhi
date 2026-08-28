@@ -111,9 +111,11 @@ def _extract_date_range_fallback(question: str) -> Tuple[Optional[str], Optional
         end = start + timedelta(days=6)
         return start.isoformat(), end.isoformat()
 
-    if any(k in q for k in ["本月", "这个月", "最近一个月"]):
+    if any(k in q for k in ["整个月", "这一个月", "本月", "这个月", "全月", "整月", "当月", "最近一个月"]):
         start = today.replace(day=1)
         end = (start.replace(month=start.month + 1, day=1) - timedelta(days=1)) if start.month < 12 else today.replace(month=12, day=31)
+        if end > today:
+            end = today
         return start.isoformat(), end.isoformat()
 
     if any(k in q for k in ["上月", "上个月"]):
@@ -1184,6 +1186,47 @@ def _time_range_text(parsed) -> str:
     return ""
 
 
+def _rate_focus(parsed) -> str:
+    raw = (getattr(parsed, "raw", "") or "") + "".join(getattr(parsed, "indicator_names", []) or [])
+    indicators = set(getattr(parsed, "indicators", []) or [])
+    if any(k in raw for k in ["优质率", "优质品率", "优等品率", "优等率"]) or "excellent_rate" in indicators:
+        return "excellent"
+    if any(k in raw for k in ["合格率", "一次合格率", "一次通过率"]) or "qualified_rate" in indicators:
+        return "pass"
+    if "缺陷率" in raw or "defect_rate" in indicators:
+        return "defect"
+    return ""
+
+
+def _format_rate_answer(parsed, summary: Dict[str, Any], time_word: str, range_text: str, focus: str) -> str:
+    total = summary.get("total_batches", 0) or 0
+    lines = [f"{time_word}{range_text}共 {total} 批过程质量检验。"]
+    if focus == "excellent":
+        lines.append(
+            f"按 5.3.1：优质率 {summary.get('excellent_rate', 0):.1f}%"
+            f"（优等品 {summary.get('excellent_count', 0)} 批，累计扣分 ≤ 18 分）。"
+        )
+        lines.append(
+            f"合格率 {summary.get('pass_rate', 0):.1f}%。"
+            f"一等品 {summary.get('first_count', 0)} 批，"
+            f"二等品 {summary.get('second_count', 0)} 批，"
+            f"不合格品 {summary.get('unqualified_count', 0)} 批。"
+        )
+        lines.append("口径：优质率按累计扣分评级，出现外观缺陷不一定拉低优质率。")
+    elif focus == "pass":
+        lines.append(
+            f"按 5.3.1：合格率 {summary.get('pass_rate', 0):.1f}%"
+            f"（合格 {summary.get('pass_count', 0)} 批，累计扣分 ≤ 200 分）。"
+        )
+        lines.append(f"优质率 {summary.get('excellent_rate', 0):.1f}%。")
+    else:
+        lines.append(
+            f"缺陷批次 {summary.get('defect_batches', 0)} 批，"
+            f"缺陷率 {summary.get('defect_rate', 0):.2f}%。"
+        )
+    return "\n".join(lines)
+
+
 def _quality_status_from_defect_rate(defect_rate: float) -> str:
     if defect_rate > 20:
         return "异常"
@@ -1206,14 +1249,9 @@ def _smart_answer_today(parsed, process_records: List[Dict[str, Any]]) -> str:
     top_text = "、".join(f"{d['name']}({d['count']}次)" for d in top) if top else "暂无"
     status = _quality_status_from_defect_rate(summary["defect_rate"])
 
-    # 检查用户是否问了特定指标
-    ind_answers = []
-    if "qualified_rate" in parsed.indicators:
-        ind_answers.append(f"合格率 {summary.get('pass_rate', 0):.1f}%（累计扣分≤200分）")
-    if "defect_count" in parsed.indicators:
-        ind_answers.append(f"缺陷总数 {summary['total_defects']} 个")
-    if "defect_rate" in parsed.indicators:
-        ind_answers.append(f"缺陷率 {summary['defect_rate']:.2f}%")
+    rate_focused = _rate_focus(parsed)
+    if rate_focused:
+        return _format_rate_answer(parsed, summary, time_word, range_text, rate_focused)
 
     rating_line = ""
     if summary.get("total_batches", 0) > 0:
@@ -1225,18 +1263,14 @@ def _smart_answer_today(parsed, process_records: List[Dict[str, Any]]) -> str:
             f"合格率 {summary.get('pass_rate', 0):.1f}%，优质率 {summary.get('excellent_rate', 0):.1f}%。"
         )
 
-    base = (
+    return (
         f"{time_word}{range_text}系统共录入 {summary['total_batches']} 批过程质量检验记录，"
         f"涉及机台 {', '.join(summary['machines']) if summary['machines'] else '无'}，"
         f"牌号 {', '.join(summary['brands']) if summary['brands'] else '无'}。\n"
         f"缺陷批次 {summary['defect_batches']} 批，缺陷率 {summary['defect_rate']:.2f}%，整体状态：{status}。"
         f"{rating_line}"
+        f"\n主要缺陷：{top_text}。"
     )
-    if ind_answers:
-        base += f"\n{'；'.join(ind_answers)}。"
-    base += f"\n主要缺陷：{top_text}。"
-
-    return base
 
 
 def _smart_answer_machine_focus(parsed, process_records: List[Dict[str, Any]]) -> str:
@@ -1478,29 +1512,28 @@ def _smart_answer_rate(parsed, process_records: List[Dict[str, Any]]) -> str:
         return "当前系统中没有足够的数据来计算该指标。"
 
     lines = []
-    if "qualified_rate" in parsed.indicators or "defect_rate" in parsed.indicators:
-        lines.append(f"合格率：{summary.get('pass_rate', 0):.1f}%（累计扣分 ≤ 200 分为合格）")
+    focus = _rate_focus(parsed)
+    if focus == "excellent":
         lines.append(f"优质率：{summary.get('excellent_rate', 0):.1f}%（优等品，累计扣分 ≤ 18 分）")
+        lines.append(f"优等品 {summary.get('excellent_count', 0)} 批 / 共 {summary['total_batches']} 批")
+    elif focus == "pass":
+        lines.append(f"合格率：{summary.get('pass_rate', 0):.1f}%（累计扣分 ≤ 200 分为合格）")
+    elif focus == "defect":
         lines.append(f"缺陷率：{summary['defect_rate']:.2f}%")
-
-    if "defect_count" in parsed.indicators:
+        lines.append(f"缺陷批次：{summary['defect_batches']} 批")
+    elif "defect_count" in parsed.indicators:
         lines.append(f"缺陷总数：{summary['total_defects']} 个")
-
-    if "batch_count" in parsed.indicators:
+    elif "batch_count" in parsed.indicators:
         lines.append(f"检验批次：{summary['total_batches']} 批")
-
-    if not lines:
+    else:
         lines.append(f"合格率：{summary.get('pass_rate', 0):.1f}%")
         lines.append(f"优质率：{summary.get('excellent_rate', 0):.1f}%")
         lines.append(f"缺陷率：{summary['defect_rate']:.2f}%")
-        lines.append(f"缺陷数：{summary['total_defects']} 个")
-        if summary.get("total_batches", 0) > 0:
-            lines.append(
-                f"评级分布：优等 {summary.get('excellent_count', 0)} / "
-                f"一等 {summary.get('first_count', 0)} / "
-                f"二等 {summary.get('second_count', 0)} / "
-                f"不合格 {summary.get('unqualified_count', 0)}"
-            )
+
+    if "defect_count" in parsed.indicators and focus:
+        lines.append(f"缺陷总数：{summary['total_defects']} 个")
+    if "batch_count" in parsed.indicators and focus:
+        lines.append(f"检验批次：{summary['total_batches']} 批")
 
     # 时间信息
     time_desc = ""

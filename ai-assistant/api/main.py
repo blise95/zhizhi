@@ -93,9 +93,15 @@ class AskContext(BaseModel):
     physical_records: List[Dict[str, Any]] = Field(default_factory=list)
 
 
+class ChatTurn(BaseModel):
+    role: str
+    content: str
+
+
 class AskRequest(BaseModel):
     question: str
     context: AskContext = Field(default_factory=AskContext)
+    history: List[ChatTurn] = Field(default_factory=list)
 
 
 class AskResponse(BaseModel):
@@ -177,6 +183,7 @@ def ask(req: AskRequest):
             req.question.strip(),
             process_records=process_records,
             physical_records=physical_records,
+            history=[{"role": turn.role, "content": turn.content} for turn in req.history],
         )
 
         # 后台记录分析日志
